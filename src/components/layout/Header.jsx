@@ -56,7 +56,7 @@ export default function Header() {
 
   return (
     <header className={`gnb${isOn ? ' on' : ''}`}>
-      <div className="gnb_bg" />0
+      <div className="gnb_bg" />
       <div className="wrap">
         <h1 className="logo">
           <Link to="/">
