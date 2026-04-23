@@ -1,0 +1,88 @@
+@charset "utf-8";
+
+/* SUIT */
+@font-face{
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 100;
+    src: local('☺'),
+         url('/font/SUIT-Thin.ttf') format('truetype');
+}
+@font-face{
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 200;
+
+    src: local('☺'),
+         url('/font/SUIT-ExtraLight.ttf') format('truetype');
+}
+@font-face{
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 300;
+
+    src: local('☺'),
+         url('/font/SUIT-Light.ttf') format('truetype');
+}
+@font-face{
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 400;
+
+    src: local('☺'),
+         url('/font/SUIT-Regular.ttf') format('truetype');
+}
+@font-face{
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 500;
+
+    src: local('☺'),
+         url('/font/SUIT-Medium.ttf') format('truetype');
+}
+@font-face{
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 600;
+
+    src: local('☺'),
+         url('/font/SUIT-SemiBold.ttf') format('truetype');
+}
+@font-face{
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 700;
+
+    src: local('☺'),
+         url('/font/SUIT-Bold.ttf') format('truetype');
+}
+@font-face{
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 800;
+
+    src: local('☺'),
+         url('/font/SUIT-ExtraBold.ttf') format('truetype');
+}
+@font-face{
+    font-family: 'SUIT';
+    font-style: normal;
+    font-weight: 900;
+
+    src: local('☺'),
+         url('/font/SUIT-Heavy.ttf') format('truetype');
+}
+
+/* 잘난고딕 */
+@font-face{
+    font-family: 'jalnan';
+    font-style: normal;
+    src: local('☺'),
+         url('/font/JalnanGothic.otf') format('otf');
+}
+@font-face{
+    font-family: 'jalnan';
+    font-style: normal;
+    src: local('☺'),
+         url('/font/JalnanGothicTTF.ttf') format('truetype');
+}
