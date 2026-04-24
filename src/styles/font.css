@@ -78,7 +78,7 @@
     font-family: 'jalnan';
     font-style: normal;
     src: local('☺'),
-         url('/font/JalnanGothic.otf') format('otf');
+         url('/font/JalnanGothic.otf') format('opentype');
 }
 @font-face{
     font-family: 'jalnan';
