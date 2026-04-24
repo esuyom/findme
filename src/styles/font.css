@@ -1,88 +1,69 @@
 @charset "utf-8";
 
-/* SUIT */
-@font-face{
-    font-family: 'SUIT';
+/* Pretendard */
+@font-face {
+    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 100;
-    src: local('☺'),
-         url('/font/SUIT-Thin.ttf') format('truetype');
+    src: local('☺'), url('/font/Pretendard-Thin.woff') format('woff');
 }
-@font-face{
-    font-family: 'SUIT';
+@font-face {
+    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 200;
-
-    src: local('☺'),
-         url('/font/SUIT-ExtraLight.ttf') format('truetype');
+    src: local('☺'), url('/font/Pretendard-ExtraLight.woff') format('woff');
 }
-@font-face{
-    font-family: 'SUIT';
+@font-face {
+    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 300;
-
-    src: local('☺'),
-         url('/font/SUIT-Light.ttf') format('truetype');
+    src: local('☺'), url('/font/Pretendard-Light.woff') format('woff');
 }
-@font-face{
-    font-family: 'SUIT';
+@font-face {
+    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 400;
-
-    src: local('☺'),
-         url('/font/SUIT-Regular.ttf') format('truetype');
+    src: local('☺'), url('/font/Pretendard-Regular.woff') format('woff');
 }
-@font-face{
-    font-family: 'SUIT';
+@font-face {
+    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 500;
-
-    src: local('☺'),
-         url('/font/SUIT-Medium.ttf') format('truetype');
+    src: local('☺'), url('/font/Pretendard-Medium.woff') format('woff');
 }
-@font-face{
-    font-family: 'SUIT';
+@font-face {
+    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 600;
-
-    src: local('☺'),
-         url('/font/SUIT-SemiBold.ttf') format('truetype');
+    src: local('☺'), url('/font/Pretendard-SemiBold.woff') format('woff');
 }
-@font-face{
-    font-family: 'SUIT';
+@font-face {
+    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 700;
-
-    src: local('☺'),
-         url('/font/SUIT-Bold.ttf') format('truetype');
+    src: local('☺'), url('/font/Pretendard-Bold.woff') format('woff');
 }
-@font-face{
-    font-family: 'SUIT';
+@font-face {
+    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 800;
-
-    src: local('☺'),
-         url('/font/SUIT-ExtraBold.ttf') format('truetype');
+    src: local('☺'), url('/font/Pretendard-ExtraBold.woff') format('woff');
 }
-@font-face{
-    font-family: 'SUIT';
+@font-face {
+    font-family: 'Pretendard';
     font-style: normal;
     font-weight: 900;
-
-    src: local('☺'),
-         url('/font/SUIT-Heavy.ttf') format('truetype');
+    src: local('☺'), url('/font/Pretendard-Black.woff') format('woff');
 }
 
 /* 잘난고딕 */
-@font-face{
+@font-face {
     font-family: 'jalnan';
     font-style: normal;
-    src: local('☺'),
-         url('/font/JalnanGothic.otf') format('opentype');
+    src: local('☺'), url('/font/JalnanGothic.otf') format('opentype');
 }
-@font-face{
+@font-face {
     font-family: 'jalnan';
     font-style: normal;
-    src: local('☺'),
-         url('/font/JalnanGothicTTF.ttf') format('truetype');
+    src: local('☺'), url('/font/JalnanGothicTTF.ttf') format('truetype');
 }

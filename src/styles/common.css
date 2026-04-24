@@ -64,7 +64,7 @@ address{margin:0;}
 	01. Typography
 -------------------------------------------------------------------*/
 
-body {font-family:'SUIT', 'jalnan';  font-size:16px; letter-spacing:-0.025em; line-height:1.6; font-weight:400; color:#191919; margin:0; overflow-x:hidden;}
+body {font-family:'Pretendard', sans-serif;  font-size:16px; letter-spacing:-0.025em; line-height:1.6; font-weight:400; color:#191919; margin:0; overflow-x:hidden;}
 h1, h2, h3, h4, h5, h6 {font-weight: 500; margin:0;}
 h1 {font-size: 2.4rem;}
 h2 {font-size: 2.2rem;}

@@ -4,7 +4,7 @@
 .content_title{font-family:'jalnan'; font-size:24px;  position:relative;}
 .section{position:relative;}
 .section+.section{margin-top:60px;}
-.more_view{position:absolute;color: #a9a8a8;font-size:15px;font-family:'SUIT';font-weight: 500;right: 75px;top: 6px; z-index:10;}
+.more_view{position:absolute;color: #a9a8a8;font-size:15px;font-family:'Pretendard';font-weight: 500;right: 75px;top: 6px; z-index:10;}
 #company_map{width:100%; height:286px;}
 
 /* 기타 공통 */
@@ -266,7 +266,7 @@ footer .footer_site .select_site .company_group > ul::-webkit-scrollbar-track {b
 /* recruit */
 .recruit .recruit_select_box{display: flex;}
 .recruit .recruit_select_box select{border:none;font-family:'jalnan';font-size:21px;position:relative;-webkit-appearance: none;-moz-appearance: none;appearance: none;background: url(/img/sub/recruit_select_arrow.png) no-repeat 95% 50%;padding-right: 47px; padding-left: 0;line-height: 52px;}
-.recruit .recruit_select_box option{font-size:13px;font-family: 'SUIT';}
+.recruit .recruit_select_box option{font-size:13px;font-family: 'Pretendard';}
 .recruit .job_select{margin-left:20px;}
 
 .mini_txt{color: rgb(51 51 51 / 70%);font-size:13px;font-weight: 700;}
