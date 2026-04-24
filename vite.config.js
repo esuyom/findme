@@ -9,7 +9,6 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (id.includes('node_modules/lottie-web')) return 'lottie';
-          if (id.includes('node_modules/bootstrap')) return 'bootstrap';
           if (id.includes('node_modules/swiper')) return 'swiper';
           if (id.includes('node_modules/react-dom')) return 'react-dom';
           if (id.includes('node_modules/react-router-dom') || id.includes('node_modules/react-router')) return 'router';
