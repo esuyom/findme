@@ -64,7 +64,7 @@ address{margin:0;}
 	01. Typography
 -------------------------------------------------------------------*/
 
-body {font-family:'Pretendard', sans-serif !important;  font-size:16px; letter-spacing:-0.025em; line-height:1.6; font-weight:400; color:#191919; margin:0; overflow-x:hidden;}
+body {font-family:'Pretendard', sans-serif;  font-size:16px; letter-spacing:-0.025em; line-height:1.6; font-weight:400; color:#191919; margin:0; overflow-x:hidden;}
 h1, h2, h3, h4, h5, h6 {font-weight: 500; margin:0;}
 h1 {font-size: 2.4rem;}
 h2 {font-size: 2.2rem;}
@@ -73,7 +73,7 @@ h4 {font-size: 21px;}
 h5 {font-size: 1.6rem;}
 h6 {font-size: 1.4rem;}
 p {margin: 0;}
-a {color: inherit ;}
+a {color: inherit;}
 a, a:link, a:hover, a:active, a:focus, button:focus {outline: 0; text-decoration: none !important;}
 body, input, textarea, button, select, label, a {-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
 /* blockquote {background: #f9f9f9; padding: 20px;} */
