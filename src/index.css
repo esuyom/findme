@@ -1,3 +1,6 @@
+/* Bootstrap - 반드시 커스텀 CSS보다 먼저 */
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
 /* AOS */
 @import './styles/aos.css';
 
