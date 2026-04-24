@@ -879,7 +879,7 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .sub_btn_box .menu-btn {height:auto; line-height:normal; padding: 9px 15px; margin-right:10px; border-radius: 16px; background: #f2f8fb; color: #666666; font-size: 12px; font-weight: 500; border:0; cursor:pointer;}
 .sub_btn_box a.active,
 .sub_btn_box button.active,
-.sub_btn_box .menu-btn.active {background: #4dbbff; color: #fff;}
+.sub_btn_box .menu-btn.active {background: #4dbbff; color: #fff !important;}
 .introduce_teacher img {width:260px; height:300px;}
 .introduce_teacher .career h5 {font-size:21px; font-weight:800;}
 .introduce_teacher .career li {font-size:15px; color:#6e6e6e;}
