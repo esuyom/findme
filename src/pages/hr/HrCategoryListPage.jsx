@@ -118,8 +118,8 @@ export default function HrCategoryListPage() {
         <section className="section">
 
           {/* 필터 영역 */}
-          <div>
-            <div className="d-flex gap-2">
+          <div className="hr_filter">
+            <div className="d-flex gap-2 hr_filter_row1">
               {/* 직군 선택 */}
               <CustomSelect
                 label="직군 선택"
@@ -165,7 +165,7 @@ export default function HrCategoryListPage() {
               />
             </div>
 
-            <div className="d-flex gap-2 mt-2">
+            <div className="d-flex gap-2 mt-2 hr_filter_row2">
               {/* MBTI */}
               <CustomSelect
                 label="MBTI 선택"

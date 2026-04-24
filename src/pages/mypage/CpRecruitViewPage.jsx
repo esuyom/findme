@@ -1,249 +1,208 @@
 import { useState } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
 import Layout from '../../components/layout/Layout';
 import CompanySidebar from '../../components/sidebar/CompanySidebar';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { STUDENT_DUMMY } from '../../constants/dummyData';
+import { DUTIES_BY_CATEGORY } from '../../constants/jobData';
+import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+
+function getMatchingStudents(jobGroup, duties) {
+  const jobDuties = DUTIES_BY_CATEGORY[jobGroup] || [];
+  const postedDuties = (duties || '').split(', ').filter(Boolean);
+  const allTargetDuties = [...new Set([...jobDuties, ...postedDuties])];
+  return STUDENT_DUMMY.filter((s) => {
+    const studentDuties = s.duty.split(', ').map((d) => d.trim());
+    return studentDuties.some((sd) =>
+      allTargetDuties.some((td) => sd.includes(td) || td.includes(sd))
+    );
+  });
+}
+
+const STATUS_LABEL = { active: '채용중', draft: '임시저장', closed: '채용종료' };
+const STATUS_CLASS  = { active: 'blue',   draft: 'gray',     closed: 'gray'     };
 
 export default function CpRecruitViewPage() {
-  const [activeTab, setActiveTab] = useState('applications');
-  const [moreMenuOpen, setMoreMenuOpen] = useState({});
-  const [showSMSModal, setShowSMSModal] = useState(false);
-  const [showOfferModal, setShowOfferModal] = useState(false);
-  const [showResumeModal, setShowResumeModal] = useState(false);
-  const [offerDeadline, setOfferDeadline] = useState('');
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { getById, close, remove } = useCpRecruitStore();
+  const recruit = getById(Number(id));
 
-  const toggleMoreMenu = (id) => {
-    setMoreMenuOpen(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
+  const [activeTab, setActiveTab] = useState('applications');
+  const [showSMSModal, setShowSMSModal]       = useState(false);
+  const [showOfferModal, setShowOfferModal]   = useState(false);
+  const [showResumeModal, setShowResumeModal] = useState(false);
+  const [offerDeadline, setOfferDeadline]     = useState('');
+
+  if (!recruit) {
+    return (
+      <Layout containerClass="mypage cp">
+        <div className="contents_wrap">
+          <CompanySidebar />
+          <section className="contents">
+            <p style={{ padding: '40px 24px', color: '#aaa' }}>
+              공고를 찾을 수 없습니다.{' '}
+              <Link to="/mypage/cp/recruit" style={{ color: '#4dbbff' }}>목록으로</Link>
+            </p>
+          </section>
+        </div>
+      </Layout>
+    );
+  }
+
+  const matchingStudents = getMatchingStudents(recruit.jobGroup, recruit.duties);
+
+  const dDay = (() => {
+    if (!recruit.deadline || recruit.deadline === '상시채용') return null;
+    return Math.max(0, Math.ceil((new Date(recruit.deadline) - new Date()) / (1000 * 60 * 60 * 24)));
+  })();
 
   return (
     <Layout containerClass="mypage cp">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="width100">
+
+          {/* ── 공고 헤더 ── */}
           <section className="top_contents">
             <div className="recruit_info_board d-flex justify-content-between">
               <div className="front d-flex align-items-center">
-                <div className="employment">채용중</div>
+                <div className={`employment ${STATUS_CLASS[recruit.status] || ''}`}>
+                  {STATUS_LABEL[recruit.status] || ''}
+                </div>
                 <div>
-                  <div className="title">[코리아교육그룹] 본사 기획부문 CS 강사 경력직 모집</div>
-                  <div className="date">2024.05.12 ~ 2024.06.12 <span className="count">D-30</span></div>
+                  <div className="title">{recruit.title || '(제목 없음)'}</div>
+                  <div className="date">
+                    {recruit.date} ~ {recruit.deadline || '상시채용'}
+                    {dDay !== null && <span className="count">D-{dDay}</span>}
+                  </div>
                 </div>
               </div>
               <div className="back d-flex gap-2">
                 <a href="#" className="sm tb">공고보기</a>
-                <a href="#" className="sm tb">수정</a>
-                <button type="button" className="sm tb">마감</button>
-                <button type="button" className="sm tb">삭제</button>
+                <button
+                  type="button"
+                  className="sm tb"
+                  onClick={() => navigate('/mypage/cp/recruit/write', { state: { editId: recruit.id } })}
+                >
+                  수정
+                </button>
+                {recruit.status !== 'closed' && (
+                  <button type="button" className="sm tb"
+                    onClick={() => { close(recruit.id); navigate('/mypage/cp/recruit'); }}>
+                    마감
+                  </button>
+                )}
+                <button type="button" className="sm tb"
+                  onClick={() => { remove(recruit.id); navigate('/mypage/cp/recruit'); }}>
+                  삭제
+                </button>
               </div>
             </div>
 
+            {/* ── 딱 맞는 인재 추천 슬라이더 ── */}
             <div className="recruit">
               <div className="notice_title">
-                <span className="bold">웹디자인.IT</span>직군 채용공고와 딱 맞는 인재를 소개합니다.
+                <span className="bold">{recruit.jobGroup || '해당 직군'}</span> 직군 채용공고와 딱 맞는 인재를 소개합니다.
               </div>
-              <div className="company_recruit_box view swiper-container basicSlide">
-                <div className="wrap swiper-wrapper">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="swiper-slide auto">
-                      <div className="applicant_info box">
-                        <div className="profile">
-                          <img src="/img/common/img-profile-default2.png" alt="image" />
-                        </div>
-                        <div className="info">
-                          <div className="d-flex align-items-center">
-                            <div className="name">홍길동</div>
-                            <div className="age">(남 34세)</div>
-                            <div className="mbti">ENTP</div>
-                          </div>
-                          <div>강원대학교</div>
-                          <div>컴퓨터공학과</div>
-                        </div>
-                      </div>
+
+              {matchingStudents.length === 0 ? (
+                <p style={{ padding: '16px', color: '#aaa', fontSize: '14px' }}>매칭되는 인재가 없습니다.</p>
+              ) : (
+                <div className="company_recruit_box view" style={{ position: 'relative' }}>
+                  <div className="btn_type01_box">
+                    <div className="swiper-button-prev btn_type01 cp-view-prev">
+                      <img src="/img/common/icon-recruit-prev.png" alt="이전" />
                     </div>
-                  ))}
-                </div>
-                <div className="btn_type01_box">
-                  <div className="swiper-button-prev new_company_recruit_btn_prev btn_type01 basic-btn-prev">
-                    <img src="/img/common/icon-recruit-prev.png" alt="" />
+                    <div className="swiper-button-next btn_type01 cp-view-next">
+                      <img src="/img/common/icon-recruit-next.png" alt="다음" />
+                    </div>
                   </div>
-                  <div className="swiper-button-next new_company_recruit_btn_next btn_type01 basic-btn-next">
-                    <img src="/img/common/icon-recruit-next.png" alt="" />
-                  </div>
+                  <Swiper
+                    modules={[Navigation]}
+                    navigation={{ prevEl: '.cp-view-prev', nextEl: '.cp-view-next' }}
+                    slidesPerView={"auto"}
+                    spaceBetween={16}
+                    grabCursor
+                    breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2.5,spaceBetween:16},1060:{slidesPerView:'auto',spaceBetween:16} }}
+                    speed={500}
+                    className="wrap"
+                  >
+                    {matchingStudents.map((student) => (
+                      <SwiperSlide
+                        key={student.id}
+                        style={{ width: 'auto', cursor: 'pointer' }}
+                        onClick={() => navigate(`/hr/${student.id}`)}
+                      >
+                        <div className="applicant_info box">
+                          <div className="profile">
+                            <img src="/img/common/img-profile-default2.png" alt="프로필" />
+                          </div>
+                          <div className="info">
+                            <div className="d-flex align-items-center">
+                              <div className="name">{student.name}</div>
+                              <div className="age">{student.age}</div>
+                              <div className="mbti">{student.mbti}</div>
+                            </div>
+                            <div>{student.duty.split(', ').slice(0, 2).join(', ')}</div>
+                            <div style={{ fontSize: '12px', color: '#888' }}>{student.region}</div>
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
                 </div>
-              </div>
+              )}
             </div>
           </section>
 
+          {/* ── 지원자 목록 ── */}
           <section className="contents bgColorfafafa">
             <div className="recruit_notice second">
               <div className="notice_part col">
                 <div className="notice_cate">
                   <ul>
-                    <li className={activeTab === 'applications' ? 'active' : ''} onClick={() => setActiveTab('applications')}>
-                      전체 15
-                    </li>
-                    <li className={activeTab === 'unread' ? 'active' : ''} onClick={() => setActiveTab('unread')}>
-                      미열람 3
-                    </li>
-                    <li className={`${activeTab === 'suggest' ? 'active' : ''} suggest`} onClick={() => setActiveTab('suggest')}>
-                      면접제의 3
-                    </li>
-                    <li className={activeTab === 'passed' ? 'active' : ''} onClick={() => setActiveTab('passed')}>
-                      서류합격 1
-                    </li>
-                    <li className={activeTab === 'final' ? 'active' : ''} onClick={() => setActiveTab('final')}>
-                      최종합격 1
-                    </li>
-                    <li className={activeTab === 'rejected' ? 'active' : ''} onClick={() => setActiveTab('rejected')}>
-                      불합격 0
-                    </li>
+                    {['applications','unread','suggest','passed','final','rejected'].map((tab) => {
+                      const labels = { applications:'전체 0', unread:'미열람 0', suggest:'면접제의 0', passed:'서류합격 0', final:'최종합격 0', rejected:'불합격 0' };
+                      return (
+                        <li key={tab}
+                          className={`${activeTab === tab ? 'active' : ''}${tab === 'suggest' ? ' suggest' : ''}`}
+                          onClick={() => setActiveTab(tab)}
+                        >
+                          {labels[tab]}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
-
-                {activeTab !== 'suggest' ? (
-                  <section className="tb_list_container">
-                    <div className="title row g-0">
-                      <div className="col-1"><input type="checkbox" id="checkNotice1" className="checked_all" /></div>
-                      <div className="col">직군</div>
-                      <div className="col-2">지원자 정보</div>
-                      <div className="col">최종경력</div>
-                      <div className="col-2">보유스킬</div>
-                      <div className="col">희망연봉</div>
-                      <div className="col">지원일</div>
-                      <div className="col">면접제의</div>
-                      <div className="col">관리</div>
-                    </div>
-                    <div className="list_wrap">
-                      {[1, 2].map((item) => (
-                        <div key={item} className="list fb-15 row g-0 align-items-start">
-                          <div className="col-1"><input type="checkbox" id={`checkNotice${item + 1}`} className="checked_sub" /></div>
-                          <div className="col">웹디자인.IT</div>
-                          <div className="col-2">
-                            <div className="applicant_info resume cursor_pointer" onClick={() => setShowResumeModal(true)}>
-                              <div className="profile">
-                                <img src="/img/common/img-profile-default2.png" alt="image" />
-                              </div>
-                              <div className="info">
-                                <div className="d-flex align-items-center">
-                                  <div className="name">홍길동</div>
-                                  <div className="age">(남 34세)</div>
-                                  <div className="mbti">ENTP</div>
-                                </div>
-                                <div>강원대학교</div>
-                                <div>컴퓨터공학과</div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col">
-                            12년 근무
-                            <ul className="career">
-                              <li>코리아교육그룹 퇴사</li>
-                              <li>메가스터디 퇴사</li>
-                              <li>그린아카데미 퇴사</li>
-                            </ul>
-                          </div>
-                          <div className="col-2">포토샵,javascript,css,html,react</div>
-                          <div className="col">5000만원</div>
-                          <div className="col">24.06.12<div className="red">미열람</div></div>
-                          <div className="col">
-                            <button type="button" className="sm tb">면접제의</button>
-                          </div>
-                          <div className="col">
-                            <div className="more_container">
-                              <button
-                                type="button"
-                                className="sm tb more"
-                                onClick={() => toggleMoreMenu(item)}
-                              >
-                                미평가
-                              </button>
-                              {moreMenuOpen[item] && (
-                                <ul className="part" style={{ display: 'block' }}>
-                                  <li>서류합격</li>
-                                  <li>최종합격</li>
-                                  <li>불합격</li>
-                                  <li>미평가</li>
-                                </ul>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                ) : (
-                  <section className="tb_list_container suggest_container">
-                    <div className="title row g-0">
-                      <div className="col">직군</div>
-                      <div className="col-2">지원자 정보</div>
-                      <div className="col">최종경력</div>
-                      <div className="col-2">보유스킬</div>
-                      <div className="col">희망연봉</div>
-                      <div className="col">면접답변기한</div>
-                      <div className="col">지원일</div>
-                      <div className="col">상태</div>
-                      <div className="col">면접제의</div>
-                      <div className="col">관리</div>
-                    </div>
-                    <div className="list_wrap">
-                      <div className="list fb-15 row g-0 align-items-start">
-                        <div className="col">웹디자인.IT</div>
-                        <div className="col-2">
-                          <div className="applicant_info resume cursor_pointer" onClick={() => setShowResumeModal(true)}>
-                            <div className="profile">
-                              <img src="/img/common/img-profile-default2.png" alt="image" />
-                            </div>
-                            <div className="info">
-                              <div className="d-flex align-items-center">
-                                <div className="name">홍길동</div>
-                                <div className="age">(남 34세)</div>
-                                <div className="mbti">ENTP</div>
-                              </div>
-                              <div>강원대학교</div>
-                              <div>컴퓨터공학과</div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="col">12년 근무</div>
-                        <div className="col-2">포토샵,javascript,css,html,react</div>
-                        <div className="col">5000만원</div>
-                        <div className="col">2024.05.10</div>
-                        <div className="col">24.06.12<div className="red">미열람</div></div>
-                        <div className="col">수락</div>
-                        <div className="col">
-                          <button type="button" className="sm tb">요청취소</button>
-                        </div>
-                        <div className="col">
-                          <div className="more_container">
-                            <button type="button" className="sm tb more">미평가</button>
-                          </div>
-                        </div>
-                        <div className="blue_box mt-3 mb-2">
-                          <div className="d-flex align-items-center">
-                            <div className="blue">관심있는 채용공고</div>
-                            <div className="ms-3">관심있는 채용공고는 기업에서 채용마감시 리스트에서 자동 삭제 됩니다.</div>
-                            <button
-                              type="button"
-                              className="bline sm ms-3"
-                              onClick={() => setShowSMSModal(true)}
-                            >
-                              면접일정 조율하기
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </section>
-                )}
+                <section className="tb_list_container">
+                  <div className="title row g-0">
+                    <div className="col-1"><input type="checkbox" /></div>
+                    <div className="col">직군</div>
+                    <div className="col-2">지원자 정보</div>
+                    <div className="col">최종경력</div>
+                    <div className="col-2">보유스킬</div>
+                    <div className="col">희망연봉</div>
+                    <div className="col">지원일</div>
+                    <div className="col">면접제의</div>
+                    <div className="col">관리</div>
+                  </div>
+                  <div className="list_wrap">
+                    <p style={{ padding: '24px 16px', color: '#aaa', fontSize: '14px' }}>아직 지원자가 없습니다.</p>
+                  </div>
+                </section>
               </div>
             </div>
           </section>
+
         </section>
       </div>
 
+      {/* ── SMS 모달 ── */}
       {showSMSModal && (
         <>
           <article className="popup pop_recruiter pop_recruiter_sms w640" style={{ display: 'block' }}>
@@ -254,15 +213,13 @@ export default function CpRecruitViewPage() {
               </button>
             </div>
             <div className="profile">
-              <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필 사진" /></div>
+              <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필" /></div>
               <div>
                 <div className="name">{CURRENT_STUDENT.name} <span className="age">{CURRENT_STUDENT.age}</span></div>
-                <div className="part">웹기획, 웹디자인, UX/UI디자인</div>
+                <div className="part">{CURRENT_STUDENT.skills?.map((s) => s.name).join(', ')}</div>
                 <ul className="characters">
-                  <li className="mbti">ENFP</li>
-                  <li>책임감</li>
-                  <li>노력</li>
-                  <li>활동적인</li>
+                  <li className="mbti">{CURRENT_STUDENT.mbti}</li>
+                  {CURRENT_STUDENT.keywords?.map((k) => <li key={k}>{k}</li>)}
                 </ul>
               </div>
             </div>
@@ -281,6 +238,7 @@ export default function CpRecruitViewPage() {
         </>
       )}
 
+      {/* ── 면접제의 모달 ── */}
       {showOfferModal && (
         <>
           <article className="popup pop_recruiter pop_recruiter_offer w640" style={{ display: 'block' }}>
@@ -291,15 +249,12 @@ export default function CpRecruitViewPage() {
               </button>
             </div>
             <div className="profile">
-              <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필 사진" /></div>
+              <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필" /></div>
               <div>
                 <div className="name">{CURRENT_STUDENT.name} <span className="age">{CURRENT_STUDENT.age}</span></div>
-                <div className="part">웹기획, 웹디자인, UX/UI디자인</div>
                 <ul className="characters">
-                  <li className="mbti">ENFP</li>
-                  <li>책임감</li>
-                  <li>노력</li>
-                  <li>활동적인</li>
+                  <li className="mbti">{CURRENT_STUDENT.mbti}</li>
+                  {CURRENT_STUDENT.keywords?.map((k) => <li key={k}>{k}</li>)}
                 </ul>
               </div>
             </div>
@@ -307,22 +262,14 @@ export default function CpRecruitViewPage() {
               <h3>채용공고 선택</h3>
               <div className="pick_list">
                 <ul>
-                  <li><input type="checkbox" id="pick1" /><label htmlFor="pick1">패키지 디자이너</label></li>
-                  <li><input type="checkbox" id="pick2" /><label htmlFor="pick2">패키지 디자이너</label></li>
-                  <li><input type="checkbox" id="pick3" /><label htmlFor="pick3">패키지 디자이너</label></li>
-                  <li><input type="checkbox" id="pick4" /><label htmlFor="pick4">패키지 디자이너</label></li>
+                  <li><input type="checkbox" id="pick1" /><label htmlFor="pick1">{recruit.title}</label></li>
                 </ul>
               </div>
               <h3>답변기한</h3>
               <div className="data_area">
                 <div className="date-form w220">
-                  <input
-                    type="date"
-                    aria-label="deadline"
-                    className="form-control start-date"
-                    value={offerDeadline}
-                    onChange={(e) => setOfferDeadline(e.target.value)}
-                  />
+                  <input type="date" className="form-control start-date"
+                    value={offerDeadline} onChange={(e) => setOfferDeadline(e.target.value)} />
                 </div>
                 <div className="text">지원자가 면접제의에 응답할 수 있는 기간입니다.</div>
               </div>
@@ -335,9 +282,10 @@ export default function CpRecruitViewPage() {
         </>
       )}
 
+      {/* ── 이력서 모달 ── */}
       {showResumeModal && (
         <>
-          <article className="popup pop_recruiter pop_recruiter_resume w640" style={{ display: 'block' }} id="popResume">
+          <article className="popup pop_recruiter pop_recruiter_resume w640" style={{ display: 'block' }}>
             <div className="d-flex mb-4 justify-content-between">
               <div className="title">이력서보기</div>
               <button type="button" className="popup_close" onClick={() => setShowResumeModal(false)}>
@@ -345,32 +293,29 @@ export default function CpRecruitViewPage() {
               </button>
             </div>
             <div className="profile type02">
-              <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필 사진" /></div>
+              <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필" /></div>
               <div>
                 <ul className="characters">
-                  <li className="mbti">ENFP</li>
-                  <li>책임감</li>
-                  <li>노력</li>
-                  <li>활동적인</li>
+                  <li className="mbti">{CURRENT_STUDENT.mbti}</li>
+                  {CURRENT_STUDENT.keywords?.map((k) => <li key={k}>{k}</li>)}
                 </ul>
                 <div className="name">{CURRENT_STUDENT.name} <span className="age">{CURRENT_STUDENT.age}</span></div>
                 <ul className="contact_info">
-                  <li><span>연락처</span> 010-9933-2223</li>
-                  <li><span>이메일</span> korea@gmail.com</li>
-                  <li><span>링크</span> <a href="#">www.korea.com</a></li>
+                  <li><span>연락처</span> {CURRENT_STUDENT.phone}</li>
+                  <li><span>이메일</span> {CURRENT_STUDENT.email}</li>
                 </ul>
               </div>
             </div>
             <div className="contents" id="resumeContents">
               <div className="skill_info">
                 <ul>
-                  <li>
-                    <div className="skill">포토샵</div>
-                    <div className="bar">
-                      <div className="outer"><span style={{width:'90%'}}></span></div>
-                    </div>
-                    <div className="percent">90%</div>
-                  </li>
+                  {CURRENT_STUDENT.skills?.map((s) => (
+                    <li key={s.name}>
+                      <div className="skill">{s.name}</div>
+                      <div className="bar"><div className="outer"><span style={{ width: `${s.percentage}%` }}></span></div></div>
+                      <div className="percent">{s.percentage}%</div>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>

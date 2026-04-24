@@ -1,0 +1,771 @@
+/* ==========================================================================
+   responsive.css — FindMe 반응형 미디어 쿼리
+   breakpoints:
+     - Desktop  : 1060px 이상 (기본값)
+     - Tablet   : 768px ~ 1059px
+     - Mobile   : 767px 이하
+     - Sm Mobile: 480px 이하
+   ========================================================================== */
+
+/* ==========================================================================
+   1. TABLET  (768px ~ 1059px)
+   ========================================================================== */
+@media (max-width: 1059px) {
+
+  /* ── 공통 레이아웃 ── */
+  body{font-size:12px;}
+  .contents_wrap {
+    max-width: 100%;
+    padding: 0 24px;
+    margin-top: 40px;
+    margin-bottom: 80px;
+  }
+
+  /* 메인 */
+  .main .main_banner{
+    padding:0;
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+  .main .main_banner .swiper-pagination{display:none;}
+  .main .content_title{display:flex; justify-content:space-between; align-items:center;}
+
+  /* ── GNB ── */
+  header .wrap {
+    max-width: 100%;
+    width: 100%;
+    padding: 0 24px;
+    justify-content: space-between;
+  }
+  header nav .depth1 > li a {
+    font-size: 14px;
+    padding: 0 10px;
+  }
+  header nav {
+    margin-left: 24px;
+  }
+  header .util .search_btn, header .util .mypage_btn{margin-right:10px; padding:0;}
+
+  /* ── 카드 그리드 ── */
+  .company_recruit_box .con { width: 100%; }
+  .job_interview_box .con   { width: 100%; }
+  .student_list_box .con    { width: 100%; height:auto; }
+  .none_slide.job_interview_box .con { width: calc(50% - 10px); }
+  .work_interview_box .con  { width: calc(25% - 15px); }
+  .mou_box .mou_thumb       { width: 220px; }
+  .trend_box .con           { width: calc(50% - 10px); }
+
+
+  .student_list_box .student_img_box{width:90px; height:90px;}
+  .student_list_box .student_info_box .name{font-size:16px;}
+  .student_list_box .student_info_box .age{font-size:14px;}
+  .student_list_box .student_info_box .student_mention{font-size:13px;}
+  .student_list_box .student_info_box .student_duty{font-size:13px;}
+
+  /* ── 디테일 페이지 ── */
+  .detail_top .detail_info  { width: 56%; }
+  .detail_float             { width: 300px; }
+  .detail_float .detail_profile { width: 280px; }
+
+  /* ── 마이페이지 ── */
+  .mypage.cp .contents      { padding: 30px 24px 60px; }
+  .mypage.cp.recruit.write .contents { width: 100%; padding: 0 24px; }
+  .mypage.cp.info .contents { width: 100%; }
+
+  /* ── 인재리스트 ── */
+  .student_list_location { flex-direction: column; gap: 16px; align-items: flex-start;}
+  .student_list_location .left_title { text-align: left; }
+  .student_list_location .location ul { justify-content: flex-start; }
+  .student_list_location .location a{width:auto;padding:0 13px;font-size:14px;margin: 5px;}
+}
+
+/* ==========================================================================
+   2. MOBILE  (767px 이하)
+   ========================================================================== */
+@media (max-width: 767px) {
+
+  /* ── 공통 레이아웃 ── */
+  .contents_wrap {
+    padding: 0 16px;
+    margin-bottom: 60px;
+  }
+  .section + .section { margin-top: 40px; }
+
+  /* ────────────────────────────────────────────────────
+     GNB — 햄버거 메뉴
+  ──────────────────────────────────────────────────── */
+  header .wrap {
+    max-width: 100%;
+    width: 100%;
+    padding: 0 16px;
+    height: 56px;
+    position: relative;
+  }
+  header .logo { width: 60px; }
+
+  /* ── 뒤로가기 버튼 (서브페이지 모바일) ── */
+  header .back_btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+  }
+  header .back_btn img {
+    width: 24px;
+    height: 24px;
+  }
+  /* 서브페이지: 뒤로가기 표시 + 로고 숨김 */
+  header.sub .back_btn { display: flex; }
+  header.sub .logo     { display: none; }
+
+  /* 햄버거 버튼 */
+  header .ham_btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 30px;
+    height: 30px;
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    z-index: 201;
+  }
+  header .ham_btn span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: #191919;
+    border-radius: 2px;
+    transition: all 0.3s;
+    transform-origin: center;
+  }
+  header .ham_btn.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  header .ham_btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  header .ham_btn.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* 모바일 nav 드로어 */
+  header nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    margin: 0;
+    padding: 72px 0 40px;
+    background: #fff;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.12);
+    overflow-y: auto;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 200;
+  }
+  header nav.open { right: 0; }
+  header nav .bubble{display:none;}
+
+  /* 모바일 dim */
+  header .nav_dim {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 199;
+  }
+  header .nav_dim.open { display: block; }
+
+  header nav .depth1 {
+    flex-direction: column;
+    height: auto;
+    width:100%;
+  }
+  header nav .depth1 > li {
+    margin: 0;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  header nav .depth1 > li > a {
+    display: block;
+    padding: 16px 24px;
+    font-size: 16px;
+    line-height: 1.4;
+    height: auto;
+  }
+  header nav .depth2 {
+    position: static;
+    transform: none;
+    width: 100%;
+    opacity: 1;
+    pointer-events: auto;
+    background: #f8f9fa;
+    text-align: left;
+  }
+  header nav .depth2 li a {
+    padding: 12px 24px 12px 36px;
+    font-size: 14px;
+    color: #555;
+  }
+
+  /* 검색·로그인 유틸 */
+  header .util { position: static; }
+  header .util .login_before .login_btn { font-size: 11px; padding: 0 8px; }
+  header .gnb_bg { display: none; }
+
+  /* ── 타이포그래피 ── */
+  h2 { font-size: 1.6rem; }
+  h3 { font-size: 22px; }
+  h4 { font-size: 18px; }
+  .top_txt .main_txt { font-size: 20px; }
+  /* content_title: flex로 more_view 우측 정렬 */
+  .content_title {
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .more_view { position: static; }
+  .more_view .more_view_full  { display: none; }
+  .more_view .more_view_short { display: inline; }
+
+  /* ────────────────────────────────────────────────────
+     카드 그리드 — 2열 고정
+  ──────────────────────────────────────────────────── */
+
+  /* none_slide 공통: 2열 */
+  .none_slide .wrap { margin-left: 0; gap: 12px; display: flex; flex-wrap: wrap; }
+  .none_slide .con  { margin-left: 0; margin-bottom: 0; width: calc(50% - 6px) !important; }
+
+  /* 취업성공스토리 — 2열 */
+  .none_slide.job_interview_box .con { width: calc(50% - 6px) !important; }
+  /* 카드 내부 좁은 폭 대응 */
+  .job_interview_box .con           { height: auto; }
+  .job_interview_box .con a         { padding: 15px; }
+  .job_interview_box .interview_info_box { flex-direction: column; gap: 4px; }
+  .job_interview_box .interview_info_box .info_img {
+    width: 48px; height: 48px; margin-right: 0; margin-bottom: 4px;
+  }
+  .job_interview_box .interview_info_box .info_txt .name  { font-size: 12px; }
+  .job_interview_box .interview_info_box .info_txt .major { font-size: 11px; }
+  .job_interview_box .interview_img_box .pf_thumb {
+    width: 42px; height: 42px; margin-top: 8px;
+  }
+  .job_interview_box .interview_mention { font-size: 11px; margin-top: 8px; }
+
+  /* student_list_box 카드 — padding 15px */
+  .student_list_box .con a { padding: 15px; }
+  .student_list_box .student_info_box { margin-top: 12px; }
+  .student_list_box .student_info_box .name { font-size: 18px; }
+  .student_list_box .student_info_box .age  { font-size: 14px; }
+  .student_list_box .student_info_box .student_mention { font-size: 13px; margin: 4px 0; }
+  .student_list_box .student_info_box .student_duty    { font-size: 12px; margin-bottom: 16px; }
+  .student_list_box .student_info_box .student_keywords { position:static; }
+  .student_list_box .student_info_box .student_mbti    { 
+    left: 15px;
+    top: 15px;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 1px 5px; }
+
+  /* most_view_recruit_box 카드 — padding 15px */
+  .most_view_recruit_box .con a { padding: 36px 15px 15px; }
+  .most_view_recruit_box .con .recruit_location { bottom: 15px; left: 15px; }
+  .most_view_recruit_box .con .recruit_state    { right: 15px; top: 15px; }
+
+  /* work_interview_box — 2열 유지 */
+  .work_interview_box .con  { width: calc(50% - 8px); margin-right: 0; margin-bottom: 16px; }
+  .work_interview_box .wrap { gap: 16px; }
+
+  /* mou_box — 2열 */
+  .mou_box .con        { width: calc(50% - 6px); margin-right: 0; margin-bottom: 12px; }
+  .mou_box .mou_thumb  { width: 100%; height: 100px; }
+
+  /* trend_box — 2열 */
+  .trend_box .con      { width: calc(50% - 6px); }
+  .trend_box .con a    { padding: 15px; }
+  .trend_box .title    { font-size: 14px; white-space: normal; overflow: hidden;
+                         display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+
+  /* poster_box — 2열 */
+  .poster_box .con     { width: calc(50% - 6px); }
+  .poster_box .img     { width: 100%; height: auto; aspect-ratio: 9 / 13; }
+  .poster_box .title{margin:5px 0 0 0;}
+
+  /* 스와이퍼 카드 (fixed width 유지) */
+  .most_view_recruit_box .con { width: 100%; height: 200px; }
+  .student_list_box.type02 .con{width:100%; height:auto;}
+  .student_list_box.type02 .student_info_box{padding:15px; margin:0;}
+  .student_list_box.type02 .student_img_box{height:150px;}
+
+  /* student_list_box.non-slide — 2열 */
+  .student_list_box.non-slide .wrap { display: flex; flex-wrap: wrap; gap: 12px; margin-left: -16px; gap: 0 !important;}
+  .student_list_box.non-slide .con  { width: calc(100% / 2 - 16px); margin-left: 16px; height: auto; }
+
+  /* ── line_cate_box — 가로 스크롤 ── */
+  .line_cate_box { margin: 32px 0 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .line_cate_box ul { white-space: nowrap; flex-wrap: nowrap; padding-bottom: 2px; }
+  .line_cate_box li { font-size: 13px; margin: 0 10px; display: inline-block; }
+
+  /* ── 광고 배너 ── */
+  .ad_banner .wrap { border-radius: 16px; }
+
+  /* ── 검색 퀵메뉴 — 가로 스와이프 ── */
+  .sub_quick_menu { margin: 40px 0 50px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .sub_quick_menu ul { flex-wrap: nowrap; gap: 10px; width: max-content; padding-bottom: 4px; }
+  .sub_quick_menu li { flex-shrink: 0; }
+  .sub_quick_menu li a{padding:0 10px;}
+  .sub_quick_menu .title { font-size: 12px; }
+  .sub_quick_menu .img { width: 55px; height: 55px;         padding: 0 10px; box-sizing: content-box;}
+
+  /* ────────────────────────────────────────────────────
+     options-container — 모바일 센터 모달
+  ──────────────────────────────────────────────────── */
+  .options-container {
+    position: fixed;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%);
+    width: calc(100vw - 32px) !important;
+    max-width: 100% !important;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding: 20px !important;
+    border-radius: 16px !important;
+    z-index: 1000;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18) !important;
+  }
+  /* dim 효과 — .options-container.active 일 때 배경 */
+  .options-container.active::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+  }
+  /* 옵션 칩 크기 */
+  .cu-option { padding: 8px 14px; font-size: 13px; }
+
+  /* ────────────────────────────────────────────────────
+     인재리스트 필터 (HrCategoryListPage) — 모바일 2열
+  ──────────────────────────────────────────────────── */
+  /* 1행: 직군(50%) | 직무(50%) → 검색 100% */
+  .hr_filter_row1 { flex-wrap: wrap; }
+  .hr_filter_row1 > .custom-select{ flex: 0 0 calc(50% - 4px) !important; min-width: 0; }
+  .hr_filter_row1 > input { flex: 0 0 100% !important; margin-top: 8px; }
+
+  /* 2행: 6개 → 2열 wrap (3행 × 2열) */
+  .hr_filter_row2 { flex-wrap: wrap; gap: 8px !important; }
+  .hr_filter_row2 > .custom-select,
+  .hr_filter_row2 > .col { flex: 0 0 calc(50% - 4px) !important; min-width: 0; }
+
+  /* ────────────────────────────────────────────────────
+     인풋 / 셀렉트 — 40px 높이 통일
+  ──────────────────────────────────────────────────── */
+  select,
+  input[type='text'],
+  input[type='password'],
+  input[type='tel'],
+  input[type='email'],
+  input[type='number'],
+  input[type='search'],
+  input[type='date'],
+  input[type='month'],
+  input[type='url'] {
+    height: 40px !important;
+    line-height: 40px !important;
+    padding: 0 10px !important;
+    font-size: 14px;
+  }
+  /* .normal 클래스 변형 동기화 */
+  input[type='text'].normal,
+  input[type='number'].normal,
+  input[type='password'].normal,
+  input[type='email'].normal {
+    height: 40px !important;
+    line-height: 40px !important;
+    padding: 0 10px !important;
+  }
+  /* select-box 컴포넌트 */
+  .select-box,
+  .select-box.type2,
+  .select_disabled,
+  .select_disabled.type2 { height: 40px !important; line-height: 40px !important; padding: 0 10px !important; }
+  /* phone_box 구분자 세로 중앙 */
+  .member .phone_box span,
+  .mypage .phone_box span  { line-height: 40px; }
+  .mypage .birth div span  { line-height: 40px; }
+  /* 채용 셀렉트 폰트 재조정 */
+  .recruit .recruit_select_box select { font-size: 16px !important; }
+
+  /* ── 필터 셀렉트 박스 ── */
+  .sub_select_box { flex-wrap: wrap; gap: 8px; }
+  .sub_select_box label { margin-right: 0; }
+
+  /* ── 채용 셀렉트 — 세로 스택 ── */
+  .recruit .recruit_select_box { flex-direction: column; gap: 4px; }
+  .recruit .job_select { margin-left: 0; }
+
+  /* ── 검색 박스 ── */
+  .sub.search .search_box .wrap { width: 100%; }
+
+  /* ────────────────────────────────────────────────────
+     Footer
+  ──────────────────────────────────────────────────── */
+  footer .wrap { padding: 32px 16px; }
+  footer .footer_menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-bottom: 20px;
+  }
+  footer .footer_menu li { font-size: 12px; }
+  footer .footer_info { flex-direction: column; gap: 20px; }
+  footer .footer_ads p { font-size: 11px; line-height: 1.7; }
+  footer .footer_ads p span { display: block; }
+  footer .footer_site {
+    position: static;
+    width: 100%;
+    margin-top: 20px;
+    justify-content: flex-start;
+  }
+  footer .footer_site .select_site { width: 100%; margin-left: 0; }
+
+  /* ────────────────────────────────────────────────────
+     회원 페이지 (login / join)
+  ──────────────────────────────────────────────────── */
+  #container.login.member .contents_wrap {
+    padding: 0 20px;
+    margin-top: 0;
+  }
+  .gnb_member .wrap { padding: 0 16px; }
+
+  /* ────────────────────────────────────────────────────
+     공통 컨텐츠 너비
+  ──────────────────────────────────────────────────── */
+  .w640 { width: 100% !important; max-width: 100%; }
+
+  /* ────────────────────────────────────────────────────
+     디테일 페이지 — 세로 배치
+  ──────────────────────────────────────────────────── */
+  .detail_top {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .detail_top .detail_info { width: 100%; }
+  .detail_float             { width: 100%; }
+  .detail_float .detail_profile { width: 100%; }
+  .detail_float .quik_area  { display: none; }
+  .detail_container {
+    flex-direction: column-reverse;
+    gap: 24px;
+  }
+  .detail_top .detail_info .portfolio_list li {
+    width: calc(50% - 8px);
+    height: auto;
+    aspect-ratio: 1;
+  }
+
+  /* fixed 요소 — 모바일에서 sticky 해제 */
+  .detail_float .detail_company.fixed  { position: static; }
+  .detail_float .coaching_float.fixed  { position: static; }
+  .detail_float .detail_profile.fixed  { position: static; }
+
+  /* 상세페이지 텍스트 링크 overflow */
+  .detail_txt a { word-break: break-all; }
+  .detail_txt h4 { font-size: 17px; }
+
+  /* float_detail_txt 고정% 해제 */
+  .float_detail_txt li span { width: auto; margin-right: 8px; }
+  .float_detail_txt li em   { width: auto; }
+
+  /* quik_area 숨김 */
+  .quik_area {
+     top: -48px;
+    left: 0;
+    display: flex;
+    gap: 10px;
+  }
+  .quik_area .btn_back{display:none;}
+  .quik_area .btn_save {height:40px; width:40px;}
+  .quik_area .btn_save div{height:100%;}
+  .quik_area .btn_save svg{vertical-align: inherit;}
+  /* ────────────────────────────────────────────────────
+     기업 상세 (CompanyDetailPage)
+  ──────────────────────────────────────────────────── */
+  .recruit.company .company_info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-bottom: 24px;
+  }
+  .recruit.company .company_logo { width: 64px; height: 64px; }
+  .recruit.company .company_name { font-size: 18px; }
+  /* 기업정보 테이블 행 — 라벨/값 세로 배치 */
+  .recruit.company .detail_txt.table { padding: 14px 16px; }
+  .recruit.company .detail_txt.table div {
+    flex-direction: column;
+    gap: 2px;
+    align-items: flex-start;
+  }
+
+  /* ────────────────────────────────────────────────────
+     채용공고 상세 float 영역
+  ──────────────────────────────────────────────────── */
+  .recruit .detail_float .company_info { flex-wrap: wrap; gap: 8px; }
+
+  /* ────────────────────────────────────────────────────
+     검색결과 탭 — 가로 스크롤
+  ──────────────────────────────────────────────────── */
+  .tab_list { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tab_list ul { white-space: nowrap; flex-wrap: nowrap; }
+  .tab_list li { flex-shrink: 0; display: inline-block; }
+
+  /* ────────────────────────────────────────────────────
+     마이페이지 — 사이드바 상단 이동
+  ──────────────────────────────────────────────────── */
+  .mypage .contents_wrap {
+    flex-direction: column;
+  }
+
+  /* 수강생 사이드바 */
+  .mypage .sidebar,
+  .mypage .cp.sidebar {
+    width: 100% !important;
+    padding: 16px 16px 0;
+    flex-direction: row;
+    overflow-x: auto;
+    border-bottom: 1px solid #eee;
+    flex-shrink: 0;
+    gap: 0;
+  }
+  .mypage .sidebar ul,
+  .mypage .cp.sidebar ul {
+    display: flex;
+    flex-direction: row;
+    gap: 0;
+    white-space: nowrap;
+  }
+  .mypage .sidebar ul li,
+  .mypage .cp.sidebar ul li {
+    flex-shrink: 0;
+    padding: 10px 14px;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -1px;
+  }
+  .mypage .sidebar ul li a,
+  .mypage .cp.sidebar ul li a {
+    font-size: 13px;
+    font-weight: 600;
+    color: #666;
+  }
+  .mypage .sidebar ul li.active,
+  .mypage .cp.sidebar ul li.active {
+    border-bottom-color: #4dbbff;
+  }
+  .mypage .sidebar ul li.active a,
+  .mypage .cp.sidebar ul li.active a {
+    color: #4dbbff;
+  }
+
+  /* 기업 사이드바 공고등록 버튼 */
+  .mypage .cp.sidebar > button { display: none; }
+
+  /* 마이페이지 콘텐츠 */
+  .mypage .contents,
+  .mypage.cp .contents {
+    width: 100% !important;
+    padding: 24px 16px 60px !important;
+  }
+  .mypage.cp.recruit.write .contents { padding: 24px 16px !important; }
+  .mypage.cp.recruit.write .back { display: none; }
+  .mypage.cp.info .contents { width: 100% !important; }
+
+  /* 마이페이지 h4 */
+  .mypage.cp h4 { font-size: 20px; margin-bottom: 24px; }
+
+  /* ── list_box (이력서·포트폴리오) — 2열 ── */
+  .mypage .list_box { display: flex; flex-wrap: wrap; gap: 12px; }
+  .mypage .list_box li {
+    width: calc(50% - 6px) !important;
+    height: auto;
+    min-height: 160px;
+  }
+  .mypage .add_box { width: 100%; height: 120px; background-size: 48px; }
+
+  /* ── pf_add_box — 세로 스택 ── */
+  .mypage .pf_add_box li { display: flex; flex-direction: column; }
+  .mypage .pf_add_box .img { width: 100%; height: 140px; }
+  .mypage .pf_add_box .txt { width: 100%; padding: 12px 0 0; }
+
+  /* ── resume_add_box — 세로 스택 ── */
+  .mypage.write .resume_add_box { display: flex; flex-direction: column; gap: 12px; }
+  .mypage.write .resume_add_box .left  { width: 100%; }
+  .mypage.write .resume_add_box .right { width: 100%; }
+
+  /* ── 채용공고 관리 대시보드 ── */
+  .recruit_board {
+    flex-direction: column;
+    gap: 0;
+    padding: 16px;
+    margin: 24px 0;
+  }
+  .recruit_board .part { border-right: none; border-bottom: 1px solid #ddd; padding: 12px 0; }
+  .recruit_board .part:last-child { border-bottom: none; }
+  .recruit_board .num  { font-size: 40px; }
+  .recruit_board .text { padding-left: 0; font-size: 13px; }
+
+  .recruit_board.second { flex-direction: column; }
+  .recruit_board.second .part { border-bottom: 1px solid #ddd; border-right: none; }
+  .recruit_board.second .part.active:first-child { border-radius: 12px 12px 0 0; }
+  .recruit_board.second .part.active:last-child  { border-radius: 0 0 12px 12px; }
+  .recruit_board.second .part:first-child .text  { padding-left: 16px; }
+  .recruit_board.second .part a                  { padding: 16px; }
+
+  /* ── TB 리스트 (채용공고 목록 테이블) ── */
+  .tb_list_container .title { display: none; }
+  .tb_list_container .list_wrap { margin: 0; }
+  .tb_list_container .list_wrap .list.row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    border-bottom: 1px solid #eee;
+  }
+  .tb_list_container .list_wrap .list.row > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: none !important;
+  }
+  .tb_list_container .list_wrap .list.row > .col-1 { display: none; }
+
+  /* ── 지원자 탭 ── */
+  .recruit_notice .notice_cate ul {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-bottom: 12px;
+  }
+  .recruit_notice .notice_cate li { margin-left: 0; font-size: 13px; }
+
+  /* ── 공고 헤더 ── */
+  .recruit_info_board {
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 24px;
+  }
+  .recruit_info_board .back { flex-wrap: wrap; }
+  .recruit_info_board .front { flex-wrap: wrap; gap: 8px; }
+
+  /* ── 인재 추천 카드 ── */
+  .applicant_info.box { width: 240px; padding: 14px; }
+
+  /* ── 스킬 정보 ── */
+  .skill_info .skill { width: 80px; font-size: 13px; }
+  .skill_info ul     { padding: 16px; }
+  .skill_info ul li  { padding: 16px 0; }
+
+  /* ── 상세 분리 레이아웃 ── */
+  .detail_float .coaching_float.fixed { position: static; }
+  .detail_float .detail_profile.fixed { position: static; }
+
+  /* ── 검색 입력 ── */
+  .search_box input { font-size: 15px; }
+
+  /* ── 버튼 ── */
+  button.type02, button.type01 { min-height: 44px; }
+  .sm.tb { min-height: 32px; font-size: 11px; padding: 0 8px; }
+
+  /* ── 팝업 ── */
+  .popup {
+    width: calc(100% - 32px) !important;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px 20px;
+    border-radius: 16px;
+  }
+  .popup.w400, .popup.w560, .popup.w640 { width: calc(100% - 32px) !important; }
+  .pop_recruiter_resume .side_btn { display: none; }
+  .popup .pick_list { max-height: 160px; }
+  .pop_skill .result label { margin-left: 8px; }
+  .pop_skill .result label span { width: 140px; }
+
+  /* ── 프로필 페이지 ── */
+  .mypage.profile .contents_wrap { padding: 0; margin-top: 60px; }
+  .sub .contents_wrap{margin-top:60px;}
+  .sub_banner_wrap .banner{border-radius:12px;}
+  .detail_board .con a { padding-bottom: 16px; margin-bottom: 16px; }
+
+  /* ── 채용공고 등록 write ── */
+  .mypage.cp.recruit.write .job_noti { font-size: 13px; padding: 12px; }
+  .mypage.cp.qna.write .input { width: 100%; }
+  .mypage.cp.qna .qna_box.view { width: 100%; }
+
+  /* ── 스크랩 — 2열 ── */
+  .mypage.scrap .con { width: calc(50% - 6px) !important; }
+  .mypage.scrap .cp_logo_box .con { width: calc(50% - 6px) !important; }
+  .mypage.scrap .cp_logo_box .img { width: 100%; }
+  .mypage.scrap .trend_box .con { width: calc(50% - 6px); }
+
+  /* ── 공지/QnA 목록 ── */
+  .mypage.qna .qna_box .title { font-size: 17px; }
+  .mypage.join .join_box .title { font-size: 16px; }
+  .mypage.join .join_box li { flex-direction: column; gap: 12px; }
+  .mypage.join .join_box .img { width: 120px; height: auto; }
+  .mypage.join .join_box .txt { width: 100%; padding: 0; }
+
+  /* ── gnb_mypage ── */
+  header.gnb_mypage .wrap { margin: 0 16px; }
+}
+
+/* ==========================================================================
+   3. SMALL MOBILE  (480px 이하)
+   ========================================================================== */
+@media (max-width: 480px) {
+
+  /* ── 공통 ── */
+  .contents_wrap { padding: 0 12px; margin-top: 60px; margin-bottom: 48px; }
+
+  /* ── 타이포 ── */
+  h3 { font-size: 20px; }
+  h4 { font-size: 16px; }
+  body { font-size: 14px; }
+  .top_txt .main_txt { font-size: 18px; }
+
+  /* ── 카드 내부 ── */
+  .job_interview_box .interview_mention { font-size: 11px; -webkit-line-clamp: 2; }
+  /* none_slide / work_interview_box 2열 유지 (767px 규칙 그대로) */
+
+  /* ── 헤더 ── */
+  header .wrap { height: 52px; }
+
+  /* ── 마이페이지 사이드바 ── */
+  .mypage .sidebar ul li,
+  .mypage .cp.sidebar ul li { padding: 8px 10px; }
+  .mypage .sidebar ul li a,
+  .mypage .cp.sidebar ul li a { font-size: 12px; }
+
+  /* ── 대시보드 ── */
+  .recruit_board .num { font-size: 32px; }
+
+  /* ── 팝업 ── */
+  .popup { padding: 24px 14px; }
+  .popup .title { font-size: 16px; }
+  .pop_recruiter .photo { width: 72px; height: 72px; margin-right: 12px; }
+  .pop_recruiter .name  { font-size: 15px; }
+  .pop_recruiter .type02 .name { font-size: 18px; }
+
+  /* ── 인재 추천 카드 ── */
+  .applicant_info.box { width: 200px; padding: 12px; }
+  .applicant_info .profile { width: 56px; height: 56px; }
+
+  /* ── 버튼 ── */
+  .main .main_banner .btn_type01_box { display: none; }
+  .btn_type01_box { display: none; }
+
+  /* ── 스킬 ── */
+  .skill_info .skill { width: 70px; font-size: 12px; }
+  .skill_info .percent { width: 46px; font-size: 13px; }
+
+}

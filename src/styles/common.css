@@ -43,7 +43,7 @@ button, input, optgroup, select, textarea {color: inherit; font: inherit; margin
 button {overflow: visible; border:0; background:none;}
 button, select {text-transform: none;}
 button, html input[type="button"], input[type="reset"], input[type="submit"] {-webkit-appearance: button; cursor: pointer;}
-button[disabled], html input[disabled] {cursor: default;}
+button[disabled], html input[disabled] {cursor: default; border:none;}
 button::-moz-focus-inner, input::-moz-focus-inner {border: 0; padding: 0;}
 input {line-height: normal;}
 input:focus {ouline:none;}

@@ -12,7 +12,8 @@ export default function SectionTitle({ title, moreText, moreTo = '#' }) {
       {title}
       {moreText && (
         <Link to={moreTo} className="more_view">
-          {moreText}
+          <span className="more_view_full">{moreText}</span>
+          <span className="more_view_short">더보기</span>
         </Link>
       )}
     </h3>

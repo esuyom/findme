@@ -280,7 +280,7 @@ export default function CpRecruitWritePage() {
           {/* 채용시 예상 연봉 */}
           <div className="input">
             <h5 className="sub_title">채용시 예상 연봉</h5>
-            <div className="d-flex align-items-center">
+            <div className="d-flex align-items-center w400">
               <input
                 name="salaryMin"
                 type="number"
@@ -322,15 +322,17 @@ export default function CpRecruitWritePage() {
           <div className="input">
             <h5 className="sub_title">마감일 설정</h5>
             <div className="d-flex align-items-center">
+            <div className="date-form">
               <input
                 name="deadline"
                 type="date"
-                className="normal"
+                className="normal form-control"
                 style={{ width: '220px' }}
                 value={form.deadline}
                 onChange={handleForm}
                 disabled={isAlways}
               />
+              </div>
               <div className="d-flex align-items-center ms-3">
                 <input
                   type="checkbox"

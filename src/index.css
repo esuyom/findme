@@ -10,3 +10,6 @@
 @import './styles/style.css';
 @import './styles/main.css';
 @import './styles/datepicker.css';
+
+/* 반응형 — 항상 마지막에 */
+@import './styles/responsive.css';

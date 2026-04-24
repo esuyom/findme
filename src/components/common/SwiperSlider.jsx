@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -15,14 +16,13 @@ let _uid = 0;
  * @param {boolean}     showPagination  - 페이지네이션 표시 여부
  * @param {boolean}     autoplay        - 자동재생 여부
  * @param {number}      delay           - 자동재생 딜레이(ms)
- * @param {string|number} slidesPerView - 한 화면에 보여줄 슬라이드 수
+ * @param {string|number} slidesPerView - 한 화면에 보여줄 슬라이드 수 (기본 데스크탑 값)
  * @param {number}      spaceBetween    - 슬라이드 간격
+ * @param {object}      breakpoints     - Swiper breakpoints (min-width 기준 반응형 설정)
  * @param {string}      prevImg         - 이전 버튼 이미지
  * @param {string}      nextImg         - 다음 버튼 이미지
  * @param {string}      sliderKey       - 같은 페이지 복수 슬라이더 구분용 고유 키
  */
-import { useState } from 'react';
-
 export default function SwiperSlider({
   items = [],
   className = '',
@@ -36,11 +36,11 @@ export default function SwiperSlider({
   speed = 600,
   loopAdditionalSlides = 0,
   grabCursor = true,
+  breakpoints,
   prevImg = '/img/common/icon-recruit-prev.png',
   nextImg = '/img/common/icon-recruit-next.png',
   sliderKey,
 }) {
-  // 인스턴스마다 고유한 클래스명 생성
   const [uid] = useState(() => sliderKey || `sw${++_uid}`);
   const prevClass = `sw-prev-${uid}`;
   const nextClass = `sw-next-${uid}`;
@@ -72,11 +72,8 @@ export default function SwiperSlider({
         grabCursor={grabCursor}
         autoplay={autoplay ? { delay, disableOnInteraction: false } : false}
         pagination={showPagination ? { el: `.swiper-pagination-${uid}`, type: 'bullets' } : false}
-        navigation={
-          showNav
-            ? { prevEl: `.${prevClass}`, nextEl: `.${nextClass}` }
-            : false
-        }
+        navigation={showNav ? { prevEl: `.${prevClass}`, nextEl: `.${nextClass}` } : false}
+        breakpoints={breakpoints}
       >
         {items.map((item, i) => (
           <SwiperSlide key={i}>{item}</SwiperSlide>

@@ -31,11 +31,26 @@ const DEADLINE_RECRUITS = [...RECRUIT_DUMMY]
   .sort((a, b) => new Date(a.deadline) - new Date(b.deadline))
   .slice(0, 8);
 
+/* ── 공통 breakpoints ──────────────────────────────── */
+const BP_RECRUIT = {
+  0:    { slidesPerView: 2,   spaceBetween: 12 },
+  480:  { slidesPerView: 2.5, spaceBetween: 16 },
+  768:  { slidesPerView: 2.5, spaceBetween: 20 },
+  1060: { slidesPerView: 4,   spaceBetween: 20 },
+};
+
+const BP_INTERVIEW = {
+  0:    { slidesPerView: 2,   spaceBetween: 12 },
+  480:  { slidesPerView: 2.5, spaceBetween: 16 },
+  768:  { slidesPerView: 2,   spaceBetween: 20 },
+  1060: { slidesPerView: 3.05, spaceBetween: 20 },
+};
+
 export default function HomePage() {
   return (
     <Layout containerClass="main">
 
-      {/* 메인 배너 */}
+      {/* 메인 배너 — 항상 1장 */}
       <div className="main_banner">
         <SwiperSlider
           sliderKey="home-banner"
@@ -59,7 +74,7 @@ export default function HomePage() {
 
       <div className="contents_wrap">
 
-        {/* 새로운 기업 채용공고 - 최신순 최대 8개 */}
+        {/* 새로운 기업 채용공고 */}
         <section className="section01 section">
           <SectionTitle title="새로운 기업에서 직원을 찾고 있어요!" moreText="업데이트 된 채용공고 더보기" moreTo="/recruit" />
           <div className="company_recruit_box">
@@ -71,6 +86,7 @@ export default function HomePage() {
               speed={600}
               loop
               loopAdditionalSlides={2}
+              breakpoints={BP_RECRUIT}
               items={LATEST_RECRUITS.map((d) => (
                 <RecruitCard key={d.id} {...d} to={`/recruit/${d.id}`} />
               ))}
@@ -78,7 +94,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 가장 많이 본 채용공고 - 조회수 순 최대 8개 */}
+        {/* 가장 많이 본 채용공고 */}
         <section className="section02 section">
           <SectionTitle title="가장 많이 본 채용공고" moreText="인기많은 채용공고 더보기" moreTo="/recruit" />
           <div className="most_view_recruit_box">
@@ -90,6 +106,7 @@ export default function HomePage() {
               speed={600}
               loop
               loopAdditionalSlides={2}
+              breakpoints={BP_RECRUIT}
               items={POPULAR_RECRUITS.map((d) => (
                 <RecruitListCard key={d.id} {...d} to={`/recruit/${d.id}`} />
               ))}
@@ -106,7 +123,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 취뽀 선배들의 합격 노하우 - 취업성공스토리 최신순 최대 8개 */}
+        {/* 취뽀 선배들의 합격 노하우 */}
         <section className="section04 section">
           <SectionTitle title="취뽀 선배들의 합격 노하우!" moreText="취업 인터뷰 더보기" moreTo="/magazine/stinterview" />
           <div className="job_interview_box">
@@ -118,6 +135,7 @@ export default function HomePage() {
               speed={600}
               loop
               loopAdditionalSlides={2}
+              breakpoints={BP_INTERVIEW}
               items={LATEST_INTERVIEWS.map((d) => (
                 <InterviewCard key={d.id} {...d} to={`/magazine/stinterview/${d.id}`} />
               ))}
@@ -125,7 +143,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* #연봉 업계 평균 이상 키워드 기업 최대 8개 */}
+        {/* #연봉 업계 평균 이상 */}
         <section className="section05 section">
           <SectionTitle title="#연봉 업계 평균 이상" />
           <div className="company_recruit_box">
@@ -137,6 +155,7 @@ export default function HomePage() {
               speed={600}
               loop
               loopAdditionalSlides={2}
+              breakpoints={BP_RECRUIT}
               items={SALARY_RECRUITS.map((d) => (
                 <RecruitCard key={d.id} {...d} to={`/recruit/${d.id}`} />
               ))}
@@ -144,7 +163,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* #이번달, 채용 마감 임박 - 마감일 임박순 최대 8개 */}
+        {/* #이번 달, 채용 마감 임박 */}
         <section className="section06 section">
           <SectionTitle title="#이번 달, 채용 마감 임박" />
           <div className="company_recruit_box">
@@ -156,6 +175,7 @@ export default function HomePage() {
               speed={600}
               loop
               loopAdditionalSlides={2}
+              breakpoints={BP_RECRUIT}
               items={DEADLINE_RECRUITS.map((d) => (
                 <RecruitCard key={d.id} {...d} to={`/recruit/${d.id}`} />
               ))}

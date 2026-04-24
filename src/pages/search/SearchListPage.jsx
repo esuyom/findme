@@ -56,6 +56,7 @@ export default function SearchListPage() {
                 loop
                 loopAdditionalSlides={2}
                 speed={600}
+                breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2.5,spaceBetween:20},1060:{slidesPerView:4,spaceBetween:20} }}
                 items={POPULAR_RECRUITS.map((d) => (
                   <RecruitListCard key={d.id} {...d} to={`/recruit/${d.id}`} />
                 ))}
@@ -75,6 +76,7 @@ export default function SearchListPage() {
                 loop
                 loopAdditionalSlides={2}
                 speed={600}
+                breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
                 items={POPULAR_STUDENTS.map((d) => (
                   <StudentCard key={d.id} {...d} to={`/hr/${d.id}`} />
                 ))}

@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const MENU_ITEMS = [
   { label: '채용공고 관리', to: '/mypage/cp/recruit' },
@@ -7,11 +8,17 @@ const MENU_ITEMS = [
   { label: '기업문의 관리', to: '/mypage/cp/inquiry' },
   { label: '면접제의 관리', to: '/mypage/cp/offer' },
   { label: '관심 인재 관리', to: '/mypage/cp/hr-search' },
-  { label: '로그아웃', to: '#' },
 ];
 
 export default function CompanySidebar() {
   const { pathname } = useLocation();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/member/login');
+  };
 
   return (
     <section className="cp sidebar">
@@ -34,6 +41,11 @@ export default function CompanySidebar() {
             <Link to={item.to}>{item.label}</Link>
           </li>
         ))}
+        <li>
+          <button type="button" onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', color: 'inherit' }}>
+            로그아웃
+          </button>
+        </li>
       </ul>
     </section>
   );

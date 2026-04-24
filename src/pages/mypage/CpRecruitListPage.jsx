@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import CompanySidebar from '../../components/sidebar/CompanySidebar';
 import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
@@ -9,6 +9,7 @@ const STATUS_CLASS = { active: 'blue', draft: 'gray', closed: 'gray' };
 
 export default function CpRecruitListPage() {
   const { recruits, remove, close } = useCpRecruitStore();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('active');
   const [checked, setChecked] = useState({});
 
@@ -95,6 +96,13 @@ export default function CpRecruitListPage() {
                           <Link to={`/mypage/cp/recruit/${r.id}`}>
                             <button type="button" className="sm tb me-1">공고보기</button>
                           </Link>
+                          <button
+                            type="button"
+                            className="sm tb me-1"
+                            onClick={() => navigate('/mypage/cp/recruit/write', { state: { editId: r.id } })}
+                          >
+                            수정
+                          </button>
                           {r.status !== 'closed' && (
                             <button type="button" className="sm tb me-1" onClick={() => close(r.id)}>마감</button>
                           )}

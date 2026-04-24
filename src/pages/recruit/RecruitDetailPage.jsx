@@ -119,6 +119,7 @@ export default function RecruitDetailPage() {
                   pagination={{ el: '.swiper-pagination', type: 'bullets' }}
                   slidesPerView={2}
                   spaceBetween={20}
+                  breakpoints={{ 0:{slidesPerView:1,spaceBetween:12},480:{slidesPerView:1,spaceBetween:12},768:{slidesPerView:1.5,spaceBetween:16},1060:{slidesPerView:2,spaceBetween:20} }}
                   loop
                   className="company_img_box"
                 >

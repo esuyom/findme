@@ -24,56 +24,56 @@ export default function TipSkillDataPage() {
   const relatedJobs = [
     {
       id: 1,
-      title: '[CJ올리브영] MD스토어기획팀 스토어 지원 (계약직)',
+      title: '[코리아교육그룹] UI/UX 디자이너 신입 채용',
       company: CURRENT_COMPANY.name,
       img: '/img/company/co-img.jpg',
       logo: '/img/company/co-logo.jpg'
     },
     {
       id: 2,
-      title: '[CJ올리브영] MD스토어기획팀 스토어 지원 (계약직)',
+      title: '[코리아교육그룹] 웹 프론트엔드 개발자 정규직 채용',
       company: CURRENT_COMPANY.name,
       img: '/img/company/co-img.jpg',
       logo: '/img/company/co-logo.jpg'
     },
     {
       id: 3,
-      title: '[CJ올리브영] MD스토어기획팀 스토어 지원 (계약직)',
+      title: '[코리아교육그룹] 콘텐츠 기획자 (신입/경력)',
       company: CURRENT_COMPANY.name,
       img: '/img/company/co-img.jpg',
       logo: '/img/company/co-logo.jpg'
     },
     {
       id: 4,
-      title: '[CJ올리브영] MD스토어기획팀 스토어 지원 (계약직)',
+      title: '[코리아교육그룹] 그래픽 디자이너 채용',
       company: CURRENT_COMPANY.name,
       img: '/img/company/co-img.jpg',
       logo: '/img/company/co-logo.jpg'
     },
     {
       id: 5,
-      title: '[CJ올리브영] MD스토어기획팀 스토어 지원 (계약직)',
+      title: '[코리아교육그룹] IT 강사 모집 (웹·앱 개발)',
       company: CURRENT_COMPANY.name,
       img: '/img/company/co-img.jpg',
       logo: '/img/company/co-logo.jpg'
     },
     {
       id: 6,
-      title: '[CJ올리브영] MD스토어기획팀 스토어 지원 (계약직)',
+      title: '[코리아교육그룹] 취업지원팀 매니저 채용',
       company: CURRENT_COMPANY.name,
       img: '/img/company/co-img.jpg',
       logo: '/img/company/co-logo.jpg'
     },
     {
       id: 7,
-      title: '[CJ올리브영] MD스토어기획팀 스토어 지원 (계약직)',
+      title: '[코리아교육그룹] 영상편집 강사 채용',
       company: CURRENT_COMPANY.name,
       img: '/img/company/co-img.jpg',
       logo: '/img/company/co-logo.jpg'
     },
     {
       id: 8,
-      title: '[CJ올리브영] MD스토어기획팀 스토어 지원 (계약직)',
+      title: '[코리아교육그룹] 마케팅 담당자 채용',
       company: CURRENT_COMPANY.name,
       img: '/img/company/co-img.jpg',
       logo: '/img/company/co-logo.jpg'

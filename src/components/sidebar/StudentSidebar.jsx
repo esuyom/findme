@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const MENU_ITEMS = [
   { label: '프로필', to: '/mypage/profile' },
@@ -9,11 +10,17 @@ const MENU_ITEMS = [
   { label: '콘텐츠관리', to: '/mypage/contents', bubble: '인터뷰가 도착했어요!' },
   { label: '참여현황', to: '/mypage/join' },
   { label: '채용담당자 문의', to: '/mypage/qna' },
-  { label: '로그아웃', to: '#' },
 ];
 
 export default function StudentSidebar() {
   const { pathname } = useLocation();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/member/login');
+  };
 
   return (
     <ul>
@@ -32,6 +39,11 @@ export default function StudentSidebar() {
           {item.bubble && <span className="bubble">{item.bubble}</span>}
         </li>
       ))}
+      <li>
+        <button type="button" onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', color: 'inherit' }}>
+          로그아웃
+        </button>
+      </li>
     </ul>
   );
 }

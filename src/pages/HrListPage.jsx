@@ -74,6 +74,7 @@ export default function HrListPage() {
               speed={600}
               loop
               loopAdditionalSlides={2}
+              breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
               items={NEW_STUDENTS.map((d) => (
                 <StudentCard key={d.id} {...d} to={`/hr/${d.id}`} />
               ))}
@@ -93,6 +94,7 @@ export default function HrListPage() {
               speed={600}
               loop
               loopAdditionalSlides={2}
+              breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
               items={PORTFOLIO_STUDENTS.map((d) => (
                 <StudentCard key={d.id} {...d} to={`/hr/${d.id}`} />
               ))}
@@ -137,6 +139,7 @@ export default function HrListPage() {
               speed={600}
               loop
               loopAdditionalSlides={2}
+              breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
               items={POPULAR_STUDENTS.map((d) => (
                 <StudentCard key={d.id} {...d} to={`/hr/${d.id}`} />
               ))}

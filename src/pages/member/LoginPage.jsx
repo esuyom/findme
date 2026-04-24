@@ -1,16 +1,22 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import MemberLayout from '../../components/layout/MemberLayout';
+import { useAuth } from '../../context/AuthContext';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // API 호출 로직 추가 필요
     console.log('Login:', { email, password });
+  };
+
+  const handleTestLogin = (userType) => {
+    login(userType);
+    navigate('/');
   };
 
   return (
@@ -47,7 +53,7 @@ export default function LoginPage() {
         <div className="line">
           또는
         </div>
-        <Link to="/member/join" className="type01 w100" style={{ display: 'block', marginBottom: '16px' }}>
+        <Link to="/member/join" style={{ display: 'block', marginBottom: '16px' }}>
           <button type="button" className="type01 w100">
             이메일 회원가입
           </button>
@@ -56,6 +62,28 @@ export default function LoginPage() {
           계정 찾기
         </Link>
       </form>
+
+      {/* 테스트 로그인 (개발용) */}
+      <div className="test_login" style={{ marginTop: '32px', paddingTop: '24px', borderTop: '1px dashed #ccc' }}>
+        <p style={{ fontSize: '12px', color: '#999', marginBottom: '12px', textAlign: 'center' }}>
+          개발용 테스트 로그인
+        </p>
+        <button
+          type="button"
+          className="type01 w100"
+          style={{ marginBottom: '8px' }}
+          onClick={() => handleTestLogin('student')}
+        >
+          수강생 테스트 로그인
+        </button>
+        <button
+          type="button"
+          className="type01 w100"
+          onClick={() => handleTestLogin('company')}
+        >
+          기업 테스트 로그인
+        </button>
+      </div>
     </MemberLayout>
   );
 }
