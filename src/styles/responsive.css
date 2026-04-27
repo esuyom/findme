@@ -35,28 +35,35 @@
     max-width: 100%;
     width: 100%;
     padding: 0 24px;
-    justify-content: space-between;
-    border-bottom:1px solid #dddddd80;
   }
   header nav .depth1 > li a {
     font-size: 14px;
-    padding: 0 10px;
+    padding: 5px 10px;
   }
+  header nav .depth2 li{margin:5px 0;}
   header nav {
-    margin-left: 24px;
+    margin-left: 28px;
   }
+  header nav .depth1>li{padding:0 7px; margin:0;}
   header .util .search_btn, header .util .mypage_btn, .login_btn{margin-right:10px; padding:0;}
 
   /* ── 카드 그리드 ── */
   .company_recruit_box .con { width: 100%; }
+  .company_recruit_box .con .img{width:100%;}
   .job_interview_box .con   { width: 100%; }
+  .most_view_recruit_box .con{width:100%;}
   .student_list_box .con    { width: 100%; height:auto; }
-  .none_slide.job_interview_box .con { width: calc(50% - 8px); }
-  .work_interview_box .con  { width: calc(25% - 15px); }
+  .none_slide.job_interview_box .con { width:calc(100% / 3 - 20px) }
+  .work_interview_box .con  { width: calc(100% / 3 - 20px);margin-right: 0;margin-left: 20px; }
+  .mou_box .con  { width: calc(100% / 3 - 20px);margin-right: 0;margin-left: 20px; }
+  .work_interview_box .wrap{margin-left:-20px;}
+  .mou_box .wrap{margin-left:-20px;}
   .mou_box .mou_thumb       { width: 220px; }
   .trend_box .d-flex{gap:10px;}
   .trend_box.non-slide .con           { margin:0; width: calc(50% - 10px);}
   .btn_type01_box{display:none;}
+
+  .none_slide .con{width:calc(100% / 3 - 20px)}
 
   .more_interview_box .info_box_wrap{padding:15px 10px;}
   .student_list_box .student_img_box{width:90px; height:90px;}
@@ -81,6 +88,13 @@
   .student_list_location .location ul { justify-content: flex-start; }
   .student_list_location .location a{width:auto;padding:0 13px;font-size:14px;margin: 5px;}
   .sidebar ul li .bubble{display:none;}
+
+    /* ── 필터 셀렉트 박스 ── */
+    .sub_select_box { flex-wrap: wrap; gap: 8px; }
+    .sub_select_box label { margin-right: 0; margin-bottom:10px;}
+
+    
+  .recruit_company_img .swiper-slide img{width:100%;}
 }
 
 /* ==========================================================================
@@ -105,6 +119,9 @@
     height: 56px;
     position: fixed;
     background: #fff;
+    
+    justify-content: space-between;
+    border-bottom:1px solid #dddddd80;
   }
   header .logo { width: 60px; }
   .pb-5{padding-bottom:20px !important;}
@@ -240,6 +257,8 @@
   .more_view .more_view_full  { display: none; }
   .more_view .more_view_short { display: inline; }
 
+  #container.main .main_banner{margin-top:56px;}
+  #container.main .contents_wrap{margin-top: 30px;}
   /* ────────────────────────────────────────────────────
      카드 그리드 — 2열 고정
   ──────────────────────────────────────────────────── */
@@ -247,6 +266,8 @@
   /* none_slide 공통: 2열 */
   .none_slide .wrap { margin-left: 0; gap: 12px; display: flex; flex-wrap: wrap; }
   .none_slide .con  { margin-left: 0; margin-bottom: 0; width: calc(50% - 6px) !important; }
+
+  
 
   /* 취업성공스토리 — 2열 */
   /* 카드 내부 좁은 폭 대응 */
@@ -284,14 +305,11 @@
   .most_view_recruit_box .con .recruit_state    { right: 15px; top: 15px; }
 
   /* work_interview_box — 2열 유지 */
-  .work_interview_box .con  { width: calc(50% - 8px); margin-right: 0; margin-bottom: 16px; }
-  .work_interview_box .wrap { gap: 16px; }
+  .work_interview_box .con  { width: calc(100% / 2 - 20px); margin-right: 0; margin-bottom: 16px; }
+  .work_interview_box .wrap { }
 
   /* mou_box — 2열 */
-  .mou_box .con        { width: calc(50% - 8px);
-    margin-left: 8px;
-    margin-bottom: 12px;
-    margin-right: 0; }
+  .mou_box .con  {width: calc(100% / 2 - 20px); margin-right: 0; margin-bottom: 16px;}
   .mou_box .mou_thumb  { width: 100%; height: 100px; }
 
   /* trend_box — 2열 */
@@ -310,6 +328,8 @@
   .student_list_box.type02 .con{width:100%; height:auto;}
   .student_list_box.type02 .student_info_box{padding:15px; margin:0;}
   .student_list_box.type02 .student_img_box{height:150px;}
+
+  
 
   /* student_list_box.non-slide — 2열 */
   .student_list_box.non-slide .wrap { display: flex; flex-wrap: wrap; gap: 12px; margin-left: -16px; gap: 0 !important;}
@@ -410,9 +430,7 @@
   /* 채용 셀렉트 폰트 재조정 */
   .recruit .recruit_select_box select { font-size: 16px !important; }
 
-  /* ── 필터 셀렉트 박스 ── */
-  .sub_select_box { flex-wrap: wrap; gap: 8px; }
-  .sub_select_box label { margin-right: 0; margin-bottom:10px;}
+
 
   /* ── 채용 셀렉트 — 세로 스택 ── */
   .recruit .recruit_select_box { }
@@ -489,7 +507,6 @@
     gap: 24px;
     margin-top:65px;
   }
-  .recruit_company_img .swiper-slide img{width:100%;}
   .detail_top .detail_info .portfolio_list li {
     width: calc(50% - 8px);
     height: auto;
@@ -720,8 +737,8 @@
   .search_box input { font-size: 15px; }
 
   /* ── 버튼 ── */
-  button.type02, button.type01m , button.type03 {height: 40px; line-height:40px; min-height: 40px; }
-  button.sm.tb { min-height: 32px; font-size: 11px; padding: 0 8px; }
+  button.type02, button.type01 , button.type03 {height: 40px; line-height:40px; min-height: 40px; }
+  button.sm.tb { min-height: 32px; font-size: 11px; padding: 0 8px; width:40px;}
 
   /* ── 팝업 ── */
   .popup {
@@ -793,5 +810,8 @@
     width: 100%;
 }
   .company_recruit_box .con .recruit_company_img{height:auto; max-height:120px;}
+  .mypage.scrap .btn_like{top:75px;}
   .portfolio_list ul li{width:calc(50% - 8px)}
+  .mypage.contents.write .profile_box .img_wrap{width:120px;}
+  .mypage.contents.write .profile_box .form-span-file{width:90px; height:90px;}
 }

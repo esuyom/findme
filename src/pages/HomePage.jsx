@@ -42,7 +42,7 @@ const BP_RECRUIT = {
 const BP_INTERVIEW = {
   0:    { slidesPerView: 2,   spaceBetween: 12 },
   480:  { slidesPerView: 2.5, spaceBetween: 16 },
-  768:  { slidesPerView: 2,   spaceBetween: 20 },
+  768:  { slidesPerView: 2.5,   spaceBetween: 20 },
   1060: { slidesPerView: 3.05, spaceBetween: 20 },
 };
 
