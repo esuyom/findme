@@ -95,6 +95,9 @@
 
     
   .recruit_company_img .swiper-slide img{width:100%;}
+
+  
+  .more_view { position: static; }
 }
 
 /* ==========================================================================
@@ -253,7 +256,6 @@
     justify-content: space-between;
     align-items: center;
   }
-  .more_view { position: static; }
   .more_view .more_view_full  { display: none; }
   .more_view .more_view_short { display: inline; }
 
