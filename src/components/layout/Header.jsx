@@ -46,6 +46,24 @@ const NAV_ITEMS = [
   },
 ];
 
+
+/* ── 모바일 대메뉴 라벨 매핑 ── */
+const PARENT_MENU_MAP = [
+  { prefix: '/hr',        label: '나를 찾아줘' },
+  { prefix: '/recruit',   label: '채용정보' },
+  { prefix: '/coaching',  label: '취업코칭' },
+  { prefix: '/tip',       label: '알아두면 좋은 팁!' },
+  { prefix: '/magazine',  label: '파인드매거진' },
+  { prefix: '/mypage',    label: '마이페이지' },
+  { prefix: '/search',    label: '검색' },
+  { prefix: '/member',    label: null },
+];
+
+function getParentMenu(pathname) {
+  const match = PARENT_MENU_MAP.find((m) => pathname.startsWith(m.prefix));
+  return match ? match.label : null;
+}
+
 export default function Header() {
   const [isOn, setIsOn]           = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
@@ -55,6 +73,7 @@ export default function Header() {
   const navigate    = useNavigate();
   const { pathname }= useLocation();
   const isHome      = pathname === '/';
+  const parentMenu  = getParentMenu(pathname);
 
   const handleCoachingClick = (menuNum, to) => {
     navigate(`${to}?tab=${menuNum + 1}`);
@@ -69,14 +88,19 @@ export default function Header() {
       <div className="wrap">
         {/* 모바일 서브페이지: 뒤로가기 버튼 */}
         {!isHome && (
-          <button
-            type="button"
-            className="back_btn"
-            onClick={() => navigate(-1)}
-            aria-label="뒤로가기"
-          >
-            <img src="/img/common/icon-list-back.png" alt="뒤로가기" />
-          </button>
+          <div className="mobile_back_wrap">
+            <button
+              type="button"
+              className="back_btn"
+              onClick={() => navigate(-1)}
+              aria-label="뒤로가기"
+            >
+              <img src="/img/common/icon-list-back.png" alt="뒤로가기" />
+            </button>
+            {parentMenu && (
+              <span className="mobile_menu_label">{parentMenu}</span>
+            )}
+          </div>
         )}
 
         <h1 className="logo">

@@ -66,21 +66,21 @@ address{margin:0;}
 
 body {font-family:'Pretendard', sans-serif;  font-size:16px; letter-spacing:-0.025em; line-height:1.6; font-weight:400; color:#191919; margin:0; overflow-x:hidden;}
 h1, h2, h3, h4, h5, h6 {font-weight: 500; margin:0;}
-h1 {font-size: 2.4rem;}
-h2 {font-size: 2.2rem;}
+h1 {font-size: 38px;}
+h2 {font-size: 35px;}
 h3 {font-size: 30px;}
 h4 {font-size: 21px;}
-h5 {font-size: 1.6rem;}
-h6 {font-size: 1.4rem;}
+h5 {font-size: 26px;}
+h6 {font-size: 22px;}
 p {margin: 0;}
 a {color: inherit !important;}
 a, a:link, a:hover, a:active, a:focus, button:focus {outline: 0; text-decoration: none !important;}
 body, input, textarea, button, select, label, a {-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
 /* blockquote {background: #f9f9f9; padding: 20px;} */
 input, textarea, button, select, label {font-family:inherit;}
-/* input, textarea, select, fieldset {margin-bottom: 1.5rem;} */
-/* pre, blockquote, dl, figure, table, p, ul, ol, form {margin-bottom: 2.5rem;} */
-/* hr {margin-top: 3rem; margin-bottom: 3.5rem; border-width: 0; border-top: 1px solid #E1E1E1;} */
+/* input, textarea, select, fieldset {margin-bottom: 24px;} */
+/* pre, blockquote, dl, figure, table, p, ul, ol, form {margin-bottom: 40px;} */
+/* hr {margin-top: 48px; margin-bottom: 56px; border-width: 0; border-top: 1px solid #E1E1E1;} */
 
 .txtAlCen {text-align:center !important;}
 .txtAlLef {text-align:left !important;}

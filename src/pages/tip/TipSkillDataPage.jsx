@@ -129,7 +129,7 @@ export default function TipSkillDataPage() {
           </div>
 
           {/* 필터 */}
-          <div className="d-flex gap-2 mb-4">
+          <div className="skill-data-select d-flex gap-2 mb-4">
             {/* 직군 */}
             <div className="col custom-select">
               <div className="select-box">
