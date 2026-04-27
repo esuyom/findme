@@ -221,7 +221,18 @@ header.gnb_member a + a::before{content:"";width:1px;height: 9px;background:#999
 .sidebar ul li .bubble{width:107px;font-size: 10px;font-weight: 500;right: 89px;top: -17px;height: 17px;line-height: 17px;}
 .sidebar ul li.active{color:#333333;font-weight: 700;}
 .sidebar ul li.on a::after{content:"";width: 7px;height: 7px;border-radius:50%;background:#4dbbff;position:absolute;display:block;right: -2px;top: 12px;}
-
+.sidebar ul li .logout{
+    background: none;
+    border-width: medium;
+    border-style: none;
+    border-color: currentcolor;
+    border-image: initial;
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+    font: inherit;
+    color: inherit;
+}
 /* footer */
 footer{background-color:#f7f7f7;}
 footer>.wrap{max-width:1060px; margin:0 auto; position:relative; padding:50px 0;}
@@ -906,8 +917,8 @@ input[type='text'].normal.type02 {height:59px; line-height:48px; padding:0 28px;
 .popup_career input[type='checkbox'] {margin:0 10px;}
 .popup_career  label {font-size:15px; font-weight:700;}
 .custom-select {position: relative;}
-.select-box {display:flex; align-items:center; height:59px; padding:0 28px; border-radius:29.5px; font-size:15px; background:url('/img/common/icon-selectbox-arrow.png') no-repeat right 29px center / 16px; -webkit-appearance:none; appearance:none; color: #000; vertical-align: middle; box-sizing: border-box; border: 1px solid #ddd;}
-.select-box .selected {display: block;}
+.select-box {display:flex; align-items:center; height:59px; line-height:59px;padding:0 28px; border-radius:29.5px; font-size:15px; background:url('/img/common/icon-selectbox-arrow.png') no-repeat right 29px center / 16px; -webkit-appearance:none; appearance:none; color: #000; vertical-align: middle; box-sizing: border-box; border: 1px solid #ddd;}
+.select-box .selected {display: block; width:100%; height:100%;}
 .options-container {display: none; position: absolute; top: 110%; left: 0; width:max-content; max-width:450px; padding:30px; background: #fff; border: 1px solid #ccc; border-radius:20px; z-index: 5; box-shadow: 3.214px 3.83px 10px 0px rgba(40, 40, 40, 0.3);}
 .options-container.active {display:block;}
 .cu-option {display:inline-block; padding:7px 16px; cursor: pointer; border-radius:13px; background:#eaeaea; font-size:13px; color:#231f20;}

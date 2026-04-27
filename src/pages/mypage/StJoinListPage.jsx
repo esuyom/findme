@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/sidebar/StudentSidebar';
@@ -5,6 +6,11 @@ import { useJoinStore } from '../../hooks/useJoinStore';
 
 export default function StJoinListPage() {
   const { joins, remove } = useJoinStore();
+  const [confirmId, setConfirmId] = useState(null);
+
+  const handleCancelClick  = (id) => setConfirmId(id);
+  const handleConfirmCancel = () => { remove(confirmId); setConfirmId(null); };
+  const handleDismiss      = () => setConfirmId(null);
 
   return (
     <Layout containerClass="join mypage">
@@ -49,7 +55,13 @@ export default function StJoinListPage() {
                         <button type="button" className="tb sm">참여정보 안내받기</button>
                       </div>
                       <div className="d-flex">
-                        <button type="button" className="sm tb" onClick={() => remove(join.id)}>취소</button>
+                        <button
+                          type="button"
+                          className="sm tb"
+                          onClick={() => handleCancelClick(join.id)}
+                        >
+                          취소
+                        </button>
                       </div>
                     </li>
                   ))}
@@ -59,6 +71,29 @@ export default function StJoinListPage() {
           </div>
         </section>
       </div>
+
+      {/* 취소 재확인 팝업 */}
+      {confirmId !== null && (
+        <>
+          <article className="popup w400" style={{ display: 'block' }}>
+            <div className="d-flex mb-4 justify-content-between">
+              <div className="title">신청 취소</div>
+              <button type="button" className="popup_close" onClick={handleDismiss}>
+                <img src="/img/common/popup-close.png" alt="닫기" />
+              </button>
+            </div>
+            <p style={{ fontSize: '15px', color: '#333', textAlign: 'center', padding: '8px 0 24px', lineHeight: '1.7' }}>
+              신청을 취소하시겠습니까?<br />
+              <span style={{ fontSize: '13px', color: '#999' }}>취소 후에는 복구가 불가능합니다.</span>
+            </p>
+            <div className="btn_center d-flex gap-2 justify-content-center">
+              <button type="button" className="type01 w195" onClick={handleDismiss}>아니오</button>
+              <button type="button" className="type02 w195" onClick={handleConfirmCancel}>취소하기</button>
+            </div>
+          </article>
+          <div className="popup-dim" style={{ display: 'block' }} onClick={handleDismiss} />
+        </>
+      )}
     </Layout>
   );
 }

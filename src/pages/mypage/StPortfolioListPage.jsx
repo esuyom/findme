@@ -1,12 +1,29 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/sidebar/StudentSidebar';
 import { usePortfolioStore } from '../../hooks/usePortfolioStore';
 
 const EMPTY_FORM = { title: '', description: '' };
 
+
+function Toast({ msg }) {
+  return (
+    <div style={{
+      position:'fixed',bottom:'32px',left:'50%',transform:'translateX(-50%)',
+      background:'#222',color:'#fff',padding:'13px 28px',borderRadius:'8px',
+      fontSize:'15px',fontWeight:'600',zIndex:9999,
+      boxShadow:'0 4px 16px rgba(0,0,0,0.18)',letterSpacing:'-0.02em',
+      display:'flex',alignItems:'center',gap:'8px',whiteSpace:'nowrap',
+    }}>
+      <span style={{color:'#4dbbff',fontSize:'18px'}}>✓</span>{msg}
+    </div>
+  );
+}
+
 export default function StPortfolioListPage() {
   const { portfolios, add, update, remove } = usePortfolioStore();
+  const [toast, setToast] = useState('');
+  const toastTimer = useRef(null);
 
   const [showPopup,    setShowPopup]    = useState(false);
   const [editId,       setEditId]       = useState(null);
@@ -191,6 +208,7 @@ export default function StPortfolioListPage() {
           <div className="popup-dim" style={{ display: 'block' }} onClick={closePopup} />
         </>
       )}
+      {toast && <Toast msg={toast} />}
     </Layout>
   );
 }

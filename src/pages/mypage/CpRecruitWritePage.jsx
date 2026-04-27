@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
@@ -13,9 +13,26 @@ const REGION2 = {
 };
 const getRegion2 = (r1) => REGION2[r1] || [r1 + ' 전체'];
 
+
+function Toast({ msg }) {
+  return (
+    <div style={{
+      position:'fixed',bottom:'32px',left:'50%',transform:'translateX(-50%)',
+      background:'#222',color:'#fff',padding:'13px 28px',borderRadius:'8px',
+      fontSize:'15px',fontWeight:'600',zIndex:9999,
+      boxShadow:'0 4px 16px rgba(0,0,0,0.18)',letterSpacing:'-0.02em',
+      display:'flex',alignItems:'center',gap:'8px',whiteSpace:'nowrap',
+    }}>
+      <span style={{color:'#4dbbff',fontSize:'18px'}}>✓</span>{msg}
+    </div>
+  );
+}
+
 export default function CpRecruitWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [toast, setToast] = useState('');
+  const toastTimer = useRef(null);
   const editId = location.state?.editId ?? null;
   const { add, update, getById } = useCpRecruitStore();
 
@@ -97,7 +114,10 @@ export default function CpRecruitWritePage() {
     } else {
       add(payload, status);
     }
-    navigate('/mypage/cp/recruit');
+    const msg = status === 'active' ? '채용공고가 등록되었습니다.' : '임시저장되었습니다.';
+    setToast(msg);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => { setToast(''); navigate('/mypage/cp/recruit'); }, 800);
   };
 
   return (
@@ -351,6 +371,7 @@ export default function CpRecruitWritePage() {
           </div>
         </section>
       </div>
+      {toast && <Toast msg={toast} />}
     </Layout>
   );
 }

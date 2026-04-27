@@ -2,13 +2,13 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
-import { TIP_TREND_ITEMS } from '../../constants/pageData';
+import { TIP_DUMMY } from '../../constants/dummyData';
 
 export default function TipListPage() {
   const [selectedTab, setSelectedTab] = useState('trend');
   const navigate = useNavigate();
 
-  const trendItems = TIP_TREND_ITEMS;
+  const trendItems = TIP_DUMMY;
 
   const handleTabChange = (tab) => {
     setSelectedTab(tab);
@@ -53,7 +53,7 @@ export default function TipListPage() {
                   <Link to={`/tip/${item.id}`}>
                     <p className="title">{item.title}</p>
                     <p className="data">
-                      {item.company} · {item.date}
+                      {item.company} · {item.date.replace(/-/g, '.')}
                     </p>
                   </Link>
                 </div>

@@ -40,7 +40,7 @@ export default function StudentSidebar() {
         </li>
       ))}
       <li>
-        <button type="button" onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', color: 'inherit' }}>
+        <button type="button" onClick={handleLogout} className="logout">
           로그아웃
         </button>
       </li>

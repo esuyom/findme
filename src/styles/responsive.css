@@ -26,8 +26,7 @@
     padding:0;
     margin-top: 0;
     margin-bottom: 30px;
-  }
-  .main .main_banner .swiper-pagination{display:none;}
+.main .main_banner .swiper-pagination{display:none;}
   .main .content_title{display:flex; justify-content:space-between; align-items:center;}
 
   /* ── GNB ── */
@@ -68,7 +67,7 @@
   .detail_float .detail_profile { width: 280px; }
 
   /* ── 마이페이지 ── */
-  .mypage.cp .contents      { padding: 30px 24px 60px; }
+  .mypage.cp .contents      { padding: 30px 0; }
   .mypage.cp.recruit.write .contents { width: 100%; padding: 0 24px; }
   .mypage.cp.info .contents { width: 100%; }
 
@@ -243,7 +242,7 @@
   /* 취업성공스토리 — 2열 */
   .none_slide.job_interview_box .con { width: calc(50% - 6px) !important; }
   /* 카드 내부 좁은 폭 대응 */
-  .job_interview_box .con           { height: auto; }
+  .job_interview_box .con           { width:auto; height: auto; }
   .job_interview_box .con a         { padding: 15px; }
   .job_interview_box .interview_info_box { flex-direction: column; gap: 4px; }
   .job_interview_box .interview_info_box .info_img {
@@ -410,7 +409,23 @@
 
   /* ── 검색 박스 ── */
   .sub.search .search_box .wrap { width: 100%; }
-
+  
+  .w400{width:100%;}
+  .multi_input label span{
+    width: 100%;
+    padding: 0 10px;
+  }
+  .btn_box.d-flex{gap:10px;}
+  .member.join .keywords label:nth-child(even) span{margin-left:0;}
+  .mypage.cp.info .multi_input label span{margin-left:0;}
+  .multi_input label{margin-right:7px;}
+  .mypage .blue_box{
+    height:auto;
+    line-height:initial;
+    flex-direction: column;
+    padding: 10px;
+    align-items: flex-end;}
+    .mypage .blue_box .blue{width:20%; min-width: 45px;}
   /* ────────────────────────────────────────────────────
      Footer
   ──────────────────────────────────────────────────── */
@@ -534,12 +549,13 @@
   .mypage .sidebar,
   .mypage .cp.sidebar {
     width: 100% !important;
-    padding: 16px 16px 0;
+    padding: 0;
     flex-direction: row;
     overflow-x: auto;
     border-bottom: 1px solid #eee;
     flex-shrink: 0;
     gap: 0;
+    border-right:0;
   }
   .mypage .sidebar ul,
   .mypage .cp.sidebar ul {
@@ -547,16 +563,18 @@
     flex-direction: row;
     gap: 0;
     white-space: nowrap;
+    margin-top:0 !important;
   }
   .mypage .sidebar ul li,
   .mypage .cp.sidebar ul li {
     flex-shrink: 0;
-    padding: 10px 14px;
+    padding: 0;
     border-bottom: 3px solid transparent;
     margin-bottom: -1px;
   }
   .mypage .sidebar ul li a,
-  .mypage .cp.sidebar ul li a {
+  .mypage .cp.sidebar ul li a,
+  .sidebar ul li .logout {
     font-size: 13px;
     font-weight: 600;
     color: #666;
@@ -577,23 +595,26 @@
   .mypage .contents,
   .mypage.cp .contents {
     width: 100% !important;
-    padding: 24px 16px 60px !important;
+    padding: 20px 0 !important;
   }
   .mypage.cp.recruit.write .contents { padding: 24px 16px !important; }
   .mypage.cp.recruit.write .back { display: none; }
   .mypage.cp.info .contents { width: 100% !important; }
 
+
+  .recommend_bar{ height: auto;   flex-direction: column; padding:10px;align-items: flex-end;}
   /* 마이페이지 h4 */
   .mypage.cp h4 { font-size: 20px; margin-bottom: 24px; }
 
   /* ── list_box (이력서·포트폴리오) — 2열 ── */
   .mypage .list_box { display: flex; flex-wrap: wrap; gap: 12px; }
+  .mypage .list_box ul{width:100%;}
   .mypage .list_box li {
-    width: calc(50% - 6px) !important;
-    height: auto;
-    min-height: 160px;
+    width: calc(50% - 8px) !important;
   }
+  .mypage.join .blue_box{height:auto;}
   .mypage .add_box { width: 100%; height: 120px; background-size: 48px; }
+  .mypage table .d-flex{flex-direction: column;}
 
   /* ── pf_add_box — 세로 스택 ── */
   .mypage .pf_add_box li { display: flex; flex-direction: column; }
@@ -607,22 +628,26 @@
 
   /* ── 채용공고 관리 대시보드 ── */
   .recruit_board {
-    flex-direction: column;
     gap: 0;
-    padding: 16px;
+    padding: 10px;
     margin: 24px 0;
   }
-  .recruit_board .part { border-right: none; border-bottom: 1px solid #ddd; padding: 12px 0; }
+  .recruit_board .part { border-right: none; border-right: 1px solid #ddd; padding: 0 10px; }
   .recruit_board .part:last-child { border-bottom: none; }
   .recruit_board .num  { font-size: 40px; }
-  .recruit_board .text { padding-left: 0; font-size: 13px; }
+  .recruit_board .text {height: 45px;  padding-left: 0; font-size: 13px; text-align: center; word-break: keep-all;}
 
-  .recruit_board.second { flex-direction: column; }
+  .recruit_notice{flex-direction: column;}
+
+  .recruit_board.second { }
   .recruit_board.second .part { border-bottom: 1px solid #ddd; border-right: none; }
-  .recruit_board.second .part.active:first-child { border-radius: 12px 12px 0 0; }
-  .recruit_board.second .part.active:last-child  { border-radius: 0 0 12px 12px; }
-  .recruit_board.second .part:first-child .text  { padding-left: 16px; }
-  .recruit_board.second .part a                  { padding: 16px; }
+  .recruit_board.second .part.active:first-child { border-radius: 12px 0 0 12px; }
+  .recruit_board.second .part.active:last-child  { border-radius:  0 12px 12px 0 ; }
+  .recruit_board.second .part:first-child .text  { padding-left: 0; }
+  .recruit_board.second .part a                  { padding: 10px 5px; }
+
+  .recruit_notice.second .notice_part{padding:15px 20px;}
+  .recruit_notice.second .notice_view{padding:0;}
 
   /* ── TB 리스트 (채용공고 목록 테이블) ── */
   .tb_list_container .title { display: none; }
@@ -631,15 +656,18 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-    padding: 16px;
     border-bottom: 1px solid #eee;
   }
   .tb_list_container .list_wrap .list.row > div {
     width: 100% !important;
     max-width: 100% !important;
     flex: none !important;
+    font-size:13px;
+    display: flex;
   }
-  .tb_list_container .list_wrap .list.row > .col-1 { display: none; }
+  .px-4{padding:0 !important;}
+  .recruit_notice.second .guide{font-size:12px;padding:10px;}
+  .mypage.cp .top_contents{padding:20px 0;}
 
   /* ── 지원자 탭 ── */
   .recruit_notice .notice_cate ul {
@@ -674,8 +702,8 @@
   .search_box input { font-size: 15px; }
 
   /* ── 버튼 ── */
-  button.type02, button.type01 { min-height: 44px; }
-  .sm.tb { min-height: 32px; font-size: 11px; padding: 0 8px; }
+  button.type02, button.type01 {height: 40px; line-height:40px; min-height: 40px; }
+  button.sm.tb { min-height: 32px; font-size: 11px; padding: 0 8px; }
 
   /* ── 팝업 ── */
   .popup {
@@ -688,8 +716,9 @@
   .popup.w400, .popup.w560, .popup.w640 { width: calc(100% - 32px) !important; }
   .pop_recruiter_resume .side_btn { display: none; }
   .popup .pick_list { max-height: 160px; }
-  .pop_skill .result label { margin-left: 8px; }
-  .pop_skill .result label span { width: 140px; }
+  .pop_skill .result label { margin-right: 8px; margin-left: 0; }
+  .pop_skill .result label span { width: auto; padding:0 20px; height:40px; line-height:40px; }
+  .pop_skill .job_group select{margin-right:10px;}
 
   /* ── 프로필 페이지 ── */
   .mypage.profile .contents_wrap { padding: 0; margin-top: 60px; }
@@ -719,14 +748,6 @@
   header.gnb_mypage .wrap { margin: 0 16px; }
 }
 
-/* ==========================================================================
-   3. SMALL MOBILE  (480px 이하)
-   ========================================================================== */
-@media (max-width: 480px) {
-
-  /* ── 공통 ── */
-  .contents_wrap { padding: 0 12px; margin-top: 60px; margin-bottom: 48px; }
-
   /* ── 타이포 ── */
   h3 { font-size: 20px; }
   h4 { font-size: 16px; }
@@ -738,13 +759,18 @@
   /* none_slide / work_interview_box 2열 유지 (767px 규칙 그대로) */
 
   /* ── 헤더 ── */
-  header .wrap { height: 52px; }
+  header .wrap { height: 52px; justify-content: space-between;}
+  header .util .search_btn{margin-right:10px;padding: 0;}
+  header .login_box{margin-right:10px;}
+
+  .company_recruit_box .con{width:100%;}
+  .company_recruit_box .con .recruit_company_img{max-height:120px;}
 
   /* ── 마이페이지 사이드바 ── */
   .mypage .sidebar ul li,
-  .mypage .cp.sidebar ul li { padding: 8px 10px; }
+  .mypage .cp.sidebar ul li { padding: 0 10px; display: flex;align-items: center;}
   .mypage .sidebar ul li a,
-  .mypage .cp.sidebar ul li a { font-size: 12px; }
+  .mypage .cp.sidebar ul li a { font-size: 13px; }
 
   /* ── 대시보드 ── */
   .recruit_board .num { font-size: 32px; }
@@ -767,5 +793,39 @@
   /* ── 스킬 ── */
   .skill_info .skill { width: 70px; font-size: 12px; }
   .skill_info .percent { width: 46px; font-size: 13px; }
+
+  /* ── 타이포 (기존 767px 값 강화) ── */
+  h3 { font-size: 20px; }
+  h4 { font-size: 16px; }
+  body { font-size: 14px; }
+  .top_txt .main_txt { font-size: 18px; }
+
+  /* ── 카드 내부 ── */
+  .job_interview_box .interview_mention { font-size: 11px; -webkit-line-clamp: 2; }
+
+  /* ── 헤더 ── */
+  header .wrap { height: 52px; }
+
+  /* ── 대시보드 수치 ── */
+  .recruit_board .num { font-size: 32px; }
+
+  /* ── 팝업 패딩 ── */
+  .popup { padding: 24px 14px; }
+  .popup .title { font-size: 16px; }
+  .pop_recruiter .photo { width: 72px; height: 72px; margin-right: 12px; }
+  .pop_recruiter .name  { font-size: 15px; }
+  .pop_recruiter .type02 .name { font-size: 18px; }
+
+  /* ── 인재 추천 카드 ── */
+  .applicant_info.box { width: 200px; padding: 12px; }
+  .applicant_info .profile { width: 56px; height: 56px; }
+
+  /* ── 슬라이더 버튼 ── */
+  .btn_type01_box { display: none; }
+
+  /* ── 스킬 바 ── */
+  .skill_info .skill { width: 70px; font-size: 12px; }
+  .skill_info .percent { width: 46px; font-size: 13px; }
+
 
 }

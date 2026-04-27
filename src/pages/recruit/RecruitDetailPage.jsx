@@ -21,12 +21,14 @@ export default function RecruitDetailPage() {
   const navigate = useNavigate();
   const { toggle: scrapToggle, isScraped } = useRecruitScrap();
   const { resumes } = useResumeStore();
-  const { add: addApplication } = useApplicationStore();
+  const { add: addApplication, applications } = useApplicationStore();
   const [showApplyModal,   setShowApplyModal]   = useState(false);
   const [isDescExpanded,   setIsDescExpanded]   = useState(false);
   const [selectedResumeId, setSelectedResumeId] = useState(null);
   const [applyDone,        setApplyDone]        = useState(false);
   const [applyError,       setApplyError]       = useState('');
+  const [outsideApplyMsg,  setOutsideApplyMsg]  = useState(''); // 버튼 아래 안내 문구
+  const [uploadedFiles,   setUploadedFiles]   = useState([]);
 
   const recruit = RECRUIT_DUMMY.find((r) => r.id === numId) || RECRUIT_DUMMY[0];
   const detail = RECRUIT_DETAIL[numId] || RECRUIT_DETAIL.default;
@@ -34,11 +36,33 @@ export default function RecruitDetailPage() {
 
   // 팝업 열릴 때 기본이력서 자동 선택
   const openApplyModal = () => {
+    // 이미 지원한 공고면 팝업 미열림 + 버튼 아래 안내 문구 표시
+    const alreadyApplied = applications.some((a) => a.recruitId === numId);
+    if (alreadyApplied) {
+      setOutsideApplyMsg('이미 지원한 공고입니다.');
+      return;
+    }
+    setOutsideApplyMsg('');
     const main = resumes.find((r) => r.isMain) || resumes[0];
     setSelectedResumeId(main?.id ?? null);
     setApplyError('');
     setApplyDone(false);
     setShowApplyModal(true);
+  };
+
+  const handleFileChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+    setUploadedFiles((prev) => {
+      const existing = prev.map((f) => f.name);
+      const deduped  = newFiles.filter((f) => !existing.includes(f.name));
+      return [...prev, ...deduped];
+    });
+    // input 초기화 (같은 파일 재선택 허용)
+    e.target.value = '';
+  };
+
+  const handleFileRemove = (name) => {
+    setUploadedFiles((prev) => prev.filter((f) => f.name !== name));
   };
 
   const handleSubmitApply = () => {
@@ -53,7 +77,9 @@ export default function RecruitDetailPage() {
       field:     recruit.location,
     });
     if (!ok) {
-      setApplyError('이미 지원한 공고입니다.');
+      // 중복 지원은 openApplyModal 단계에서 처리되므로 여기선 예외 처리만
+      setShowApplyModal(false);
+      setOutsideApplyMsg('이미 지원한 공고입니다.');
       return;
     }
     setApplyError('');
@@ -215,6 +241,11 @@ export default function RecruitDetailPage() {
               >
                 입사지원하기
               </button>
+              {outsideApplyMsg && (
+                <p style={{ color: '#ff4d4d', fontSize: '13px', textAlign: 'center', marginTop: '8px', fontWeight: 500 }}>
+                  {outsideApplyMsg}
+                </p>
+              )}
             </div>
           </section>
         </section>
@@ -308,8 +339,34 @@ export default function RecruitDetailPage() {
               <div className="file_box">
                 <div className="d-flex justify-content-center mt-4">
                   <label className="form-label-file" htmlFor="upload1">파일업로드</label>
-                  <input type="file" id="upload1" className="d-none" multiple />
+                  <input
+                    type="file"
+                    id="upload1"
+                    className="d-none"
+                    multiple
+                    onChange={handleFileChange}
+                  />
                 </div>
+                {uploadedFiles.length > 0 && (
+                  <ul className={`file-list show`} style={{ marginTop: '12px' }}>
+                    {uploadedFiles.map((file) => (
+                      <div key={file.name} className="filebox">
+                        <span style={{ fontSize: '14px', color: '#333', wordBreak: 'break-all' }}>
+                          {file.name}
+                          <span style={{ marginLeft: '8px', fontSize: '12px', color: '#aaa' }}>
+                            ({(file.size / 1024).toFixed(1)} KB)
+                          </span>
+                        </span>
+                        <button
+                          type="button"
+                          className="delete"
+                          onClick={() => handleFileRemove(file.name)}
+                          aria-label="파일 삭제"
+                        />
+                      </div>
+                    ))}
+                  </ul>
+                )}
               </div>
               <div className="noti">
                 <ul>

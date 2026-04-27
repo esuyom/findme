@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
 const MENU_ITEMS = [
+  { label: '대시보드', to: '/mypage/cp/dashboard' },
   { label: '채용공고 관리', to: '/mypage/cp/recruit' },
   { label: '회사정보', to: '/mypage/cp/info' },
   { label: '채용담당자 문의', to: '/mypage/cp/qna', hasAlert: true },
@@ -42,7 +43,7 @@ export default function CompanySidebar() {
           </li>
         ))}
         <li>
-          <button type="button" onClick={handleLogout} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, font: 'inherit', color: 'inherit' }}>
+          <button type="button" onClick={handleLogout} className='logout'>
             로그아웃
           </button>
         </li>

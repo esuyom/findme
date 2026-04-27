@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/sidebar/StudentSidebar';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { useAuth } from '../../context/AuthContext';
 
 export default function SecessionPage() {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [checks, setChecks] = useState({
     unpaidAmount: false,
     agreeSecession: false,
@@ -25,9 +27,8 @@ export default function SecessionPage() {
       return;
     }
     if (window.confirm('정말로 회원을 탈퇴하시겠습니까?')) {
-      // 실제 API 호출
-      alert('회원 탈퇴가 완료되었습니다.');
-      navigate('/');
+      logout();
+      navigate('/member/login');
     }
   };
 

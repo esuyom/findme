@@ -3,19 +3,24 @@ import { useParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
 import { useContestScrap } from '../../hooks/useScrapStore';
+import { useContestInquiryStore } from '../../hooks/useContestInquiryStore';
+import { CURRENT_STUDENT } from '../../constants/currentUser';
 
 export default function TipContestDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
   const { toggle: scrapToggle, isScraped } = useContestScrap();
+  const { add: addInquiry, isInquired } = useContestInquiryStore();
   const [showContactPopup, setShowContactPopup] = useState(false);
+  const [inquiryDone, setInquiryDone] = useState(false);
+  const [outsideMsg, setOutsideMsg] = useState('');
   const [formData, setFormData] = useState({
-    name: '홍길동',
-    phone01: '010',
-    phone02: '2222',
-    phone03: '3333',
-    location: 'SBS아카데미컴퓨터학원 강남지점',
-    agreed: false
+    name: CURRENT_STUDENT.name,
+    phone01: CURRENT_STUDENT.phone.split('-')[0] || '010',
+    phone02: CURRENT_STUDENT.phone.split('-')[1] || '',
+    phone03: CURRENT_STUDENT.phone.split('-')[2] || '',
+    location: 'SBS아카데미컴퓨터아트학원 강남지점',
+    agreed: false,
   });
 
   const contestData = {
@@ -74,9 +79,39 @@ export default function TipContestDetailPage() {
     });
   };
 
+  const openContactPopup = () => {
+    if (isInquired(numId)) {
+      setOutsideMsg('이미 문의한 공모전입니다.');
+      return;
+    }
+    setOutsideMsg('');
+    setInquiryDone(false);
+    setShowContactPopup(true);
+  };
+
   const handleSubmitInquiry = () => {
-    console.log('Submit inquiry:', formData);
-    setShowContactPopup(false);
+    if (!formData.agreed) {
+      alert('개인정보 수집 및 이용에 동의해주세요.');
+      return;
+    }
+    const ok = addInquiry({
+      contestId:    numId,
+      contestTitle: data.title,
+      name:         formData.name,
+      phone:        `${formData.phone01}-${formData.phone02}-${formData.phone03}`,
+      location:     formData.location,
+      agreed:       formData.agreed,
+    });
+    if (!ok) {
+      setShowContactPopup(false);
+      setOutsideMsg('이미 문의한 공모전입니다.');
+      return;
+    }
+    setInquiryDone(true);
+    setTimeout(() => {
+      setShowContactPopup(false);
+      setInquiryDone(false);
+    }, 1500);
   };
 
   return (
@@ -193,10 +228,15 @@ export default function TipContestDetailPage() {
               <button
                 type="button"
                 className="type02 bottom_btn btn_contest w100"
-                onClick={() => setShowContactPopup(true)}
+                onClick={openContactPopup}
               >
                 공모전 대비반 문의하기
               </button>
+              {outsideMsg && (
+                <p style={{ color: '#ff4d4d', fontSize: '13px', textAlign: 'center', marginTop: '8px', fontWeight: 500 }}>
+                  {outsideMsg}
+                </p>
+              )}
             </div>
           </section>
         </section>
@@ -288,9 +328,15 @@ export default function TipContestDetailPage() {
               </div>
             </div>
             <div className="btn_center">
-              <button type="button" className="type02 w276" onClick={handleSubmitInquiry}>
-                문의하기
-              </button>
+              {inquiryDone ? (
+                <p style={{ textAlign: 'center', color: '#4dbbff', fontSize: '15px', fontWeight: 600, padding: '8px 0' }}>
+                  문의가 완료되었습니다!
+                </p>
+              ) : (
+                <button type="button" className="type02 w276" onClick={handleSubmitInquiry}>
+                  문의하기
+                </button>
+              )}
             </div>
           </article>
           <div className="popup-dim" style={{ display: 'block' }} onClick={() => setShowContactPopup(false)} />

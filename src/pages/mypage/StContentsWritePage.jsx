@@ -1,12 +1,30 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/sidebar/StudentSidebar';
 import { useContentsStore } from '../../hooks/useContentsStore';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { JOB_CATEGORIES } from '../../constants/jobData';
+
+
+function Toast({ msg }) {
+  return (
+    <div style={{
+      position:'fixed',bottom:'32px',left:'50%',transform:'translateX(-50%)',
+      background:'#222',color:'#fff',padding:'13px 28px',borderRadius:'8px',
+      fontSize:'15px',fontWeight:'600',zIndex:9999,
+      boxShadow:'0 4px 16px rgba(0,0,0,0.18)',letterSpacing:'-0.02em',
+      display:'flex',alignItems:'center',gap:'8px',whiteSpace:'nowrap',
+    }}>
+      <span style={{color:'#4dbbff',fontSize:'18px'}}>✓</span>{msg}
+    </div>
+  );
+}
 
 export default function StContentsWritePage() {
   const navigate = useNavigate();
+  const [toast, setToast] = useState('');
+  const toastTimer = useRef(null);
   const location = useLocation();
   const editId = location.state?.editId ?? null;
   const { add, update, getById } = useContentsStore();
@@ -67,7 +85,10 @@ export default function StContentsWritePage() {
     } else {
       add(formData, status);
     }
-    navigate('/mypage/contents');
+    const msg = status === 'complete' ? '작성완료되었습니다.' : '임시저장되었습니다.';
+    setToast(msg);
+    clearTimeout(toastTimer.current);
+    toastTimer.current = setTimeout(() => { setToast(''); navigate('/mypage/contents'); }, 800);
   };
 
   return (
@@ -204,10 +225,10 @@ export default function StContentsWritePage() {
                     onChange={handleInputChange}
                     className="w100"
                   >
-                    <option value="">선택해주세요</option>
-                    <option value="design">디자인</option>
-                    <option value="development">개발</option>
-                    <option value="pm">PM</option>
+                    <option value="">직군 선택</option>
+                    {JOB_CATEGORIES.map((job) => (
+                      <option key={job} value={job}>{job}</option>
+                    ))}
                   </select>
                 </div>
               </div>
@@ -327,6 +348,7 @@ export default function StContentsWritePage() {
           <div className="popup-dim" style={{ display: 'block' }} onClick={() => setShowSubjectPopup(false)} />
         </>
       )}
+      {toast && <Toast msg={toast} />}
     </Layout>
   );
 }

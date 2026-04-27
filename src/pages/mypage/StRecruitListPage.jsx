@@ -6,9 +6,12 @@ import { useApplicationStore } from '../../hooks/useApplicationStore';
 
 export default function StRecruitListPage() {
   const { applications, remove } = useApplicationStore();
-
-  // 면접제의는 별도 store 없이 빈 상태 (HrDetailPage 면접제의 기능과 연동 시 추가)
   const [interviewOffers] = useState([]);
+  const [confirmId, setConfirmId] = useState(null); // 재확인 팝업 대상 id
+
+  const handleCancelClick = (id) => setConfirmId(id);
+  const handleConfirmCancel = () => { remove(confirmId); setConfirmId(null); };
+  const handleDismiss = () => setConfirmId(null);
 
   return (
     <Layout containerClass="recruit mypage">
@@ -39,7 +42,7 @@ export default function StRecruitListPage() {
                     <th>지원내역</th>
                     <th>진행상태</th>
                     <th>열람</th>
-                    <th>취소삭제</th>
+                    <th>지원취소</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -61,31 +64,19 @@ export default function StRecruitListPage() {
                           </Link>
                         </td>
                         <td>
-                          {app.status}
-                          <br />
-                          (채용시까지)
+                          {app.status}<br />(채용시까지)
                         </td>
                         <td className={app.viewed ? 'open' : ''}>
                           {app.viewed ? '열람' : '미열람'}
                         </td>
                         <td>
-                          {app.viewed ? (
-                            <button
-                              type="button"
-                              className="cancel tb sm"
-                              onClick={() => remove(app.id)}
-                            >
-                              지원취소
-                            </button>
-                          ) : (
-                            <button
-                              type="button"
-                              className="delete tb sm"
-                              onClick={() => remove(app.id)}
-                            >
-                              삭제
-                            </button>
-                          )}
+                          <button
+                            type="button"
+                            className="cancel tb sm"
+                            onClick={() => handleCancelClick(app.id)}
+                          >
+                            {app.viewed ? '지원취소' : '취소'}
+                          </button>
                         </td>
                       </tr>
                     ))
@@ -143,7 +134,7 @@ export default function StRecruitListPage() {
                               <button type="button" className="tb sm ms-1">거절</button>
                             </>
                           ) : (
-                            <button type="button" className="tb sm">삭제</button>
+                            <button type="button" className="tb sm" onClick={() => handleCancelClick(offer.id)}>취소</button>
                           )}
                         </td>
                       </tr>
@@ -155,6 +146,29 @@ export default function StRecruitListPage() {
           </div>
         </section>
       </div>
+
+      {/* 지원취소 재확인 팝업 */}
+      {confirmId !== null && (
+        <>
+          <article className="popup w400" style={{ display: 'block' }}>
+            <div className="d-flex mb-4 justify-content-between">
+              <div className="title">지원취소</div>
+              <button type="button" className="popup_close" onClick={handleDismiss}>
+                <img src="/img/common/popup-close.png" alt="닫기" />
+              </button>
+            </div>
+            <p style={{ fontSize: '15px', color: '#333', textAlign: 'center', padding: '8px 0 24px', lineHeight: '1.7' }}>
+              지원을 취소하시겠습니까?<br />
+              <span style={{ fontSize: '13px', color: '#999' }}>취소 후에는 복구가 불가능합니다.</span>
+            </p>
+            <div className="btn_center d-flex gap-2 justify-content-center">
+              <button type="button" className="type01 w195" onClick={handleDismiss}>아니오</button>
+              <button type="button" className="type02 w195" onClick={handleConfirmCancel}>지원취소</button>
+            </div>
+          </article>
+          <div className="popup-dim" style={{ display: 'block' }} onClick={handleDismiss} />
+        </>
+      )}
     </Layout>
   );
 }
