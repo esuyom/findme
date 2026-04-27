@@ -45,7 +45,7 @@
   header nav {
     margin-left: 24px;
   }
-  header .util .search_btn, header .util .mypage_btn{margin-right:10px; padding:0;}
+  header .util .search_btn, header .util .mypage_btn, .login_btn{margin-right:10px; padding:0;}
 
   /* ── 카드 그리드 ── */
   .company_recruit_box .con { width: 100%; }
