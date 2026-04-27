@@ -80,6 +80,7 @@
   .student_list_location .left_title { text-align: left; }
   .student_list_location .location ul { justify-content: flex-start; }
   .student_list_location .location a{width:auto;padding:0 13px;font-size:14px;margin: 5px;}
+  .sidebar ul li .bubble{display:none;}
 }
 
 /* ==========================================================================
@@ -584,6 +585,8 @@
     padding: 0;
     border-bottom: 3px solid transparent;
     margin-bottom: -1px;
+    display: flex;
+    align-items: center;
   }
   .mypage .sidebar ul li a,
   .mypage .cp.sidebar ul li a,
@@ -647,7 +650,7 @@
   }
   .recruit_board .part { border-right: none; border-right: 1px solid #ddd; padding: 0 10px; }
   .recruit_board .part:last-child { border-bottom: none; }
-  .recruit_board .num  { font-size: 40px; }
+  .recruit_board .num  { font-size:30px; }
   .recruit_board .text {height: 45px;  padding-left: 0; font-size: 13px; text-align: center; word-break: keep-all;}
 
   .recruit_notice{flex-direction: column;}
@@ -658,6 +661,7 @@
   .recruit_board.second .part.active:last-child  { border-radius:  0 12px 12px 0 ; }
   .recruit_board.second .part:first-child .text  { padding-left: 0; }
   .recruit_board.second .part a                  { padding: 10px 5px; }
+  .recruit_notice .list_inner .text_title{font-size:14px;}
 
   .recruit_notice.second .notice_part{padding:15px 20px;}
   .recruit_notice.second .notice_view{padding:0;}
@@ -678,6 +682,7 @@
     font-size:13px;
     display: flex;
   }
+  .tb_list_container .list_wrap .list.row > div.col-4{font-size:15px; font-weight:600;}
   .px-4{padding:0 !important;}
   .recruit_notice.second .guide{font-size:12px;padding:10px;}
   .mypage.cp .top_contents{padding:20px 0;}
