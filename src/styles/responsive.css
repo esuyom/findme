@@ -574,7 +574,8 @@
   ──────────────────────────────────────────────────── */
   .tab_list { overflow-x: auto; -webkit-overflow-scrolling: touch; margin:30px 0 30px;}
   .tab_list ul { white-space: nowrap; flex-wrap: nowrap; }
-  .tab_list li { flex-shrink: 0; display: inline-block; }
+  .tab_list ul li{padding-bottom:15px; flex-shrink: 0; display: inline-block;}
+  .line_cate_box li.active{border-bottom: 3px solid #4dbbff;}
 
   /* ────────────────────────────────────────────────────
      마이페이지 — 사이드바 상단 이동
@@ -608,7 +609,7 @@
     flex-shrink: 0;
     padding: 0;
     border-bottom: 3px solid transparent;
-    margin-bottom: -1px;
+    margin-bottom: 0;
     display: flex;
     align-items: center;
   }
@@ -617,7 +618,7 @@
   .sidebar ul li .logout {
     font-size: 13px;
     font-weight: 600;
-    color: #666;
+    color: #33333366;
   }
   .mypage .sidebar ul li.active,
   .mypage .cp.sidebar ul li.active {
@@ -770,7 +771,7 @@
   .sub_banner_wrap .banner{border-radius:12px;}
   .detail_board .con a { padding-bottom: 16px; margin-bottom: 16px; }
 
-  .detail_top .detail_info .content_title{font-size:20px;}
+  .detail_top .detail_info .content_title{font-size:18px;}
   .detail_top .detail_info h3{font-size:17px;}
 
   /* ── 채용공고 등록 write ── */
