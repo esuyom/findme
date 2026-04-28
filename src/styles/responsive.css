@@ -233,16 +233,23 @@
     background: #f8f9fa;
     text-align: left;
   }
+  header nav .depth2 li{
+    margin:0;}
   header nav .depth2 li a {
     padding: 12px 24px 12px 36px;
     font-size: 14px;
     color: #555;
   }
 
+  header nav .depth1>li{padding:0;}
+
   /* 검색·로그인 유틸 */
   header .util { position: static; }
   header .util .login_before .login_btn { font-size: 11px; padding: 0 8px; }
   header .gnb_bg { display: none; }
+
+  .sub_btn_box{gap:0;}
+  .sub_btn_box a, .sub_btn_box button, .sub_btn_box .menu-btn{margin-bottom:8px;}
 
   /* ── 타이포그래피 ── */
   h2 { font-size: 1.6rem; }
