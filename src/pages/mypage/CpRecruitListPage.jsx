@@ -87,14 +87,18 @@ export default function CpRecruitListPage() {
                         <div className="col-1">
                           <input type="checkbox" checked={checked[r.id] || false} onChange={() => toggleCheck(r.id)} />
                         </div>
-                        <div className="col-4 overflow">{r.title || '(제목 없음)'}</div>
+                        <div className="col-4 overflow">
+                          <Link to={`/recruit/${r.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                            {r.title || '(제목 없음)'}
+                          </Link>
+                        </div>
                         <div className="col">{r.jobGroup || '-'}</div>
                         <div className="col">{r.applicants ?? 0}건</div>
                         <div className="col">{r.deadline || '-'}</div>
                         <div className={`col ${STATUS_CLASS[r.status] || ''}`}>{STATUS_LABEL[r.status]}</div>
                         <div className="col-2">
                           <Link to={`/mypage/cp/recruit/${r.id}`}>
-                            <button type="button" className="sm tb me-1">공고보기</button>
+                            <button type="button" className="sm tb mb-1">지원자 현황</button>
                           </Link>
                           <button
                             type="button"

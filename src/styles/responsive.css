@@ -746,7 +746,7 @@
 
   /* ── 버튼 ── */
   button.type02, button.type01 , button.type03 {height: 40px; line-height:40px; min-height: 40px; }
-  button.sm.tb { min-height: 32px; font-size: 11px; padding: 0 8px; width:40px;}
+  button.sm.tb { min-height: 32px; font-size: 11px; padding: 0 8px; width:auto;}
 
   /* ── 팝업 ── */
   .popup {

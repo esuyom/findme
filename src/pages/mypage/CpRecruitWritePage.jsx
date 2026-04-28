@@ -159,8 +159,7 @@ export default function CpRecruitWritePage() {
               </div>
             )}
             <div className="job_noti mt-2">
-              공고 직무가 다른 경우 각각 등록 해야 합니다.<br />
-              (예시) iOS 개발자, Android 개발자 2개의 직무를 채용 하는 경우 각각 공고 등록<br />
+              공고 직군이 다른 경우 각각 공고를 등록 해야 합니다.<br />
               직무를 잘 나타내는 태그를 선택해주세요. (최대 3개)
             </div>
           </div>
