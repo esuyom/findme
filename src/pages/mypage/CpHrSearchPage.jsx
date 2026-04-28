@@ -13,7 +13,7 @@ export default function CpHrSearchPage() {
     .filter(Boolean);
 
   return (
-    <Layout containerClass="mypage cp">
+    <Layout containerClass="mypage cp sub">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="width100">

@@ -77,7 +77,7 @@ export default function StPortfolioListPage() {
   const closePopup = () => setShowPopup(false);
 
   return (
-    <Layout containerClass="mypage">
+    <Layout containerClass="mypage sub">
       <div className="contents_wrap">
         <section className="st sidebar" data-menu="4">
           <StudentSidebar />

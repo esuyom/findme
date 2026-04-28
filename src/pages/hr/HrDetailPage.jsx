@@ -162,8 +162,8 @@ export default function HrDetailPage() {
                     nextEl: `.hr-detail-next-${safeKey}`,
                   }}
                   slidesPerView={2}
-                  spaceBetween={20}
-                  breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2,spaceBetween:16},768:{slidesPerView:1.5,spaceBetween:20},1060:{slidesPerView:2,spaceBetween:20} }}
+                  spaceBetween={12}
+                  breakpoints={{ 768:{slidesPerView:1.5,spaceBetween:20},1060:{slidesPerView:2,spaceBetween:20} }}
                   loop
                   loopAdditionalSlides={2}
                   speed={600}

@@ -4,7 +4,7 @@ import { CURRENT_STUDENT } from '../../constants/currentUser';
 
 export default function FindIdResultPage() {
   return (
-    <MemberLayout containerClass="find result member">
+    <MemberLayout containerClass="find result member sub">
       <h2>
         <img src="/img/common/logo.png" alt="find me" />
       </h2>

@@ -13,7 +13,7 @@ export default function StJoinListPage() {
   const handleDismiss      = () => setConfirmId(null);
 
   return (
-    <Layout containerClass="join mypage">
+    <Layout containerClass="join mypage sub">
       <div className="contents_wrap">
         <section className="st sidebar" data-menu="6">
           <StudentSidebar />

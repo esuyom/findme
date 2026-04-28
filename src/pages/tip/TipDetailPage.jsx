@@ -32,7 +32,7 @@ export default function TipDetailPage() {
   }, []);
 
   return (
-    <Layout>
+    <Layout containerClass="sub">
       <div className="contents_wrap">
         <section className="detail_container section">
           <div className="quik_area">

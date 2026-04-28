@@ -167,9 +167,9 @@ export default function SearchResultPage() {
                 <Swiper
                   modules={[Navigation]}
                   navigation={{ prevEl: '.recruit-result-prev', nextEl: '.recruit-result-next' }}
-                  slidesPerView={4}
-                  spaceBetween={20}
-                  breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2.5,spaceBetween:20},1060:{slidesPerView:4,spaceBetween:20} }}
+                  slidesPerView={2}
+                  spaceBetween={12}
+                  breakpoints={{ 768:{slidesPerView:2.5,spaceBetween:20},1060:{slidesPerView:4,spaceBetween:20} }}
                   loop={filtered.recruit.length > 2}
                   loopAdditionalSlides={2}
                   speed={600}
@@ -211,9 +211,9 @@ export default function SearchResultPage() {
                 <Swiper
                   modules={[Navigation]}
                   navigation={{ prevEl: '.company-result-prev', nextEl: '.company-result-next' }}
-                  slidesPerView={5}
-                  spaceBetween={20}
-                  breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:3,spaceBetween:20},1060:{slidesPerView:5,spaceBetween:20} }}
+                  slidesPerView={2}
+                  spaceBetween={12}
+                  breakpoints={{ 768:{slidesPerView:3,spaceBetween:20},1060:{slidesPerView:5,spaceBetween:20} }}
                   loop={filtered.company.length > 4}
                   loopAdditionalSlides={2}
                   speed={600}
@@ -249,9 +249,9 @@ export default function SearchResultPage() {
                 <Swiper
                   modules={[Navigation]}
                   navigation={{ prevEl: '.coaching-result-prev', nextEl: '.coaching-result-next' }}
-                  slidesPerView={4}
-                  spaceBetween={20}
-                  breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2.5,spaceBetween:20},1060:{slidesPerView:4,spaceBetween:20} }}
+                  slidesPerView={2}
+                  spaceBetween={12}
+                  breakpoints={{ 768:{slidesPerView:2.5,spaceBetween:20},1060:{slidesPerView:4,spaceBetween:20} }}
                   loop={filtered.coaching.length > 3}
                   loopAdditionalSlides={2}
                   speed={600}
@@ -289,8 +289,8 @@ export default function SearchResultPage() {
                   modules={[Navigation]}
                   navigation={{ prevEl: '.trend-result-prev', nextEl: '.trend-result-next' }}
                   slidesPerView={2}
-                  spaceBetween={20}
-                  breakpoints={{ 0:{slidesPerView:1,spaceBetween:12},480:{slidesPerView:1.2,spaceBetween:16},768:{slidesPerView:1.5,spaceBetween:20},1060:{slidesPerView:2,spaceBetween:20} }}
+                  spaceBetween={12}
+                  breakpoints={{ 768:{slidesPerView:1.5,spaceBetween:20},1060:{slidesPerView:2,spaceBetween:20} }}
                   loop={filtered.trend.length > 2}
                   loopAdditionalSlides={2}
                   speed={600}
@@ -326,9 +326,9 @@ export default function SearchResultPage() {
                 <Swiper
                   modules={[Navigation]}
                   navigation={{ prevEl: '.story-result-prev', nextEl: '.story-result-next' }}
-                  slidesPerView={3}
-                  spaceBetween={20}
-                  breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
+                  slidesPerView={2}
+                  spaceBetween={12}
+                  breakpoints={{ 768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
                   loop={filtered.story.length > 2}
                   loopAdditionalSlides={2}
                   speed={600}

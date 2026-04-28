@@ -81,7 +81,7 @@ export default function StResumeWritePage() {
   };
 
   return (
-    <Layout containerClass="write resume mypage">
+    <Layout containerClass="write resume mypage sub">
       <div className="contents_wrap">
         <section className="contents">
           <h4 className="big_title">{editId != null ? '이력서 수정' : '이력서 작성'}</h4>

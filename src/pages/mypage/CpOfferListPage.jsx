@@ -13,7 +13,7 @@ export default function CpOfferListPage() {
   const openSms = (offer) => { setSmsTarget(offer); setShowSMSModal(true); };
 
   return (
-    <Layout containerClass="mypage cp offer">
+    <Layout containerClass="mypage cp offer sub">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="width100">

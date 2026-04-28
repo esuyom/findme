@@ -75,7 +75,7 @@ export default function JoinProfilePage() {
   };
 
   return (
-    <MemberLayout containerClass="profile join member">
+    <MemberLayout containerClass="profile join member sub">
       <h2>
         <img src="/img/common/logo.png" alt="find me" />
       </h2>

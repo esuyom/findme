@@ -11,7 +11,7 @@ export default function CpQnaViewPage() {
 
   if (!q) {
     return (
-      <Layout containerClass="mypage cp qna write">
+      <Layout containerClass="mypage cp qna write sub">
         <div className="contents_wrap">
           <CompanySidebar />
           <section className="width100">
@@ -35,7 +35,7 @@ export default function CpQnaViewPage() {
   };
 
   return (
-    <Layout containerClass="mypage cp qna write">
+    <Layout containerClass="mypage cp qna write sub">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="width100">

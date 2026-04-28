@@ -33,7 +33,7 @@ export default function SecessionPage() {
   };
 
   return (
-    <Layout containerClass="secession mypage">
+    <Layout containerClass="secession mypage sub">
       <div className="contents_wrap">
         <section className="st sidebar" data-menu="0">
           <StudentSidebar />
@@ -107,7 +107,7 @@ export default function SecessionPage() {
             </div>
           </div>
         </section>
-      </div>
+          </div>
     </Layout>
   );
 }

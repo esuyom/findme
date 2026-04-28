@@ -75,7 +75,7 @@ export default function JoinPage() {
   };
 
   return (
-    <MemberLayout containerClass="join member">
+    <MemberLayout containerClass="join member sub">
       <h2>
         <img src="/img/common/logo.png" alt="find me" />
       </h2>

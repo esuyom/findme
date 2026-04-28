@@ -20,7 +20,7 @@ export default function TipListPage() {
   };
 
   return (
-    <Layout>
+    <Layout containerClass="sub">
       <div className="contents_wrap">
         <section className="section">
 

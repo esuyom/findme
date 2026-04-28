@@ -45,7 +45,7 @@ export default function StQnaWritePage() {
   };
 
   return (
-    <Layout containerClass="write qna mypage">
+    <Layout containerClass="write qna mypage sub">
       <div className="contents_wrap">
         <section className="st sidebar"><StudentSidebar /></section>
         <section className="contents">

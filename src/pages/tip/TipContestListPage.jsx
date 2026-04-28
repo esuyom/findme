@@ -7,7 +7,7 @@ export default function TipContestListPage() {
   const contestItems = TIP_CONTEST_ITEMS.map((item) => ({ ...item, dateRange: item.period }));
 
   return (
-    <Layout>
+    <Layout containerClass="sub">
       <div className="contents_wrap">
         <section className="section">
 

@@ -20,7 +20,7 @@ export default function LoginPage() {
   };
 
   return (
-    <MemberLayout containerClass="login member">
+    <MemberLayout containerClass="login member sub">
       <h2>
         <img src="/img/common/logo.png" alt="find me" />
       </h2>

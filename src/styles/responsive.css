@@ -13,7 +13,7 @@
 @media (max-width: 1059px) {
 
   /* ── 공통 레이아웃 ── */
-  body{font-size:12px;}
+  body{font-size:14px;}
   .contents_wrap {
     max-width: 100%;
     padding: 0 24px;
@@ -111,7 +111,7 @@
     margin-bottom: 60px;
   }
   .section + .section { margin-top: 30px; }
-
+  body{font-size:13px;}
   /* ────────────────────────────────────────────────────
      GNB — 햄버거 메뉴
   ──────────────────────────────────────────────────── */
@@ -122,15 +122,17 @@
     height: 56px;
     position: fixed;
     background: #fff;
-    
+    z-index:99;
     justify-content: space-between;
     border-bottom:1px solid #dddddd80;
   }
   header .logo { width: 60px; }
-  .pb-5{padding-bottom:20px !important;}
-  .pt-5{padding-top:20px !important;}
-  .mt-5{margin-top:20px !important;}
-  .mb-5{margin-bottom:20px !important;}
+  .pb-5{padding-bottom:15px !important;}
+  .pt-5{padding-top:15px !important;}
+  .mt-5{margin-top:15px !important;}
+  .mb-5{margin-bottom:15px !important;}
+
+  .detail_txt{margin-top:20px;}
   /* ── 뒤로가기 버튼 (서브페이지 모바일) ── */
   header .back_btn {
     display: none;
@@ -443,8 +445,6 @@
   .recruit .recruit_select_box { }
   .recruit .job_select { margin-left: 0; }
 
-  /* ── 검색 박스 ── */
-  .sub.search .search_box .wrap { width: 100%; }
   
   .w400{width:100%;}
   .multi_input label span{
@@ -512,7 +512,6 @@
   .detail_container {
     flex-direction: column;
     gap: 24px;
-    margin-top:65px;
   }
   .detail_top .detail_info .portfolio_list li {
     width: calc(50% - 8px);
@@ -536,15 +535,15 @@
 
   /* quik_area 숨김 */
   .quik_area {
-     top: -48px;
+     top: -45px;
     left: 0;
     display: flex;
     gap: 10px;
   }
   .quik_area .btn_back{display:none;}
-  .quik_area .btn_save {height:40px; width:40px;}
-  .quik_area .btn_save div{height:100%;}
-  .quik_area .btn_save svg{vertical-align: inherit;}
+  .quik_area .btn_save, .quik_area .btn_wish {height:35px; width:35px;}
+  .quik_area .btn_save div, .quik_area .btn_wish div{height:100%;}
+  .quik_area .btn_save svg, .quik_area .btn_wish svg{vertical-align: inherit;}
   /* ────────────────────────────────────────────────────
      기업 상세 (CompanyDetailPage)
   ──────────────────────────────────────────────────── */
@@ -552,9 +551,9 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
-    padding-bottom: 24px;
+    padding-bottom: 0;
   }
-  .recruit.company .company_logo { width: 64px; height: 64px; }
+  .recruit.company .company_logo { width:45px; height: 45px; border-radius:12px;}
   .recruit.company .company_name { font-size: 18px; }
   /* 기업정보 테이블 행 — 라벨/값 세로 배치 */
   .recruit.company .detail_txt.table { padding: 14px 16px; }
@@ -757,14 +756,16 @@
   }
   .popup.w400, .popup.w560, .popup.w640 { width: calc(100% - 32px) !important; }
   .pop_recruiter_resume .side_btn { display: none; }
-  .popup .pick_list { max-height: 160px; }
+  .popup .pick_list { max-height: 160px; padding:15px 10px; }
+  .popup .pick_list label{margin-left:0; display: flex;  flex-direction: column;}
+  .popup .pick_list label span{margin-left:0 !important;}
+  .pop_apply .pick_list ul li .resume_edit_btn{float:none; padding-left:0;}
   .pop_skill .result label { margin-right: 8px; margin-left: 0; }
   .pop_skill .result label span { width: auto; padding:0 20px; height:40px; line-height:40px; }
   .pop_skill .job_group select{margin-right:10px;}
 
   /* ── 프로필 페이지 ── */
   .mypage.profile .contents_wrap { padding: 0;  }
-  .sub .contents_wrap{}
   .sub_banner_wrap .banner{border-radius:12px;}
   .detail_board .con a { padding-bottom: 16px; margin-bottom: 16px; }
 
@@ -819,4 +820,11 @@
   .company_recruit_box .con .recruit_company_img{height:auto; max-height:120px;}
   .mypage.scrap .btn_like{top:75px;}
   .portfolio_list ul li{width:calc(50% - 8px)}
+
+  .company_recruit_box .con .recruit_company_logo{width:40px; height:40px; border-radius:8px;}
+
+  
+  /* ── 검색 박스 ── */
+  .sub.search .search_box .wrap { width: 100%; gap:10px;}
+  .search_box .wrap input[type='text'].normal{padding-left:35px !important;}
  }

@@ -33,7 +33,7 @@ export default function CpInfoModifyPage() {
   };
 
   return (
-    <Layout containerClass="mypage cp info">
+    <Layout containerClass="mypage cp info sub">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="contents">

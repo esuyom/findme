@@ -50,7 +50,7 @@ export default function StudentProfilePage() {
   };
 
   return (
-    <Layout containerClass="mypage">
+    <Layout containerClass="mypage sub">
       <div className="contents_wrap">
         {/* 사이드바 */}
         <section className="st sidebar" data-menu="0">

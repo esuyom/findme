@@ -105,7 +105,7 @@ export default function JoinCompanyPage() {
   };
 
   return (
-    <MemberLayout containerClass="join company member">
+    <MemberLayout containerClass="join company member sub">
       <h2>
         <img src="/img/common/logo.png" alt="find me" />
       </h2>

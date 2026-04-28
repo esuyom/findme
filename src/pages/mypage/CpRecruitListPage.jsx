@@ -35,7 +35,7 @@ export default function CpRecruitListPage() {
   };
 
   return (
-    <Layout containerClass="mypage cp">
+    <Layout containerClass="mypage cp sub">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="contents">

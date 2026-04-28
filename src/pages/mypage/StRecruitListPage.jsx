@@ -14,7 +14,7 @@ export default function StRecruitListPage() {
   const handleDismiss = () => setConfirmId(null);
 
   return (
-    <Layout containerClass="recruit mypage">
+    <Layout containerClass="recruit mypage sub">
       <div className="contents_wrap">
         <section className="st sidebar" data-menu="2">
           <StudentSidebar />

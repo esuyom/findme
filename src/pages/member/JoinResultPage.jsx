@@ -3,7 +3,7 @@ import MemberLayout from '../../components/layout/MemberLayout';
 
 export default function JoinResultPage() {
   return (
-    <MemberLayout containerClass="join result member">
+    <MemberLayout containerClass="join result member sub">
       <h2>
         <img src="/img/common/logo.png" alt="find me" />
       </h2>

@@ -111,7 +111,7 @@ export default function TipSkillDataPage() {
   };
 
   return (
-    <Layout>
+    <Layout containerClass="sub">
       <div className="contents_wrap">
         <section className="section">
           <div className="sub_btn_box">

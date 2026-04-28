@@ -12,7 +12,7 @@ export default function StQnaViewPage() {
 
   if (!qna) {
     return (
-      <Layout containerClass="qna mypage">
+      <Layout containerClass="qna mypage sub">
         <div className="contents_wrap">
           <section className="st sidebar" data-menu="7"><StudentSidebar /></section>
           <section className="contents">
@@ -34,7 +34,7 @@ export default function StQnaViewPage() {
   };
 
   return (
-    <Layout containerClass="qna mypage">
+    <Layout containerClass="qna mypage sub">
       <div className="contents_wrap">
         <section className="st sidebar" data-menu="7">
           <StudentSidebar />

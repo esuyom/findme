@@ -7,7 +7,7 @@ export default function CpQnaListPage() {
   const { qnas, remove } = useCpQnaStore();
 
   return (
-    <Layout containerClass="mypage cp qna">
+    <Layout containerClass="mypage cp qna sub">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="width100">

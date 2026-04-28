@@ -51,7 +51,7 @@ export default function StScrapListPage() {
   const show = (key) => activeTab === 'all' || activeTab === key;
 
   return (
-    <Layout containerClass="scrap mypage">
+    <Layout containerClass="scrap mypage sub">
       <div className="contents_wrap">
         <section className="st sidebar" data-menu="3">
           <StudentSidebar />

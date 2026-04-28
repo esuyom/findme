@@ -21,7 +21,7 @@ export default function CpRecruitInfoPage() {
     .slice(0, 5);
 
   return (
-    <Layout containerClass="mypage cp">
+    <Layout containerClass="mypage cp sub">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="contents">

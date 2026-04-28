@@ -40,7 +40,7 @@ export default function CpRecruitViewPage() {
 
   if (!recruit) {
     return (
-      <Layout containerClass="mypage cp">
+      <Layout containerClass="mypage cp sub">
         <div className="contents_wrap">
           <CompanySidebar />
           <section className="contents">
@@ -62,7 +62,7 @@ export default function CpRecruitViewPage() {
   })();
 
   return (
-    <Layout containerClass="mypage cp">
+    <Layout containerClass="mypage cp sub">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="width100">
@@ -128,7 +128,7 @@ export default function CpRecruitViewPage() {
                     slidesPerView={"auto"}
                     spaceBetween={16}
                     grabCursor
-                    breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2.5,spaceBetween:16},1060:{slidesPerView:'auto',spaceBetween:16} }}
+                    breakpoints={{ 768:{slidesPerView:2.5,spaceBetween:16},1060:{slidesPerView:'auto',spaceBetween:16} }}
                     speed={500}
                     className="wrap"
                   >

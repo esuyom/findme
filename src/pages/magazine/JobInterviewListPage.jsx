@@ -5,7 +5,7 @@ import { JOB_INTERVIEW_DUMMY } from '../../constants/detailData';
 
 export default function JobInterviewListPage() {
   return (
-    <Layout>
+    <Layout containerClass="sub">
       <div className="contents_wrap">
         <section className="section">
 

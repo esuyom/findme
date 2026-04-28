@@ -92,7 +92,7 @@ export default function StContentsWritePage() {
   };
 
   return (
-    <Layout containerClass="contents write mypage">
+    <Layout containerClass="contents write mypage sub">
       <div className="contents_wrap">
         <section className="st sidebar" data-menu="5">
           <StudentSidebar />

@@ -11,7 +11,7 @@ export default function MouHistoryListPage() {
   }));
 
   return (
-    <Layout>
+    <Layout containerClass="sub">
       <div className="contents_wrap">
         <section className="section">
 

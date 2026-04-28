@@ -121,7 +121,7 @@ export default function CpRecruitWritePage() {
   };
 
   return (
-    <Layout containerClass="write recruit mypage cp">
+    <Layout containerClass="write recruit mypage cp sub">
       <div className="contents_wrap">
         <section className="contents">
           <button type="button" className="back" style={{ background: 'none', border: 'none', padding: 0 }} onClick={() => navigate(-1)}>

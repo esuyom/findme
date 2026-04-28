@@ -13,7 +13,7 @@ export default function FindPwResetPage() {
   };
 
   return (
-    <MemberLayout containerClass="find member">
+    <MemberLayout containerClass="find member sub">
       <h2>
         <img src="/img/common/logo.png" alt="find me" />
       </h2>

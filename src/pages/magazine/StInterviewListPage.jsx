@@ -35,7 +35,7 @@ export default function StInterviewListPage() {
   };
 
   return (
-    <Layout>
+    <Layout containerClass="sub">
       <div className="contents_wrap">
         <section className="section">
 

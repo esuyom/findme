@@ -33,16 +33,12 @@ const DEADLINE_RECRUITS = [...RECRUIT_DUMMY]
 
 /* ── 공통 breakpoints ──────────────────────────────── */
 const BP_RECRUIT = {
-  0:    { slidesPerView: 2,   spaceBetween: 12 },
-  480:  { slidesPerView: 2.5, spaceBetween: 16 },
   768:  { slidesPerView: 2.5, spaceBetween: 20 },
   1060: { slidesPerView: 4,   spaceBetween: 20 },
 };
 
 const BP_INTERVIEW = {
-  0:    { slidesPerView: 2,   spaceBetween: 12 },
-  480:  { slidesPerView: 2.5, spaceBetween: 16 },
-  768:  { slidesPerView: 2.5,   spaceBetween: 20 },
+  768:  { slidesPerView: 2,   spaceBetween: 20 },
   1060: { slidesPerView: 3.05, spaceBetween: 20 },
 };
 
@@ -81,8 +77,8 @@ export default function HomePage() {
             <SwiperSlider
               sliderKey="home-recruit"
               className="basicSlide"
-              slidesPerView={4}
-              spaceBetween={20}
+              slidesPerView={2}
+              spaceBetween={12}
               speed={600}
               loop
               loopAdditionalSlides={2}
@@ -101,8 +97,8 @@ export default function HomePage() {
             <SwiperSlider
               sliderKey="home-popular"
               className="basicSlide line"
-              slidesPerView={4}
-              spaceBetween={20}
+              slidesPerView={2}
+              spaceBetween={12}
               speed={600}
               loop
               loopAdditionalSlides={2}
@@ -130,8 +126,8 @@ export default function HomePage() {
             <SwiperSlider
               sliderKey="home-interview"
               className="otherSlide"
-              slidesPerView={3.05}
-              spaceBetween={20}
+              slidesPerView={2}
+              spaceBetween={12}
               speed={600}
               loop
               loopAdditionalSlides={2}
@@ -150,8 +146,8 @@ export default function HomePage() {
             <SwiperSlider
               sliderKey="home-salary"
               className="basicSlide"
-              slidesPerView={4}
-              spaceBetween={20}
+              slidesPerView={2}
+              spaceBetween={12}
               speed={600}
               loop
               loopAdditionalSlides={2}
@@ -170,8 +166,8 @@ export default function HomePage() {
             <SwiperSlider
               sliderKey="home-deadline"
               className="basicSlide"
-              slidesPerView={4}
-              spaceBetween={20}
+              slidesPerView={2}
+              spaceBetween={12}
               speed={600}
               loop
               loopAdditionalSlides={2}

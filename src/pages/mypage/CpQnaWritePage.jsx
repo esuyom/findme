@@ -41,7 +41,7 @@ export default function CpQnaWritePage() {
   };
 
   return (
-    <Layout containerClass="write qna mypage cp">
+    <Layout containerClass="write qna mypage cp sub">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="contents">

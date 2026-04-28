@@ -124,7 +124,7 @@ export default function StResumeListPage() {
   };
 
   return (
-    <Layout containerClass="mypage">
+    <Layout containerClass="mypage sub">
       <div className="contents_wrap">
         <section className="st sidebar" data-menu="1">
           <StudentSidebar />

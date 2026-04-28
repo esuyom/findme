@@ -68,13 +68,13 @@ export default function HrListPage() {
           <div className="student_list_box">
             <SwiperSlider
               sliderKey="hr-new"
-              slidesPerView={3}
+              slidesPerView={2}
               className="line"
               spaceBetween={20}
               speed={600}
               loop
               loopAdditionalSlides={2}
-              breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
+              breakpoints={{ 768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
               items={NEW_STUDENTS.map((d) => (
                 <StudentCard key={d.id} {...d} to={`/hr/${d.id}`} />
               ))}
@@ -88,13 +88,13 @@ export default function HrListPage() {
           <div className="student_list_box type02">
             <SwiperSlider
               sliderKey="hr-portfolio"
-              slidesPerView={3}
+              slidesPerView={2}
               className="line"
               spaceBetween={20}
               speed={600}
               loop
               loopAdditionalSlides={2}
-              breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
+              breakpoints={{ 768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
               items={PORTFOLIO_STUDENTS.map((d) => (
                 <StudentCard key={d.id} {...d} to={`/hr/${d.id}`} />
               ))}
@@ -133,13 +133,13 @@ export default function HrListPage() {
           <div className="student_list_box">
             <SwiperSlider
               sliderKey="hr-popular"
-              slidesPerView={3}
+              slidesPerView={2}
               className="line"
               spaceBetween={20}
               speed={600}
               loop
               loopAdditionalSlides={2}
-              breakpoints={{ 0:{slidesPerView:2,spaceBetween:12},480:{slidesPerView:2.5,spaceBetween:16},768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
+              breakpoints={{ 768:{slidesPerView:2,spaceBetween:20},1060:{slidesPerView:3,spaceBetween:20} }}
               items={POPULAR_STUDENTS.map((d) => (
                 <StudentCard key={d.id} {...d} to={`/hr/${d.id}`} />
               ))}

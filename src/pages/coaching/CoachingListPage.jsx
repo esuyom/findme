@@ -44,7 +44,7 @@ export default function CoachingListPage() {
   };
 
   return (
-    <Layout>
+    <Layout containerClass="sub">
       <div className="contents_wrap">
         <section className="section">
 

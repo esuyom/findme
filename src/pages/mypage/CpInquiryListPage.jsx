@@ -9,7 +9,7 @@ export default function CpInquiryListPage() {
   const inquiries = getByCompanyId(CURRENT_COMPANY_ID);
 
   return (
-    <Layout containerClass="mypage cp qna">
+    <Layout containerClass="mypage cp qna sub">
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="width100">
