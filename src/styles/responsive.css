@@ -149,9 +149,7 @@
     height: 24px;
   }
   /* 서브페이지: 뒤로가기 표시 + 로고 숨김 */
-  header.sub .back_btn{display:flex;}
   header .back_btn img{width:20px; height:auto;}
-  header.sub .logo     { display: none; }
 
   /* 햄버거 버튼 */
   header .ham_btn {
@@ -342,7 +340,7 @@
 
   /* student_list_box.non-slide — 2열 */
   .student_list_box.non-slide .wrap { display: flex; flex-wrap: wrap; gap: 12px; margin-left: -16px; gap: 0 !important;}
-  .student_list_box.non-slide .con  { width: calc(100% / 2 - 16px); margin-left: 16px; height: auto; }
+  .student_list_box.non-slide .con  { width: calc(100% / 2 - 16px); margin-left: 16px; height: auto; margin-bottom:16px;}
 
   /* ── line_cate_box — 가로 스크롤 ── */
   .line_cate_box { margin: 32px 0 24px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -821,6 +819,4 @@
   .company_recruit_box .con .recruit_company_img{height:auto; max-height:120px;}
   .mypage.scrap .btn_like{top:75px;}
   .portfolio_list ul li{width:calc(50% - 8px)}
-  .mypage.contents.write .profile_box .img_wrap{width:120px;}
-  .mypage.contents.write .profile_box .form-span-file{width:90px; height:90px;}
-}
+ }

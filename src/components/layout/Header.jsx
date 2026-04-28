@@ -72,7 +72,6 @@ export default function Header() {
   const mypageLink  = userType === 'company' ? '/mypage/cp/dashboard' : '/mypage/profile';
   const navigate    = useNavigate();
   const { pathname }= useLocation();
-  const isHome      = pathname === '/';
   const parentMenu  = getParentMenu(pathname);
 
   const handleCoachingClick = (menuNum, to) => {
@@ -83,26 +82,10 @@ export default function Header() {
   const closeMenu = () => setMenuOpen(false);
 
   return (
-    <header className={`gnb${isOn ? ' on' : ''}${isHome ? '' : ' sub'}`}>
+    <header className={`gnb${isOn ? ' on' : ''}`}>
       <div className="gnb_bg" />
       <div className="wrap">
         {/* 모바일 서브페이지: 뒤로가기 버튼 */}
-        {!isHome && (
-          <div className="mobile_back_wrap">
-            <button
-              type="button"
-              className="back_btn"
-              onClick={() => navigate(-1)}
-              aria-label="뒤로가기"
-            >
-              <img src="/img/common/icon-list-back.png" alt="뒤로가기" />
-            </button>
-            {parentMenu && (
-              <span className="mobile_menu_label">{parentMenu}</span>
-            )}
-          </div>
-        )}
-
         <h1 className="logo">
           <Link to="/" onClick={closeMenu}>
             <img src="/img/common/logo.png" alt="find me" />
