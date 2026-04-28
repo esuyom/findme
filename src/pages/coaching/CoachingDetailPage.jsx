@@ -3,6 +3,7 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
 import { useCoachingScrap } from '../../hooks/useScrapStore';
+import { useAuth } from '../../context/AuthContext';
 import { useJoinStore } from '../../hooks/useJoinStore';
 
 const COACHING_DATA = {
@@ -23,6 +24,7 @@ export default function CoachingDetailPage() {
   const location = useLocation();
   const [showFloatingFixed, setShowFloatingFixed] = useState(false);
   const { toggle: scrapToggle, isScraped } = useCoachingScrap();
+  const { userType } = useAuth();
   const { add: joinAdd, isJoined } = useJoinStore();
   const [joinDone,  setJoinDone]  = useState(false);
   const [joinError, setJoinError] = useState('');
@@ -155,6 +157,7 @@ export default function CoachingDetailPage() {
                   type="button"
                   className="type02 bottom_btn w100"
                   onClick={() => {
+                    if (userType === 'company') { setJoinError('수강생 전용입니다.'); return; }
                     if (isJoined(numId)) { setJoinError('이미 신청한 특강입니다.'); return; }
                     const ok = joinAdd({ coachingId: numId, category: data.category, title: data.title, deadline: data.deadline, img: data.img });
                     if (!ok) { setJoinError('이미 신청한 특강입니다.'); return; }

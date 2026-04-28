@@ -385,7 +385,7 @@
     z-index: -1;
   }
   /* 옵션 칩 크기 */
-  .cu-option { padding: 0 14px; font-size: 13px; }
+  .cu-option { padding: 0 14px; font-size: 13px; height:40px; line-height:40px; }
   .badge{padding:0 14px !important;}
 
   /* ────────────────────────────────────────────────────
@@ -432,7 +432,7 @@
   .select-box,
   .select-box.type2,
   .select_disabled,
-  .select_disabled.type2 { height: 40px !important; line-height: 40px !important; padding: 0 10px !important; }
+  .select_disabled.type2 { height: 40px !important; line-height: 40px !important; padding: 0 10px !important; background-position:95% center; background-size:12px; }
   /* phone_box 구분자 세로 중앙 */
   .member .phone_box span,
   .mypage .phone_box span  { line-height: 40px; }
@@ -509,7 +509,6 @@
   .detail_top .detail_info { width: 100%; }
   .detail_float             { width: 100%; }
   .detail_float .detail_profile { width: 100%; }
-  .detail_float .quik_area  { display: none; }
   .detail_container {
     flex-direction: column;
     gap: 24px;
@@ -541,8 +540,14 @@
     display: flex;
     gap: 10px;
   }
-  .quik_area .btn_back{display:none;}
-  .quik_area .btn_save, .quik_area .btn_wish {height:35px; width:35px;}
+  .detail_float .quik_area{
+    top: -45px;
+    left: 0;
+    display: flex;
+    gap: 10px;
+  }
+  .quik_area .btn_back, .detail_float .quik_area .btn_back{display:none;}
+  .quik_area .btn_save, .quik_area .btn_wish, .detail_float .quik_area .btn_wish{height:35px; width:35px;}
   .quik_area .btn_save div, .quik_area .btn_wish div{height:100%;}
   .quik_area .btn_save svg, .quik_area .btn_wish svg{vertical-align: inherit;}
   /* ────────────────────────────────────────────────────
@@ -630,7 +635,9 @@
   }
 
   /* 기업 사이드바 공고등록 버튼 */
-  .mypage .cp.sidebar > button { display: none; }
+  .mypage .cp.sidebar .btn-wrap{position:absolute; display:flex; top: -45px; gap:10px;}
+  .mypage .cp.sidebar .btn-wrap button{width:auto; padding:0 15px;}
+  .mypage.cp .contents_wrap{margin-top:130px;}
 
   /* 마이페이지 콘텐츠 */
   .mypage .contents,
@@ -638,10 +645,22 @@
     width: 100% !important;
     padding: 20px 0 !important;
   }
-  .mypage.cp.recruit.write .contents { padding: 24px 16px !important; }
+  .mypage.cp.recruit.write .contents { padding:0 !important; }
   .mypage.cp.recruit.write .back { display: none; }
   .mypage.cp.info .contents { width: 100% !important; }
 
+  button.w195{width:auto; min-width:60px; max-width:150px; padding:0 10px;}
+  .mypage.cp .hr_box{padding:15px 10px; font-size:14px;}
+  .mypage.cp .hr_box .profile{width:30px; height:30px;}
+  .mypage.cp .hr_box .btn_wish{
+    bottom: 15px;
+        top: auto;
+        right: 10px;
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+  }
+  .select-box .selected{font-size:12px;}
 
   .recommend_bar{ height: auto;   flex-direction: column; padding:10px;align-items: flex-end;}
   /* 마이페이지 h4 */
@@ -745,7 +764,7 @@
   .search_box input { font-size: 15px; }
 
   /* ── 버튼 ── */
-  button.type02, button.type01 , button.type03 {height: 40px; line-height:40px; min-height: 40px; }
+  button.type02,button.normal, button.type01 , button.type03 {height: 40px; line-height:40px; min-height: 40px; }
   button.sm.tb { min-height: 32px; font-size: 11px; padding: 0 8px; width:auto;}
 
   /* ── 팝업 ── */

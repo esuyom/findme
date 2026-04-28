@@ -92,11 +92,27 @@ function load() {
     const storedIds = new Set(stored.map((r) => r.id));
     const missing = DEFAULT_RECRUITS.filter((r) => !storedIds.has(r.id));
     const merged = [...missing, ...stored];
+    // 마감일 지난 active 공고 자동 closed
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    let autoClosedAny = false;
+    const autoChecked = merged.map((r) => {
+      if (r.status === 'active' && r.deadline && r.deadline !== '상시채용') {
+        const dl = new Date(r.deadline);
+        dl.setHours(23, 59, 59, 0);
+        if (dl < today) {
+          autoClosedAny = true;
+          return { ...r, status: 'closed' };
+        }
+      }
+      return r;
+    });
+
     // 병합 결과를 localStorage에 반영
-    if (missing.length > 0) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(merged));
+    if (missing.length > 0 || autoClosedAny) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(autoChecked));
     }
-    return merged;
+    return autoChecked;
   } catch {
     return DEFAULT_RECRUITS;
   }

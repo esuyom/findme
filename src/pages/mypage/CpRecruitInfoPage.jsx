@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import CompanySidebar from '../../components/sidebar/CompanySidebar';
 import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import { useWishList } from '../../hooks/useWishList';
 import { useCpOfferStore } from '../../hooks/useCpOfferStore';
 import { STUDENT_DUMMY } from '../../constants/dummyData';
 
@@ -10,6 +11,8 @@ const RECOMMEND_STUDENTS = STUDENT_DUMMY.slice(0, 5);
 export default function CpRecruitInfoPage() {
   const { recruits } = useCpRecruitStore();
   const { offers }   = useCpOfferStore();
+  const { wishList }  = useWishList();
+  const wishCount    = wishList.length;
 
   const activeCount  = recruits.filter((r) => r.status === 'active').length;
   const closedCount  = recruits.filter((r) => r.status === 'closed').length;
@@ -52,9 +55,9 @@ export default function CpRecruitInfoPage() {
               </Link>
             </div>
             <div className="part col">
-              <Link to="/mypage/cp/hr-search">
+              <Link to="/mypage/cp/hr-wish">
                 <div className="text">관심 인재</div>
-                <div className="num zero">0</div>
+                <div className={`num${wishCount === 0 ? ' zero' : ''}`}>{wishCount}</div>
               </Link>
             </div>
             <div className="part col">

@@ -3,9 +3,25 @@ import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/sidebar/StudentSidebar';
 import { useApplicationStore } from '../../hooks/useApplicationStore';
+import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import { RECRUIT_DUMMY } from '../../constants/dummyData';
 
 export default function StRecruitListPage() {
   const { applications, remove } = useApplicationStore();
+  const { recruits: storeRecruits } = useCpRecruitStore();
+  const ALL_RECRUITS = [...RECRUIT_DUMMY, ...storeRecruits];
+
+  // 지원 공고의 실제 마감 상태 계산
+  const getRecruitStatus = (recruitId) => {
+    const r = ALL_RECRUITS.find((d) => d.id === recruitId || String(d.id) === String(recruitId));
+    if (!r) return '진행중';
+    if (r.status === 'closed') return '채용종료';
+    if (!r.deadline || r.deadline === '상시채용') return '채용시마감';
+    const today = new Date(); today.setHours(0,0,0,0);
+    const dl = new Date(r.deadline); dl.setHours(23,59,59,0);
+    if (dl < today) return '채용종료';
+    return '진행중';
+  };
   const [interviewOffers] = useState([]);
   const [confirmId, setConfirmId] = useState(null); // 재확인 팝업 대상 id
 
@@ -64,7 +80,7 @@ export default function StRecruitListPage() {
                           </Link>
                         </td>
                         <td>
-                          {app.status}<br />(채용시까지)
+                          {getRecruitStatus(app.recruitId)}
                         </td>
                         <td className={app.viewed ? 'open' : ''}>
                           {app.viewed ? '열람' : '미열람'}

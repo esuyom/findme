@@ -72,6 +72,7 @@ import CpRecruitViewPage from './pages/mypage/CpRecruitViewPage';
 import CpRecruitWritePage from './pages/mypage/CpRecruitWritePage';
 import CpInfoModifyPage from './pages/mypage/CpInfoModifyPage';
 import CpHrSearchPage from './pages/mypage/CpHrSearchPage';
+import CpHrWishPage from './pages/mypage/CpHrWishPage';
 import CpQnaListPage from './pages/mypage/CpQnaListPage';
 import CpQnaWritePage from './pages/mypage/CpQnaWritePage';
 import CpQnaViewPage from './pages/mypage/CpQnaViewPage';
@@ -156,6 +157,7 @@ export default function App() {
           <Route path="/mypage/cp/recruit/write" element={<CpRecruitWritePage />} />
           <Route path="/mypage/cp/info" element={<CpInfoModifyPage />} />
           <Route path="/mypage/cp/hr-search" element={<CpHrSearchPage />} />
+          <Route path="/mypage/cp/hr-wish" element={<CpHrWishPage />} />
           <Route path="/mypage/cp/qna" element={<CpQnaListPage />} />
           <Route path="/mypage/cp/qna/write" element={<CpQnaWritePage />} />
           <Route path="/mypage/cp/qna/:id" element={<CpQnaViewPage />} />

@@ -3,6 +3,9 @@ import Layout from '../components/layout/Layout';
 import RecruitCard from '../components/cards/RecruitCard';
 import Pagination from '../components/common/Pagination';
 import { JOB_CATEGORIES } from '../constants/jobData';
+import { useCompanyProfileStore } from '../hooks/useCompanyProfileStore';
+import { useCpRecruitStore } from '../hooks/useCpRecruitStore';
+import { CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../constants/currentUser';
 import { RECRUIT_DUMMY } from '../constants/dummyData';
 
 const FILTER_TAGS = [
@@ -15,6 +18,35 @@ const REGIONS = ['전체', '서울', '경기', '인천', '대전', '세종', '�
 const PAGE_SIZE = 12;
 
 export default function RecruitListPage() {
+  const { profile: cpProfile } = useCompanyProfileStore();
+  const { recruits: storeRecruits } = useCpRecruitStore();
+
+  // store 활성 공고를 RECRUIT_DUMMY 포맷으로 변환
+  const storeActive = storeRecruits
+    .filter((r) => r.status === 'active' && !RECRUIT_DUMMY.find((d) => d.id === r.id))
+    .map((r) => {
+      const dDay = r.deadline && r.deadline !== '상시채용'
+        ? Math.max(0, Math.ceil((new Date(r.deadline) - new Date()) / (1000 * 60 * 60 * 24)))
+        : null;
+      return {
+        id:              r.id,
+        companyId:       CURRENT_COMPANY_ID,
+        title:           r.title || '(제목 없음)',
+        company:         cpProfile.name || CURRENT_COMPANY.name,
+        companyImg:      r.thumbnailImg || r.companyImg || '/img/company/co-img.jpg',
+        companyLogo:     r.companyLogo || cpProfile.logoPreview || '/img/company/co-logo.jpg',
+        keywords:        (cpProfile.keywords || []).join(', '),
+        location:        `${r.region1 || '서울'} ${r.region2 || ''}∙${r.isNewbie ? '신입' : `경력 ${r.careerMin || 0}년↑`}`,
+        state:           dDay === null ? '채용시마감' : `D-${dDay}`,
+        deadline:        r.deadline || '',
+        views:           0,
+        date:            r.date || '',
+        region:          r.region1 || '서울',
+        companyKeywords: cpProfile.keywords || [],
+      };
+    });
+
+  const ALL_RECRUITS = [...storeActive, ...RECRUIT_DUMMY];
   const [selectedRegion, setSelectedRegion] = useState('전체');
   const [selectedJobCategory, setSelectedJobCategory] = useState('');
   const [checkedTags, setCheckedTags] = useState([]);
@@ -28,7 +60,7 @@ export default function RecruitListPage() {
   };
 
   const filtered = useMemo(() => {
-    return RECRUIT_DUMMY.filter((d) => {
+    return ALL_RECRUITS.filter((d) => {
       const regionMatch = selectedRegion === '전체' || d.region === selectedRegion;
       const tagMatch = checkedTags.length === 0 || checkedTags.every((tag) => d.companyKeywords.includes(tag));
       return regionMatch && tagMatch;
@@ -90,7 +122,7 @@ export default function RecruitListPage() {
             <div className="wrap">
               {paged.length > 0 ? (
                 paged.map((d) => (
-                  <RecruitCard key={d.id} {...d} to={`/recruit/${d.id}`} />
+                  <RecruitCard key={d.id} {...d} companyLogo={d.companyId === CURRENT_COMPANY_ID && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
                 ))
               ) : (
                 <p className="gray text-center w-100 py-5">조건에 맞는 채용공고가 없습니다.</p>

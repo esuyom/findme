@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
 import { useContestScrap } from '../../hooks/useScrapStore';
+import { useAuth } from '../../context/AuthContext';
 import { useContestInquiryStore } from '../../hooks/useContestInquiryStore';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
 
@@ -10,6 +11,7 @@ export default function TipContestDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
   const { toggle: scrapToggle, isScraped } = useContestScrap();
+  const { userType } = useAuth();
   const { add: addInquiry, isInquired } = useContestInquiryStore();
   const [showContactPopup, setShowContactPopup] = useState(false);
   const [inquiryDone, setInquiryDone] = useState(false);
@@ -80,6 +82,7 @@ export default function TipContestDetailPage() {
   };
 
   const openContactPopup = () => {
+    if (userType === 'company') { setOutsideMsg('수강생 전용입니다.'); return; }
     if (isInquired(numId)) {
       setOutsideMsg('이미 문의한 공모전입니다.');
       return;

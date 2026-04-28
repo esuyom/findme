@@ -6,12 +6,16 @@ import { RECRUIT_DUMMY } from '../../constants/dummyData';
 import { COMPANY_DETAIL } from '../../constants/detailData';
 import { useCompanyScrap } from '../../hooks/useScrapStore';
 import { useCompanyInquiryStore } from '../../hooks/useCompanyInquiryStore';
+import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
+import { CURRENT_COMPANY_ID } from '../../constants/currentUser';
 
 export default function CompanyDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
   const { toggle: scrapToggle, isScraped } = useCompanyScrap();
   const { add: addInquiry } = useCompanyInquiryStore();
+  const { profile: cpProfile } = useCompanyProfileStore();
+  const isOwnCompany = numId === CURRENT_COMPANY_ID;
   const [showContactModal, setShowContactModal] = useState(false);
   const [form, setForm] = useState({ title: '', content: '', email: '', agreed: false });
   const [inquiryDone, setInquiryDone] = useState(false);
@@ -19,6 +23,25 @@ export default function CompanyDetailPage() {
 
   // 기업 상세 데이터 조회
   const company = COMPANY_DETAIL[numId] || COMPANY_DETAIL.default;
+
+  // 현재 로그인 기업이면 store 데이터로 오버라이드
+  const companyData = isOwnCompany ? {
+    ...company,
+    companyName:     cpProfile.name     || companyData.companyName,
+    companyJobGroup: cpProfile.industry || companyData.companyJobGroup,
+    logoSrc:         cpProfile.logoPreview || companyData.logoSrc,
+    intro:           cpProfile.intro ? [cpProfile.intro] : companyData.intro,
+    address:         cpProfile.address  || companyData.address,
+    welfareKeywords: cpProfile.keywords?.length ? cpProfile.keywords : companyData.welfareKeywords,
+    table: [
+      { label: '산업분류', value: cpProfile.industry  || companyData.companyJobGroup },
+      { label: '설립일',   value: cpProfile.founded   ? `${cpProfile.founded}년 설립` : (companyData.table?.find(r=>r.label==='설립일')?.value||'') },
+      { label: '매출',     value: cpProfile.revenue   || (companyData.table?.find(r=>r.label==='매출')?.value||'') },
+      { label: '기업유형', value: cpProfile.size       || (companyData.table?.find(r=>r.label==='기업유형')?.value||'') },
+      { label: '사원수',   value: cpProfile.employees || (companyData.table?.find(r=>r.label==='사원수')?.value||'') },
+      { label: '홈페이지', value: cpProfile.website   || '', isLink: true },
+    ].filter(r => r.value),
+  } : company;
 
   // 해당 기업의 채용공고 목록
   const companyRecruits = RECRUIT_DUMMY.filter((r) => r.companyId === numId);
@@ -35,7 +58,7 @@ export default function CompanyDetailPage() {
 
   // RECRUIT_DUMMY에서 이 기업의 대표 데이터 참조 (이름/키워드)
   const recruitRef = RECRUIT_DUMMY.find((r) => r.companyId === numId);
-  const displayName = company.companyName || recruitRef?.company || '';
+  const displayName = companyData.companyName || recruitRef?.company || '';
   const displayKeywords = recruitRef?.keywords || '';
 
   return (
@@ -61,11 +84,11 @@ export default function CompanyDetailPage() {
             <section className="section section01">
               <div className="company_info">
                 <div className="company_logo">
-                  <img src={company.logoSrc} alt="" />
+                  <img src={companyData.logoSrc} alt="" />
                 </div>
                 <div>
                   <p className="company_name">{displayName}</p>
-                  <p className="company_job_group">{company.companyJobGroup}</p>
+                  <p className="company_job_group">{companyData.companyJobGroup}</p>
                   <p className="company_keywords mini_txt">
                     <span>기업키워드</span>{displayKeywords}
                   </p>
@@ -76,20 +99,20 @@ export default function CompanyDetailPage() {
             <section className="section section02">
               <div className="detail_txt">
                 <h4>기업소개</h4>
-                {company.intro.map((p, i) => <p key={i}>{p}</p>)}
+                {companyData.intro.map((p, i) => <p key={i}>{p}</p>)}
                 {company.links.map((l) => (
                   <p key={l.href}>
                     [{l.label}]<br />
                     <a href={l.href} target="_blank" rel="noreferrer">{l.href}</a>
                   </p>
                 ))}
-                {company.welfare.map((w, i) => (
+                {companyData.welfare.map((w, i) => (
                   <p key={i} style={{ whiteSpace: 'pre-line' }}>{w}</p>
                 ))}
               </div>
 
               <div className="detail_txt table">
-                {company.table.map((row) => (
+                {companyData.table.map((row) => (
                   <div key={row.label}>
                     <span>{row.label}</span>
                     <p>
@@ -104,13 +127,13 @@ export default function CompanyDetailPage() {
 
               <div className="detail_txt company_loca">
                 <h4>주소</h4>
-                <p>{company.address}</p>
+                <p>{companyData.address}</p>
               </div>
 
               <div className="detail_txt welfare">
                 <h4>{displayName}의 Check Point!</h4>
                 <div>
-                  {company.welfareKeywords.map((w) => <span key={w}>{w}</span>)}
+                  {companyData.welfareKeywords.map((w) => <span key={w}>{w}</span>)}
                 </div>
               </div>
             </section>

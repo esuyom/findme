@@ -141,7 +141,7 @@ export default function HrDetailPage() {
           </section>
 
           {relatedByDuty.filter(({ students }) => students.length > 0).map(({ duty, safeKey, students }) => (
-            <section key={duty} className="section">
+            <section key={duty} className="hr_other section">
               <h3 className="content_title">
                 #{duty}
                 <Link to={`/hr/category?job=${encodeURIComponent(duty)}`} className="more_view" />

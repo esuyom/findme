@@ -12,7 +12,7 @@ header .back_btn { display: none; }
 .mobile_menu_label{display:none;}
 .ham_btn{display:none;}
 /* 기타 공통 */
-.select-box.type2{height:48px; border-radius:8px;}
+.select-box.type2{height:48px; line-height:48px; border-radius:8px;}
 .select_disabled.type2{height:48px; line-height:48px; border-radius:8px;}
 
 /* company_recruit_box */
@@ -22,7 +22,7 @@ header .back_btn { display: none; }
 .company_recruit_box .con {width:250px; }
 .company_recruit_box .con a{position:relative; display:block;}
 .company_recruit_box .con .recruit_company_img {height:168px; border-radius:15px; overflow:hidden;}
-.company_recruit_box .con .recruit_company_logo{position:absolute;width:56px;height:56px;background-color:#fff;top: 10px;left: 10px;border-radius: 13px;overflow: hidden;border: 1px solid #ededed;}
+.company_recruit_box .con .recruit_company_logo{position:absolute;display: flex;align-items: center;width:56px;height:56px;background-color:#fff;top: 10px;left: 10px;border-radius: 13px;overflow: hidden;border: 1px solid #ededed;}
 .company_recruit_box .con .recruit_title{word-break: keep-all; font-size:14px;margin: 15px 0 5px;font-weight: 800;}
 .company_recruit_box .con .recruit_company{font-size:12px;color:#4dbbff;font-weight: 700;}
 .company_recruit_box.none_slide .con:nth-child(4n+4){margin-right:0;}
@@ -294,6 +294,7 @@ footer .footer_site .select_site .company_group > ul::-webkit-scrollbar-track {b
 .recruit_company_img .swiper-pagination-bullet{width:8px; height:8px; margin:0 3px;}
 .recruit_company_img .swiper-pagination-bullet-active{background:#231f20;}
 .recruit_company_img .con{border-radius:20px; overflow:hidden;}
+.recruit_company_img .swiper-slide{max-height:300px; overflow: hidden; display: flex;align-items: center;}
 .recruit .recruit_info .company_name{font-size:15px;font-weight: 600;}
 .recruit .recruit_info .recruit_title{font-size:28px;font-weight: 800; margin-bottom: 18px;}
 .recruit .recruit_welfare{margin-top: 40px;}
@@ -301,7 +302,7 @@ footer .footer_site .select_site .company_group > ul::-webkit-scrollbar-track {b
 
 .recruit .detail_float .company_info .company_name{font-size:17px;font-weight: 700;color: #333333;}
 .recruit .detail_float .company_info .edit{background: #eaeaea; border-radius: 5px; width: 40px; line-height: 22px; text-align: center; margin-top: 5px;}
-.recruit .detail_float .company_info .company_logo{width:74px; height:54px; border-radius:12px; overflow:hidden;}
+.recruit .detail_float .company_info .company_logo{width:74px; height:54px; border-radius:12px; overflow:hidden; display: flex; align-items: center;}
 .recruit .detail_float .company_info .company_logo a{display:block; width:100%; height:100%;}
 .recruit .detail_float .company_info .company_logo img{width:100%;}
 .recruit .detail_float .company_detail .company_service{text-overflow: ellipsis; overflow: hidden; white-space: normal; display: -webkit-box; -webkit-line-clamp: 5;  -webkit-box-orient: vertical;} 
@@ -605,6 +606,16 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .mypage.cp .hr_box .profile{width:53px; height:53px; margin-right:10px;}
 .mypage.cp .hr_box .age{font-weight:400;}
 .mypage.cp .hr_box .sub_title{margin-bottom:3px;}
+.mypage.cp .hr_box .btn_wish{
+    width: 48px;
+    height: 48px;
+    border-radius: 100%;
+    border: 1px solid #ddd;
+    font-size: 14px;
+    color: #999;
+    font-weight: 700;
+    position:absolute; right:27px; top:27px;
+}
 
 .mypage.cp .qna_box{min-height: 650px; background:#fff; padding:27px; border-radius: 12px; border: 1px solid rgb(221, 221, 221); box-shadow: 1px 1.732px 8px 0px rgba(0, 0, 0, 0.13);}
 .mypage.cp.qna .agree_box .txt{color:#282828;margin-bottom: 10px;}
@@ -796,6 +807,8 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .skill_info.type02 .bar .outer span {height:12px; background:#4dbbff;}
 .skill_info.type02 .bar .outer {height:12px;}
 .skill_info.type02 .percent {color:#858588;}
+.hr_other .content_title{margin-bottom:20px;}
+.hr_other .btn_type01_box{top:0;}
 
 
 .detail_top .detail_info .portfolio_list {margin-top:20px;}
@@ -867,7 +880,7 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .popup .agree_part label {margin-left:10px;}
 .pop_recruiter .btn_center {margin-top:40px; text-align:center;}
 .pop_recruiter .contents {max-height:415px; overflow-y:scroll;}
-.pop_recruiter .contents.no_scroll {overflow-y:unset;}
+.pop_recruiter .contents.no_scroll {overflow-y:unset; padding:0 !important;}
 .popup .pick_list {max-height:220px; padding:18px 30px; font-size:15px; color:#6e6e6e; border:1px solid #eaeaea; border-radius:12px; overflow-y:scroll;}
 .popup .pick_list label {margin-left:20px;}
 .popup .pick_list li {padding-bottom:15px; margin-bottom:15px; border-bottom:1px solid #d4d5d7;}
@@ -922,7 +935,7 @@ input[type='text'].normal.type02 {height:59px; line-height:48px; padding:0 28px;
 .select-box .selected {display: block; width:100%; height:100%;}
 .options-container {display: none; position: absolute; top: 110%; left: 0; width:max-content; max-width:450px; padding:30px; background: #fff; border: 1px solid #ccc; border-radius:20px; z-index: 5; box-shadow: 3.214px 3.83px 10px 0px rgba(40, 40, 40, 0.3);}
 .options-container.active {display:block;}
-.cu-option {display:inline-block; padding:7px 16px; cursor: pointer; border-radius:13px; background:#eaeaea; font-size:13px; color:#231f20;}
+.cu-option {display:inline-block; padding:0 16px; cursor: pointer; border-radius:13px; background:#eaeaea; font-size:13px; color:#231f20;}
 .cu-option.active {color:#fff; background:#4dbbff;}
 .recruit_detail_txt h4 {font-size:21px; font-weight:800; color:#333;}
 .float_detail_txt b {color:#4dbbff;}

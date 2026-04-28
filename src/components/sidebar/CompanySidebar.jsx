@@ -8,7 +8,7 @@ const MENU_ITEMS = [
   { label: '채용담당자 문의', to: '/mypage/cp/qna', hasAlert: true },
   { label: '기업문의 관리', to: '/mypage/cp/inquiry' },
   { label: '면접제의 관리', to: '/mypage/cp/offer' },
-  { label: '관심 인재 관리', to: '/mypage/cp/hr-search' },
+  { label: '관심 인재 관리', to: '/mypage/cp/hr-wish' },
 ];
 
 export default function CompanySidebar() {
@@ -23,11 +23,18 @@ export default function CompanySidebar() {
 
   return (
     <section className="cp sidebar">
+      <div className='btn-wrap'>
       <button type="button" className="type02 w170 mb-2">
         <Link to="/mypage/cp/recruit/write">
           <span className="plus" />공고 등록하기
         </Link>
       </button>
+      <button type="button" className="type01 w170 mb-2">
+        <Link to="/mypage/cp/hr-search">
+          인재 검색하기
+        </Link>
+      </button>
+      </div>
       <ul className="mt-5">
         {MENU_ITEMS.map((item) => (
           <li
@@ -43,6 +50,7 @@ export default function CompanySidebar() {
           </li>
         ))}
         <li>
+       
           <button type="button" onClick={handleLogout} className='logout'>
             로그아웃
           </button>

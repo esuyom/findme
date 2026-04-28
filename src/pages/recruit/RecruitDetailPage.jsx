@@ -12,8 +12,11 @@ import { RECRUIT_DUMMY } from '../../constants/dummyData';
 import { RECRUIT_DETAIL } from '../../constants/detailData';
 import { useRecruitScrap } from '../../hooks/useScrapStore';
 import { useResumeStore } from '../../hooks/useResumeStore';
+import { useAuth } from '../../context/AuthContext';
 import { useApplicationStore } from '../../hooks/useApplicationStore';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { CURRENT_STUDENT, CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../constants/currentUser';
+import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
 
 export default function RecruitDetailPage() {
   const { id } = useParams();
@@ -22,6 +25,11 @@ export default function RecruitDetailPage() {
   const { toggle: scrapToggle, isScraped } = useRecruitScrap();
   const { resumes } = useResumeStore();
   const { add: addApplication, applications } = useApplicationStore();
+  const { userType } = useAuth();
+  const { recruits: storeRecruits } = useCpRecruitStore();
+  const { profile: cpProfile } = useCompanyProfileStore();
+  const storeRecruit = storeRecruits.find((r) => r.id === numId) || null;
+  const isStoreOnly  = storeRecruit && !RECRUIT_DUMMY.find((r) => r.id === numId);
   const [showApplyModal,   setShowApplyModal]   = useState(false);
   const [isDescExpanded,   setIsDescExpanded]   = useState(false);
   const [selectedResumeId, setSelectedResumeId] = useState(null);
@@ -30,12 +38,50 @@ export default function RecruitDetailPage() {
   const [outsideApplyMsg,  setOutsideApplyMsg]  = useState(''); // 버튼 아래 안내 문구
   const [uploadedFiles,   setUploadedFiles]   = useState([]);
 
-  const recruit = RECRUIT_DUMMY.find((r) => r.id === numId) || RECRUIT_DUMMY[0];
-  const detail = RECRUIT_DETAIL[numId] || RECRUIT_DETAIL.default;
+  const recruitFromDummy = RECRUIT_DUMMY.find((r) => r.id === numId);
+  const recruit = recruitFromDummy || (storeRecruit ? {
+    id:        storeRecruit.id,
+    companyId: CURRENT_COMPANY_ID,
+    title:     storeRecruit.title || '(제목 없음)',
+    company:   cpProfile.name || CURRENT_COMPANY.name,
+    companyImg:  storeRecruit.thumbnailImg || storeRecruit.companyImg || '/img/company/co-img.jpg',
+    companyLogo: storeRecruit.companyLogo  || cpProfile.logoPreview  || '/img/company/co-logo.jpg',
+    location:  storeRecruit.address || '',
+    state:     'D-0',
+    deadline:  storeRecruit.deadline || '',
+    date:      storeRecruit.date || '',
+    region:    storeRecruit.region1 || '서울',
+    keywords:  (cpProfile.keywords || []).join(', '),
+  } : RECRUIT_DUMMY[0]);
+  const detail = RECRUIT_DETAIL[numId] || (isStoreOnly ? {
+    companyId:      CURRENT_COMPANY_ID,
+    companyJobGroup: storeRecruit.jobGroup || '',
+    jobGroup:       storeRecruit.jobGroup || '',
+    duty:           storeRecruit.duties || '',
+    period:         storeRecruit.deadline || '상시채용',
+    images:         storeRecruit.companyIntroImages || [],
+    description:    storeRecruit.description || '',
+    duties:         storeRecruit.mainDuties  || '',
+    requirements:   storeRecruit.requirements || '',
+    preference:     storeRecruit.preference  || '',
+    address:        storeRecruit.address || '',
+    welfare:        storeRecruit.welfare ? storeRecruit.welfare.split(', ') : [],
+    companyService: cpProfile.intro || '',
+    companyDetails: [
+      { label: '주요산업', value: cpProfile.industry  || '' },
+      { label: '기업형태', value: cpProfile.size       || '' },
+      { label: '사원수',   value: cpProfile.employees  || '' },
+      { label: '설립연도', value: cpProfile.founded    || '' },
+      { label: '매출액',   value: cpProfile.revenue    || '' },
+      { label: '회사주소', value: cpProfile.address    || '' },
+      { label: '홈페이지', value: cpProfile.website    || '', isLink: true },
+    ].filter((d) => d.value),
+  } : RECRUIT_DETAIL.default);
   const relatedRecruits = RECRUIT_DUMMY.filter((r) => r.id !== numId).slice(0, 8);
 
   // 팝업 열릴 때 기본이력서 자동 선택
   const openApplyModal = () => {
+    if (userType === 'company') { setOutsideApplyMsg('수강생 전용입니다.'); return; }
     // 이미 지원한 공고면 팝업 미열림 + 버튼 아래 안내 문구 표시
     const alreadyApplied = applications.some((a) => a.recruitId === numId);
     if (alreadyApplied) {
@@ -138,33 +184,41 @@ export default function RecruitDetailPage() {
                 </p>
               </div>
 
-              <div className="recruit_company_img">
-                <Swiper
-                  modules={[Navigation, Pagination]}
-                  navigation={{ prevEl: '.company-button-prev', nextEl: '.company-button-next' }}
-                  pagination={{ el: '.swiper-pagination', type: 'bullets' }}
-                  slidesPerView={2}
-                  spaceBetween={12}
-                  breakpoints={{ 768:{slidesPerView:1.5,spaceBetween:16},1060:{slidesPerView:2,spaceBetween:20} }}
-                  loop
-                  className="company_img_box"
-                >
-                  {detail.images.map((src, i) => (
-                    <SwiperSlide key={i}>
-                      <img src={src} alt="" />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
-                <div className="slide_ctl">
-                  <div className="swiper-button-prev company-button-prev">
-                    <img src="/img/sub/icon-list-prev.png" alt="이전" />
-                  </div>
-                  <div className="swiper-pagination" />
-                  <div className="swiper-button-next company-button-next">
-                    <img src="/img/sub/icon-list-next.png" alt="다음" />
-                  </div>
+              {detail.images && detail.images.length > 0 && (
+                <div className="recruit_company_img">
+                  {detail.images.length === 1 ? (
+                    <img src={detail.images[0]} alt="" style={{ width: '100%', borderRadius: 12, display: 'block' }} />
+                  ) : (
+                    <>
+                      <Swiper
+                        modules={[Navigation, Pagination]}
+                        navigation={{ prevEl: '.company-button-prev', nextEl: '.company-button-next' }}
+                        pagination={{ el: '.swiper-pagination', type: 'bullets' }}
+                        slidesPerView={2}
+                        spaceBetween={12}
+                        breakpoints={{ 768:{slidesPerView:1.5,spaceBetween:16},1060:{slidesPerView:2,spaceBetween:20} }}
+                        loop={detail.images.length > 2}
+                        className="company_img_box"
+                      >
+                        {detail.images.map((src, i) => (
+                          <SwiperSlide key={i}>
+                            <img src={src} alt="" />
+                          </SwiperSlide>
+                        ))}
+                      </Swiper>
+                      <div className="slide_ctl">
+                        <div className="swiper-button-prev company-button-prev">
+                          <img src="/img/sub/icon-list-prev.png" alt="이전" />
+                        </div>
+                        <div className="swiper-pagination" />
+                        <div className="swiper-button-next company-button-next">
+                          <img src="/img/sub/icon-list-next.png" alt="다음" />
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
-              </div>
+              )}
             </section>
 
             {/* 섹션02 — 상세 내용 */}
@@ -198,11 +252,11 @@ export default function RecruitDetailPage() {
               <Link to={`/recruit/company/${recruit.companyId}`}>
                 <div className="company_info">
                   <div>
-                    <p className="company_name">{recruit.company}</p>
+                    <p className="company_name">{recruit.companyId === CURRENT_COMPANY_ID ? (cpProfile.name || recruit.company) : recruit.company}</p>
                     <p className="company_job_group">{detail.companyJobGroup}</p>
                   </div>
                   <div className="company_logo">
-                      <img src="/img/company/co-logo-2.png" alt="" />
+                      <img src={recruit.companyId === CURRENT_COMPANY_ID && cpProfile.logoPreview ? cpProfile.logoPreview : (recruit.companyLogo || '/img/company/co-logo-2.png')} alt="" />
                   </div>
                 </div>
 

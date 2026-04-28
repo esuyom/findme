@@ -4,6 +4,8 @@ import SectionTitle from '../components/common/SectionTitle';
 import RecruitCard from '../components/cards/RecruitCard';
 import RecruitListCard from '../components/cards/RecruitListCard';
 import InterviewCard from '../components/cards/InterviewCard';
+import { useCompanyProfileStore } from '../hooks/useCompanyProfileStore';
+import { CURRENT_COMPANY_ID } from '../constants/currentUser';
 import { RECRUIT_DUMMY, INTERVIEW_DUMMY } from '../constants/dummyData';
 
 // 최신순 상위 8개
@@ -43,6 +45,7 @@ const BP_INTERVIEW = {
 };
 
 export default function HomePage() {
+  const { profile: cpProfile } = useCompanyProfileStore();
   return (
     <Layout containerClass="main">
 
@@ -84,7 +87,7 @@ export default function HomePage() {
               loopAdditionalSlides={2}
               breakpoints={BP_RECRUIT}
               items={LATEST_RECRUITS.map((d) => (
-                <RecruitCard key={d.id} {...d} to={`/recruit/${d.id}`} />
+                <RecruitCard key={d.id} {...d} companyLogo={d.companyId === CURRENT_COMPANY_ID && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
               ))}
             />
           </div>
@@ -153,7 +156,7 @@ export default function HomePage() {
               loopAdditionalSlides={2}
               breakpoints={BP_RECRUIT}
               items={SALARY_RECRUITS.map((d) => (
-                <RecruitCard key={d.id} {...d} to={`/recruit/${d.id}`} />
+                <RecruitCard key={d.id} {...d} companyLogo={d.companyId === CURRENT_COMPANY_ID && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
               ))}
             />
           </div>
@@ -173,7 +176,7 @@ export default function HomePage() {
               loopAdditionalSlides={2}
               breakpoints={BP_RECRUIT}
               items={DEADLINE_RECRUITS.map((d) => (
-                <RecruitCard key={d.id} {...d} to={`/recruit/${d.id}`} />
+                <RecruitCard key={d.id} {...d} companyLogo={d.companyId === CURRENT_COMPANY_ID && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
               ))}
             />
           </div>

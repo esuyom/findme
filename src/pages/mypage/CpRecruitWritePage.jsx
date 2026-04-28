@@ -4,6 +4,7 @@ import Layout from '../../components/layout/Layout';
 import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
 import { CURRENT_COMPANY } from '../../constants/currentUser';
 import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
 
 const REGION1 = ['서울', '경기', '인천', '부산', '대구', '광주', '대전', '울산', '세종', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주'];
 const REGION2 = {
@@ -31,12 +32,16 @@ function Toast({ msg }) {
 export default function CpRecruitWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { profile: cpProfile } = useCompanyProfileStore();
+  const thumbInputRef = useRef(null);
   const [toast, setToast] = useState('');
   const toastTimer = useRef(null);
   const editId = location.state?.editId ?? null;
   const { add, update, getById } = useCpRecruitStore();
 
   const existing = editId != null ? getById(editId) : null;
+  const [thumbnailImg, setThumbnailImg] = useState(existing?.thumbnailImg || '');
+  const [companyIntroImages, setCompanyIntroImages] = useState(existing?.companyIntroImages || []);
 
   const [selectedJob, setSelectedJob] = useState(existing?.jobGroup || '');
   const [selectedDuties, setSelectedDuties] = useState(
@@ -81,6 +86,31 @@ export default function CpRecruitWritePage() {
     setRegion2(getRegion2(r1)[0]);
   };
 
+  const handleThumbChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => setThumbnailImg(ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+
+  const handleIntroImagesChange = (e) => {
+    const files = Array.from(e.target.files);
+    files.forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        setCompanyIntroImages((prev) => [...prev, ev.target.result]);
+      };
+      reader.readAsDataURL(file);
+    });
+    e.target.value = '';
+  };
+
+  const removeIntroImage = (idx) => {
+    setCompanyIntroImages((prev) => prev.filter((_, i) => i !== idx));
+  };
+
   const handleSave = (status) => {
     if (status === 'active') {
       if (!form.title.trim()) { alert('공고명을 입력해주세요.'); return; }
@@ -108,6 +138,10 @@ export default function CpRecruitWritePage() {
       careerMax:     form.careerMax,
       deadline,
       email:         form.email,
+      thumbnailImg,
+      companyIntroImages,
+      companyLogo:   cpProfile.logoPreview || '/img/company/co-logo.jpg',
+      companyImg:    thumbnailImg || '/img/company/co-img.jpg',
     };
     if (editId != null) {
       update(editId, payload, status);
@@ -128,6 +162,56 @@ export default function CpRecruitWritePage() {
             <img src="/img/common/icon-list-back.png" alt="돌아가기" />
           </button>
           <h4 className="big_title">{editId != null ? '채용공고 수정하기' : '채용공고 등록하기'}</h4>
+
+          {/* 대표 이미지 */}
+          <div className="input">
+            <h5 className="sub_title">대표 이미지</h5>
+            <p className="noti mb-2">채용공고 썸네일로 사용됩니다.</p>
+            <div className="img_wrap">
+              <div className="form-input-file-wrap cp" style={{ position: 'relative' }}>
+                <input
+                  className="form-input-file cp"
+                  id="thumb-upload"
+                  type="file"
+                  accept="image/*"
+                  ref={thumbInputRef}
+                  onChange={handleThumbChange}
+                />
+                <span
+                  className="form-span-file cp_main"
+                  style={thumbnailImg ? {
+                    backgroundImage: `url(${thumbnailImg})`,
+                    backgroundSize: 'cover',
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'center',
+                  } : {}}
+                />
+                <label className="form-label-file cp_main" htmlFor="thumb-upload">파일선택</label>
+                <div className="icon cp_main" />
+              </div>
+            </div>
+          </div>
+
+
+          {/* 회사소개이미지 */}
+          <div className="input">
+            <h5 className="sub_title">회사소개이미지</h5>
+            <p className="noti mb-2">1장: 풀화면 / 2장 이상: 슬라이드 노출. 여러 장 선택 가능합니다.</p>
+            <div className="d-flex align-items-center gap-3 flex-wrap mb-3">
+              {companyIntroImages.map((src, idx) => (
+                <div key={idx} style={{ position: 'relative', width: 120, height: 80, borderRadius: 8, overflow: 'hidden', border: '1px solid #ddd' }}>
+                  <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <button
+                    type="button"
+                    onClick={() => removeIntroImage(idx)}
+                    style={{ position: 'absolute', top: 4, right: 4, width: 20, height: 20, borderRadius: '50%', background: 'rgba(0,0,0,0.5)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: 12, lineHeight: '20px', textAlign: 'center', padding: 0 }}
+                  >✕</button>
+                </div>
+              ))}
+              <label htmlFor="intro-img-upload" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 80, height: 80, border: '2px dashed #ddd', borderRadius: 8, cursor: 'pointer', color: '#aaa', fontSize: 28 }}>+</label>
+              <input id="intro-img-upload" type="file" accept="image/*" multiple className="d-none" onChange={handleIntroImagesChange} />
+            </div>
+          </div>
 
           {/* 직군/직무 */}
           <div className="input">
@@ -374,3 +458,4 @@ export default function CpRecruitWritePage() {
     </Layout>
   );
 }
+
