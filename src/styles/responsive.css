@@ -294,7 +294,7 @@
   .job_interview_box .interview_mention { font-size: 11px; margin-top: 8px; }
 
   /* student_list_box 카드 — padding 15px */
-  .student_list_box .con a { padding: 15px; }
+  .student_list_box .con a { padding: 20px 15px; }
   .student_list_box .student_info_box { margin-top: 12px; }
   .student_list_box .student_info_box .name { font-size: 18px; }
   .student_list_box .student_info_box .age  { font-size: 14px; }
@@ -302,8 +302,8 @@
   .student_list_box .student_info_box .student_duty    { font-size: 12px; margin-bottom: 16px; }
   .student_list_box .student_info_box .student_keywords { position:static; }
   .student_list_box .student_info_box .student_mbti    { 
-    left: 15px;
-    top: 15px;
+    left: 13px;
+    top: 13px;
     font-size: 11px;
     font-weight: 500;
     padding: 1px 5px; }
@@ -385,7 +385,8 @@
     z-index: -1;
   }
   /* 옵션 칩 크기 */
-  .cu-option { padding: 8px 14px; font-size: 13px; }
+  .cu-option { padding: 0 14px; font-size: 13px; }
+  .badge{padding:0 14px !important;}
 
   /* ────────────────────────────────────────────────────
      인재리스트 필터 (HrCategoryListPage) — 모바일 2열
@@ -571,7 +572,7 @@
   /* ────────────────────────────────────────────────────
      검색결과 탭 — 가로 스크롤
   ──────────────────────────────────────────────────── */
-  .tab_list { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .tab_list { overflow-x: auto; -webkit-overflow-scrolling: touch; margin:30px 0 30px;}
   .tab_list ul { white-space: nowrap; flex-wrap: nowrap; }
   .tab_list li { flex-shrink: 0; display: inline-block; }
 
