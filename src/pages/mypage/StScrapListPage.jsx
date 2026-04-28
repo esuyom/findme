@@ -4,6 +4,9 @@ import StudentSidebar from '../../components/sidebar/StudentSidebar';
 import LottieButton from '../../components/common/LottieButton';
 import { useState } from 'react';
 import { RECRUIT_DUMMY } from '../../constants/dummyData';
+import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
+import { CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../constants/currentUser';
 import { COACHING_ITEMS, TIP_TREND_ITEMS, TIP_CONTEST_ITEMS } from '../../constants/pageData';
 import {
   useRecruitScrap,
@@ -37,12 +40,25 @@ export default function StScrapListPage() {
   const [activeTab, setActiveTab] = useState('all');
 
   const { list: recruitIds,  remove: removeRecruit }  = useRecruitScrap();
+  const { recruits: storeRecruits } = useCpRecruitStore();
+  const { profile: cpProfile }      = useCompanyProfileStore();
   const { list: companyIds,  remove: removeCompany }  = useCompanyScrap();
   const { list: coachingIds, remove: removeCoaching } = useCoachingScrap();
   const { list: trendIds,    remove: removeTrend }    = useTrendScrap();
   const { list: contestIds,  remove: removeContest }  = useContestScrap();
 
-  const recruits  = recruitIds.map((id) => RECRUIT_DUMMY.find((r) => r.id === id)).filter(Boolean);
+  const ALL_RECRUITS = [
+    ...RECRUIT_DUMMY,
+    ...storeRecruits.filter((r) => !RECRUIT_DUMMY.find((d) => d.id === r.id)).map((r) => ({
+      id:          r.id,
+      companyId:   CURRENT_COMPANY_ID,
+      title:       r.title || '(제목 없음)',
+      company:     cpProfile.name || CURRENT_COMPANY.name,
+      companyImg:  r.thumbnailImg || r.companyImg || '/img/company/co-img.jpg',
+      companyLogo: r.companyLogo  || cpProfile.logoPreview || '/img/company/co-logo.jpg',
+    })),
+  ];
+  const recruits = recruitIds.map((id) => ALL_RECRUITS.find((r) => r.id === id || r.id === Number(id))).filter(Boolean);
   const companies = companyIds.map((id) => COMPANY_MAP[id]).filter(Boolean);
   const coachings = coachingIds.map((id) => COACHING_ITEMS.find((c) => c.id === id)).filter(Boolean);
   const trends    = trendIds.map((id) => TIP_TREND_ITEMS.find((t) => t.id === id)).filter(Boolean);

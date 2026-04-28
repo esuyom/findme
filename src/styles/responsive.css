@@ -49,7 +49,7 @@
 
   /* ── 카드 그리드 ── */
   .company_recruit_box .con { width: 100%; }
-  .company_recruit_box .con .img{width:100%;}
+  .company_recruit_box .con .img{width:100%; max-height:none;}
   .job_interview_box .con   { width: 100%; }
   .most_view_recruit_box .con{width:100%;}
   .student_list_box .con    { width: 100%; height:auto; }
@@ -65,7 +65,7 @@
 
   .none_slide .con{width:calc(100% / 3 - 20px)}
 
-  .more_interview_box .info_box_wrap{padding:15px 10px;}
+  .more_interview_box .info_box_wrap{padding:15px;}
   .student_list_box .student_img_box{width:90px; height:90px;}
   .student_list_box .student_info_box .name{font-size:16px;}
   .student_list_box .student_info_box .age{font-size:14px;}
@@ -286,12 +286,13 @@
   .job_interview_box .interview_info_box .info_img {
     width: 48px; height: 48px; margin-right: 0; margin-bottom: 4px;
   }
-  .job_interview_box .interview_info_box .info_txt .name  { font-size: 12px; }
-  .job_interview_box .interview_info_box .info_txt .major { font-size: 11px; }
+  .job_interview_box .interview_info_box .info_txt{text-align: center;}
+  .job_interview_box .interview_info_box .info_txt .name  { font-size: 14px; }
+  .job_interview_box .interview_info_box .info_txt .major { font-size: 12px; }
   .job_interview_box .interview_img_box .pf_thumb {
     width: 42px; height: 42px; margin-top: 8px;
   }
-  .job_interview_box .interview_mention { font-size: 11px; margin-top: 8px; }
+  .job_interview_box .interview_mention { font-size: 12px; margin-top: 8px; }
 
   /* student_list_box 카드 — padding 15px */
   .student_list_box .con a { padding: 20px 15px; }
@@ -665,6 +666,9 @@
   .recommend_bar{ height: auto;   flex-direction: column; padding:10px;align-items: flex-end;}
   /* 마이페이지 h4 */
   .mypage.cp h4 { font-size: 20px; margin-bottom: 24px; }
+  .img_wrap .form-span-file.cp{max-width:120px; height:120px;}
+  .img_wrap .form-label-file.cp{ width: 120px;height: 120px;}
+   .img_wrap .icon{left: 30px;top: calc(50% - 30px);}
 
   /* ── list_box (이력서·포트폴리오) — 2열 ── */
   .mypage .list_box { display: flex; flex-wrap: wrap; gap: 12px; }
@@ -807,8 +811,9 @@
   /* ── 공지/QnA 목록 ── */
   .mypage.qna .qna_box .title { font-size: 17px; }
   .mypage.join .join_box .title { font-size: 16px; }
-  .mypage.join .join_box li { flex-direction: column; gap: 12px; }
-  .mypage.join .join_box .img { width: 120px; height: auto; }
+  .mypage.join .join_box li { flex-direction: column; gap: 12px;padding-left: 130px; align-items: flex-start !important;}
+  .mypage.join .join_box .img { width: 120px; height: auto; position: absolute;
+    left: 10px;}
   .mypage.join .join_box .txt { width: 100%; padding: 0; }
 
   /* ── gnb_mypage ── */
@@ -839,7 +844,7 @@
     width: 100%;
 }
   .company_recruit_box .con .recruit_company_img{height:auto; max-height:120px;}
-  .mypage.scrap .btn_like{top:75px;}
+  .mypage.scrap .btn_like{top:10px !important;}
   .portfolio_list ul li{width:calc(50% - 8px)}
 
   .company_recruit_box .con .recruit_company_logo{width:40px; height:40px; border-radius:8px;}

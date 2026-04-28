@@ -55,7 +55,7 @@ export default function RecruitDetailPage() {
   } : RECRUIT_DUMMY[0]);
   const detail = RECRUIT_DETAIL[numId] || (isStoreOnly ? {
     companyId:      CURRENT_COMPANY_ID,
-    companyJobGroup: storeRecruit.jobGroup || '',
+    companyJobGroup: cpProfile.industry || storeRecruit.jobGroup || '',
     jobGroup:       storeRecruit.jobGroup || '',
     duty:           storeRecruit.duties || '',
     period:         storeRecruit.deadline || '상시채용',
