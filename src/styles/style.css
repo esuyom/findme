@@ -19,7 +19,7 @@ header .back_btn { display: none; }
 .line .con a {position: relative; display: block; height: 100%; width: 100%; border: 1px solid #e8e8e8; border-radius: 12px; word-break: keep-all;}
 .company_recruit_box{}
 .company_recruit_box .wrap{}
-.company_recruit_box .con {width:250px;}
+.company_recruit_box .con {width:250px; position:relative;}
 .company_recruit_box .con a{position:relative;}
 .company_recruit_box .con .recruit_company_img {height:168px; border-radius:15px; overflow:hidden;}
 .company_recruit_box .con .recruit_company_logo{position:absolute;width:56px;height:56px;background-color:#fff;top: 10px;left: 10px;border-radius: 13px;overflow: hidden;border: 1px solid #ededed;}
