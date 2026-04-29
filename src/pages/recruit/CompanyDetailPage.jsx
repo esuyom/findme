@@ -8,15 +8,19 @@ import { useCompanyScrap } from '../../hooks/useScrapStore';
 import { useCompanyInquiryStore } from '../../hooks/useCompanyInquiryStore';
 import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
 import { CURRENT_COMPANY_ID } from '../../constants/currentUser';
+import LoginPromptModal from '../../components/common/LoginPromptModal';
+import { useAuth } from '../../context/AuthContext';
 
 export default function CompanyDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
   const { toggle: scrapToggle, isScraped } = useCompanyScrap();
+  const { userType } = useAuth();
   const { add: addInquiry } = useCompanyInquiryStore();
   const { profile: cpProfile } = useCompanyProfileStore();
   const isOwnCompany = numId === CURRENT_COMPANY_ID;
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [form, setForm] = useState({ title: '', content: '', email: '', agreed: false });
   const [inquiryDone, setInquiryDone] = useState(false);
   const [inquiryError, setInquiryError] = useState('');
@@ -71,13 +75,16 @@ export default function CompanyDetailPage() {
             <Link to="/recruit" className="btn_back">
               <img src="/img/common/icon-inventory.png" alt="채용공고리스트로 이동" />
             </Link>
-            <LottieButton
-              animationPath="/img/sub/icon-wish1.json"
-              className="btn_wish"
-              initialOn={isScraped(numId)}
-              onToggle={() => scrapToggle(numId)}
-            />
-          </div>
+            <div style={{ position: 'relative' }}>
+              <LottieButton
+                animationPath="/img/sub/icon-wish1.json"
+                className="btn_wish"
+                initialOn={isScraped(numId)}
+                onToggle={() => scrapToggle(numId)}
+              />
+            
+                {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
+              </div></div>
 
           {/* 본문 */}
           <section className="w640">
@@ -254,6 +261,7 @@ export default function CompanyDetailPage() {
           <div className="popup-dim" style={{ display: 'block' }} onClick={() => setShowContactModal(false)} />
         </>
       )}
+      {showLoginModal && <LoginPromptModal onClose={() => setShowLoginModal(false)} />}
     </Layout>
   );
 }

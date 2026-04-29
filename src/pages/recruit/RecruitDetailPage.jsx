@@ -17,6 +17,7 @@ import { useApplicationStore } from '../../hooks/useApplicationStore';
 import { CURRENT_STUDENT, CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../constants/currentUser';
 import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
 import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
+import LoginPromptModal from '../../components/common/LoginPromptModal';
 
 export default function RecruitDetailPage() {
   const { id } = useParams();
@@ -26,6 +27,7 @@ export default function RecruitDetailPage() {
   const { resumes } = useResumeStore();
   const { add: addApplication, applications } = useApplicationStore();
   const { userType } = useAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { recruits: storeRecruits } = useCpRecruitStore();
   const { profile: cpProfile } = useCompanyProfileStore();
   const storeRecruit = storeRecruits.find((r) => r.id === numId) || null;
@@ -156,12 +158,16 @@ export default function RecruitDetailPage() {
             <Link to="/recruit" className="btn_back">
               <img src="/img/common/icon-inventory.png" alt="채용공고리스트로 이동" />
             </Link>
-            <LottieButton
+            <div style={{ position: 'relative' }}>
+                <LottieButton
               animationPath="/img/sub/icon-save.json"
               className="btn_save"
               initialOn={isScraped(numId)}
               onToggle={() => scrapToggle(numId)}
             />
+              
+                {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
+              </div>
           </div>
 
           {/* 본문 */}
@@ -451,6 +457,7 @@ export default function RecruitDetailPage() {
           <div className="popup-dim" style={{ display: 'block' }} onClick={() => setShowApplyModal(false)} />
         </>
       )}
+      {showLoginModal && <LoginPromptModal onClose={() => setShowLoginModal(false)} />}
     </Layout>
   );
 }

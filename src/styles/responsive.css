@@ -853,4 +853,8 @@
   /* ── 검색 박스 ── */
   .sub.search .search_box .wrap { width: 100%; gap:10px;}
   .search_box .wrap input[type='text'].normal{padding-left:35px !important;}
+
+  .mypage .pw .noti{font-size:12px;}
+
+  .mypage table thead tr{border-left:0; border-right:0;}
  }

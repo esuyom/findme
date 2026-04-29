@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import Layout from '../../components/layout/Layout';
 import CompanySidebar from '../../components/sidebar/CompanySidebar';
+import { compressImage } from '../../utils/compressImage';
 import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
 
 const KEYWORD_OPTIONS = [
@@ -29,12 +30,11 @@ export default function CpInfoModifyPage() {
     }));
   };
 
-  const handleLogoChange = (e) => {
+  const handleLogoChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => setForm((p) => ({ ...p, logoPreview: ev.target.result }));
-    reader.readAsDataURL(file);
+    const compressed = await compressImage(file, 400, 0.7);
+    setForm((p) => ({ ...p, logoPreview: compressed }));
   };
 
   const handleSave = () => {

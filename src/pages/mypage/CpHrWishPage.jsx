@@ -58,11 +58,17 @@ export default function CpHrWishPage() {
               const offered = alreadyOffered(student.id);
               return (
                 <div key={student.id} className="hr_box" style={{ marginBottom: 12, position: 'relative' }}>
+                  {/* 클릭 인터셉트 오버레이: 팝업 먼저 표시 */}
+                  <div
+                    className="btn_wish"
+                    style={{ zIndex: 10 }}
+                    onClick={() => setConfirmRemoveId(student.id)}
+                  />
                   <LottieButton
                     animationPath="/img/sub/icon-wish1.json"
                     className="btn_wish"
                     initialOn={true}
-                    onToggle={() => setConfirmRemoveId(student.id)}
+                    onToggle={() => {}}
                   />
 
                   <div className="hr_info slash d-flex align-items-center mb-4">

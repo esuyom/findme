@@ -15,11 +15,18 @@ export default function StRecruitListPage() {
   const getRecruitStatus = (recruitId) => {
     const r = ALL_RECRUITS.find((d) => d.id === recruitId || String(d.id) === String(recruitId));
     if (!r) return '진행중';
+    // storeRecruit(기업 등록 공고): status 필드 기준
     if (r.status === 'closed') return '채용종료';
-    if (!r.deadline || r.deadline === '상시채용') return '채용시마감';
-    const today = new Date(); today.setHours(0,0,0,0);
-    const dl = new Date(r.deadline); dl.setHours(23,59,59,0);
-    if (dl < today) return '채용종료';
+    if (r.status === 'draft')  return '임시저장';
+    // RECRUIT_DUMMY: state 필드 우선 사용 ('채용시마감', 'D-14' 등)
+    if (r.state === '채용시마감') return '채용시마감';
+    if (r.state && r.state.startsWith('D-')) return '진행중';
+    if (r.status === 'active') {
+      if (!r.deadline || r.deadline === '상시채용') return '채용시마감';
+      const today = new Date(); today.setHours(0,0,0,0);
+      const dl = new Date(r.deadline); dl.setHours(23,59,59,0);
+      return dl < today ? '채용종료' : '진행중';
+    }
     return '진행중';
   };
   const [interviewOffers] = useState([]);

@@ -30,7 +30,7 @@ export default function CpRecruitInfoPage() {
         <section className="contents">
 
           {/* 추천인재 배너 */}
-          <div className="recommend_bar">
+          {/* <div className="recommend_bar">
             <div className="d-flex align-itmes-center">
               <div className="blue">추천인재</div>
               <div className="ms-3">귀사에 딱! 맞는 인재를 찾고 계신가요? FindMe가 맞춤 인재를 추천드려요.</div>
@@ -38,7 +38,7 @@ export default function CpRecruitInfoPage() {
             <Link to="/hr">
               <button type="button" className="bline sm">맞춤인재 추천받기</button>
             </Link>
-          </div>
+          </div> */}
 
           {/* 요약 보드 */}
           <div className="recruit_board">

@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { CURRENT_STUDENT } from '../../constants/currentUser';
 
 const NAV_ITEMS = [
   {
@@ -69,6 +72,11 @@ export default function Header() {
   const [menuOpen, setMenuOpen]   = useState(false);
   const { userType }              = useAuth();
   const isLoggedIn  = userType !== null;
+  const { profile: cpProfile } = useCompanyProfileStore();
+  const { profile: stProfile } = useStudentProfileStore();
+  const headerImg = userType === 'company'
+    ? (cpProfile.logoPreview || '/img/common/img-profile-default.jpg')
+    : (stProfile.profileImg  || CURRENT_STUDENT.profileImg || '/img/common/img-profile-default.jpg');
   const mypageLink  = userType === 'company' ? '/mypage/cp/dashboard' : '/mypage/profile';
   const navigate    = useNavigate();
   const { pathname }= useLocation();
@@ -146,7 +154,7 @@ export default function Header() {
             <div className="login_after">
               <button type="button" className="mypage_btn on">
                 <Link to={mypageLink}>
-                  <img src="/img/common/img-profile-default.jpg" alt="마이페이지" />
+                  <img src={headerImg} alt="마이페이지" style={{ objectFit: 'cover' }} />
                 </Link>
               </button>
             </div>

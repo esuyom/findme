@@ -1,14 +1,18 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
 import { TIP_DUMMY } from '../../constants/dummyData';
 import { useTrendScrap } from '../../hooks/useScrapStore';
+import LoginPromptModal from '../../components/common/LoginPromptModal';
+import { useAuth } from '../../context/AuthContext';
 
 export default function TipDetailPage() {
   const { id } = useParams();
   const currentId = Number(id);
   const { toggle: scrapToggle, isScraped } = useTrendScrap();
+  const { userType } = useAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const data = TIP_DUMMY.find((t) => t.id === currentId) || TIP_DUMMY[0];
 
@@ -39,12 +43,16 @@ export default function TipDetailPage() {
             <Link to="/tip" className="btn_back">
               <img src="/img/common/icon-inventory.png" alt="채용공고리스트로 이동" />
             </Link>
-            <LottieButton
+            <div style={{ position: 'relative' }}>
+                <LottieButton
               animationPath="/img/sub/icon-save.json"
               className="btn_save"
               initialOn={isScraped(currentId)}
               onToggle={() => scrapToggle(currentId)}
             />
+              
+                {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
+              </div>
           </div>
 
           <section className="w640">
@@ -91,6 +99,7 @@ export default function TipDetailPage() {
           </section>
         </section>
       </div>
+      {showLoginModal && <LoginPromptModal onClose={() => setShowLoginModal(false)} />}
     </Layout>
   );
 }

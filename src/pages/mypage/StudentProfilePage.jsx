@@ -4,15 +4,18 @@ import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/sidebar/StudentSidebar';
 import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { compressImage } from '../../utils/compressImage';
 
 const MBTI_LIST = ['ISTJ','ISFJ','INFJ','INTJ','ISTP','ISFP','INFP','INTP','ESTP','ESFP','ENFP','ENTP','ESTJ','ESFJ','ENFJ','ENTJ'];
 const KEYWORD_LIST = ['노력형', '책임감', '활동적인', '주도적인', '자신감', '프리랜서'];
 
 export default function StudentProfilePage() {
+  const { profile: stProfile, update: updateProfile } = useStudentProfileStore();
   const [p1, p2, p3] = CURRENT_STUDENT.phone.split('-');
   const [jobState, setJobState] = useState('구직중');
   const [checkedKeywords, setCheckedKeywords] = useState(CURRENT_STUDENT.keywords || []);
-  const [imagePreview, setImagePreview] = useState('');
+  const [imagePreview, setImagePreview] = useState(stProfile.profileImg || CURRENT_STUDENT.profileImg || '');
   const fileInputRef = useRef(null);
   const [jobGroup, setJobGroup] = useState(CURRENT_STUDENT.major || '직군선택');
   const [jobDuties, setJobDuties] = useState([]);
@@ -21,19 +24,18 @@ export default function StudentProfilePage() {
   const [toast, setToast] = useState(false);
   const toastTimer = useRef(null);
 
+
   const showToast = () => {
     setToast(true);
     clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToast(false), 2500);
   };
 
-  const handleProfileImageChange = (e) => {
+  const handleProfileImageChange = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => setImagePreview(event.target.result);
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    const compressed = await compressImage(file, 400, 0.8);
+    setImagePreview(compressed);
   };
 
   const toggleKeyword = (kw) => {
@@ -45,7 +47,7 @@ export default function StudentProfilePage() {
   };
 
   const handleSave = () => {
-    // 실제 API 연동 시 여기서 서버 저장 호출
+    if (imagePreview) updateProfile({ profileImg: imagePreview });
     showToast();
   };
 

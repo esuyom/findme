@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
 import { useCoachingScrap } from '../../hooks/useScrapStore';
 import { useAuth } from '../../context/AuthContext';
 import { useJoinStore } from '../../hooks/useJoinStore';
+import LoginPromptModal from '../../components/common/LoginPromptModal';
 
 const COACHING_DATA = {
   1: { title: 'YOU WANT A.C.P TO LEVEL UP YOUR CARRIERS', category: '합격자소서', description: '이력서·자소서 실전 완성 특강입니다.', content: '합격자소서의 핵심은 나만의 스토리를 구체적으로 표현하는 것입니다. 이번 특강에서는 실제 합격자 자소서를 분석하고, 나의 경험을 효과적으로 녹여내는 방법을 실습합니다.', instructorName: '김채원 강사', instructorImg: '/img/sub/img-teacher.jpg', instructorCareer: ['현) SBS아카데미컴퓨터아트학원 강사', '전) 대기업 HR 팀 근무 5년', '자소서 컨설팅 500건 이상'], schedules: ['자소서 이론 - 2024년 04월 22일(월)', '실전 작성 - 2024년 04월 24일(수)'], duration: '14:00 ~ 16:00(2시간)', location: '서울시 종로구 대학로 146', method: '대면, 비대면 (동시진행)', enrolled: 18, capacity: 30, instructor: '김채원 강사', deadline: '2024년 04월 20일', img: '/img/sub/img-poster.jpg' },
@@ -25,6 +26,7 @@ export default function CoachingDetailPage() {
   const [showFloatingFixed, setShowFloatingFixed] = useState(false);
   const { toggle: scrapToggle, isScraped } = useCoachingScrap();
   const { userType } = useAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { add: joinAdd, isJoined } = useJoinStore();
   const [joinDone,  setJoinDone]  = useState(false);
   const [joinError, setJoinError] = useState('');
@@ -58,12 +60,16 @@ export default function CoachingDetailPage() {
             <Link to="/coaching" className="btn_back">
               <img src="/img/common/icon-inventory.png" alt="채용공고리스트로 이동" />
             </Link>
-            <LottieButton
+            <div style={{ position: 'relative' }}>
+                <LottieButton
               animationPath="/img/sub/icon-save.json"
               className="btn_save"
               initialOn={isScraped(numId)}
               onToggle={() => scrapToggle(numId)}
             />
+              
+                {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
+              </div>
           </div>
 
           <section className="w640">
@@ -176,6 +182,7 @@ export default function CoachingDetailPage() {
           </section>
         </section>
       </div>
+      {showLoginModal && <LoginPromptModal onClose={() => setShowLoginModal(false)} />}
     </Layout>
   );
 }

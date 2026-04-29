@@ -11,13 +11,17 @@ import { STUDENT_DETAIL } from '../../constants/detailData';
 import { CURRENT_COMPANY_ID } from '../../constants/currentUser';
 import { useWishList } from '../../hooks/useWishList';
 import { useCpOfferStore } from '../../hooks/useCpOfferStore';
+import LoginPromptModal from '../../components/common/LoginPromptModal';
+import { useAuth } from '../../context/AuthContext';
 
 export default function HrDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
   const { toggle, isWished } = useWishList();
+  const { userType } = useAuth();
   const { add: addOffer } = useCpOfferStore();
   const [showResumeModal,    setShowResumeModal]    = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [showOfferModal,     setShowOfferModal]     = useState(false);
   const [showInquiryModal,   setShowInquiryModal]   = useState(false);
   const [showPortfolioModal, setShowPortfolioModal] = useState(false);
@@ -100,12 +104,16 @@ export default function HrDetailPage() {
               <Link to="/hr" className="btn_back">
                 <img src="/img/common/icon-banner-prev.png" alt="뒤로가기" />
               </Link>
-              <LottieButton
-                animationPath="/img/sub/icon-wish1.json"
-                className="btn_wish"
-                initialOn={isWished(numId)}
-                onToggle={() => toggle(numId)}
-              />
+              <div style={{ position: 'relative' }}>
+                <LottieButton
+                  animationPath="/img/sub/icon-wish1.json"
+                  className="btn_wish"
+                  initialOn={isWished(numId)}
+                  onToggle={() => toggle(numId)}
+                />
+              
+                {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
+              </div>
             </div>
           </div>
         </section>
@@ -417,6 +425,7 @@ export default function HrDetailPage() {
         </>
       )}
       </div>
+      {showLoginModal && <LoginPromptModal onClose={() => setShowLoginModal(false)} />}
     </Layout>
   );
 }

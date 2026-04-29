@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
@@ -6,12 +6,14 @@ import { useContestScrap } from '../../hooks/useScrapStore';
 import { useAuth } from '../../context/AuthContext';
 import { useContestInquiryStore } from '../../hooks/useContestInquiryStore';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
+import LoginPromptModal from '../../components/common/LoginPromptModal';
 
 export default function TipContestDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
   const { toggle: scrapToggle, isScraped } = useContestScrap();
   const { userType } = useAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const { add: addInquiry, isInquired } = useContestInquiryStore();
   const [showContactPopup, setShowContactPopup] = useState(false);
   const [inquiryDone, setInquiryDone] = useState(false);
@@ -125,12 +127,16 @@ export default function TipContestDetailPage() {
             <Link to="/tip/contest" className="btn_back">
               <img src="/img/common/icon-inventory.png" alt="채용공고리스트로 이동" />
             </Link>
-            <LottieButton
+            <div style={{ position: 'relative' }}>
+                <LottieButton
               animationPath="/img/sub/icon-save.json"
               className="btn_save"
               initialOn={isScraped(numId)}
               onToggle={() => scrapToggle(numId)}
             />
+              
+                {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
+              </div>
           </div>
 
           <section className="w640">
@@ -345,6 +351,7 @@ export default function TipContestDetailPage() {
           <div className="popup-dim" style={{ display: 'block' }} onClick={() => setShowContactPopup(false)} />
         </>
       )}
+      {showLoginModal && <LoginPromptModal onClose={() => setShowLoginModal(false)} />}
     </Layout>
   );
 }
