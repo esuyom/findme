@@ -158,6 +158,7 @@ header .back_btn { display: none; }
 .float_detail_txt li span{color: #333333;font-weight: 800;display: inline-block;width: 19%;}
 .portfolio_list ul{display: flex; flex-wrap: wrap;}
 .portfolio_list ul li{width:200px; height:200px; border-radius:12px; overflow: hidden;}
+.portfolio_list ul li img{width:100%; height:100%; object-fit: cover;}
 .detail_float{width:340px;}
 .detail_float .name span{margin-left: 4px;  font-size: 14px; font-weight: 400;}
 .detail_float .wrap{border: 1px solid #ddd; border-radius: 12px; padding: 20px;background: #fff;}
