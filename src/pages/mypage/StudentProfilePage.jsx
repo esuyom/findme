@@ -16,6 +16,7 @@ export default function StudentProfilePage() {
   const [jobState, setJobState] = useState('구직중');
   const [checkedKeywords, setCheckedKeywords] = useState(CURRENT_STUDENT.keywords || []);
   const [imagePreview, setImagePreview] = useState(stProfile.profileImg || CURRENT_STUDENT.profileImg || '');
+  const formRef = useRef(null);
   const fileInputRef = useRef(null);
   const [jobGroup, setJobGroup] = useState(CURRENT_STUDENT.major || '직군선택');
   const [jobDuties, setJobDuties] = useState([]);
@@ -47,7 +48,22 @@ export default function StudentProfilePage() {
   };
 
   const handleSave = () => {
-    if (imagePreview) updateProfile({ profileImg: imagePreview });
+    const form = formRef.current;
+    const getValue = (name) => form?.querySelector(`[name="${name}"]`)?.value || '';
+    const profileData = {
+      ...(imagePreview ? { profileImg: imagePreview } : {}),
+      name:     getValue('name')     || stProfile.name     || CURRENT_STUDENT.name,
+      email:    getValue('email')    || stProfile.email    || CURRENT_STUDENT.email,
+      phone:    [getValue('phone01') || p1, getValue('phone02') || p2, getValue('phone03') || p3].join('-'),
+      jobStatus: jobState,
+      mention:  form?.querySelector('textarea[name="mention"]')?.value || stProfile.mention || '',
+      career:   form?.querySelector('select[name="career"]')?.value   || stProfile.career  || '신입',
+      mbti:     form?.querySelector('select[name="mbti"]')?.value     || stProfile.mbti    || CURRENT_STUDENT.mbti,
+      keywords: checkedKeywords,
+      jobGroup,
+      duties:   jobDuties.join(', '),
+    };
+    updateProfile(profileData);
     showToast();
   };
 
@@ -61,7 +77,7 @@ export default function StudentProfilePage() {
 
         {/* 프로필 폼 */}
         <section className="contents align-items-center">
-          <div className="w400 box">
+          <div className="w400 box" ref={formRef}>
             <div className="input profile_box">
               <span className="label">프로필</span>
               <div className="img_wrap">
@@ -85,12 +101,12 @@ export default function StudentProfilePage() {
 
             <div className="input">
               <h5 className="sub_title">이메일</h5>
-              <input defaultValue={CURRENT_STUDENT.email} type="text" className="normal" />
+              <input name="email" defaultValue={stProfile.email || CURRENT_STUDENT.email} type="text" className="normal" />
             </div>
 
             <div className="input">
               <h5 className="sub_title">이름</h5>
-              <input defaultValue={CURRENT_STUDENT.name} type="text" className="normal" />
+              <input name="name" defaultValue={stProfile.name || CURRENT_STUDENT.name} type="text" className="normal" />
             </div>
 
             <div className="input">
@@ -152,7 +168,7 @@ export default function StudentProfilePage() {
 
             <div className="input">
               <h5 className="sub_title">경력</h5>
-              <select className="w100" defaultValue={CURRENT_STUDENT.career || '신입'}>
+              <select name="career" className="w100" defaultValue={stProfile.career || CURRENT_STUDENT.career || '신입'}>
                 {['신입', ...Array.from({ length: 35 }, (_, i) => `${i + 1}년 이상`)].map((v) => (
                   <option key={v}>{v}</option>
                 ))}
@@ -161,7 +177,7 @@ export default function StudentProfilePage() {
 
             <div className="input">
               <h5 className="sub_title">MBTI</h5>
-              <select className="w100" defaultValue={CURRENT_STUDENT.mbti || 'ENFP'}>
+              <select name="mbti" className="w100" defaultValue={stProfile.mbti || CURRENT_STUDENT.mbti || 'ENFP'}>
                 {MBTI_LIST.map((v) => <option key={v}>{v}</option>)}
               </select>
             </div>

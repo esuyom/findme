@@ -83,6 +83,7 @@ export default function RecruitDetailPage() {
 
   // 팝업 열릴 때 기본이력서 자동 선택
   const openApplyModal = () => {
+    if (!userType) { setShowLoginModal(true); return; }
     if (userType === 'company') { setOutsideApplyMsg('수강생 전용입니다.'); return; }
     // 이미 지원한 공고면 팝업 미열림 + 버튼 아래 안내 문구 표시
     const alreadyApplied = applications.some((a) => a.recruitId === numId);

@@ -84,6 +84,7 @@ export default function TipContestDetailPage() {
   };
 
   const openContactPopup = () => {
+    if (!userType) { setShowLoginModal(true); return; }
     if (userType === 'company') { setOutsideMsg('수강생 전용입니다.'); return; }
     if (isInquired(numId)) {
       setOutsideMsg('이미 문의한 공모전입니다.');

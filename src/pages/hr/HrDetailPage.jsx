@@ -68,9 +68,9 @@ export default function HrDetailPage() {
           <div className="detail_profile">
             <div className="top">
               <div>프로필</div>
-              <a href="#">
+              {/* <a href="#">
                 <img src="/img/common/icon-profile-edit.png" alt="프로필 수정이동" />
-              </a>
+              </a> */}
             </div>
             <div className="photo">
               <img src="/img/sub/img-teacher.jpg" alt="프로필 사진" />

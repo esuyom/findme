@@ -94,7 +94,7 @@ header .back_btn { display: none; }
 .work_interview_box .wrap{display:flex; flex-wrap: wrap;}
 .work_interview_box .con{width:250px;margin-right:20px;margin-bottom: 50px;}
 .work_interview_box .con:nth-child(4n+4){margin-right:0;}
-.work_interview_box .work_interview_thumb{border-radius:12px; overflow:hidden;}
+.work_interview_box .work_interview_thumb{border-radius:12px; height:250px; overflow:hidden;}
 .work_interview_box .work_interview_thumb img{}
 .work_interview_box .title{font-size:14px;font-weight: 700;text-overflow: ellipsis;overflow: hidden;white-space: normal;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;margin-top: 12px;margin-bottom: 5px;height: 35px;line-height: 1.3;}
 .work_interview_box .info{font-size:12px; color:#4dbbff; font-weight:500;}
@@ -155,6 +155,7 @@ header .back_btn { display: none; }
 .float_detail_txt li em a{color:#4dbbff; text-decoration: underline !important;}
 .float_detail_txt li span{color: #333333;font-weight: 800;display: inline-block;width: 19%;}
 .portfolio_list ul{display: flex; flex-wrap: wrap;}
+.portfolio_list ul li{width:200px; height:200px; border-radius:12px; overflow: hidden;}
 .detail_float{width:340px;}
 .detail_float .name span{margin-left: 4px;  font-size: 14px; font-weight: 400;}
 .detail_float .wrap{border: 1px solid #ddd; border-radius: 12px; padding: 20px;background: #fff;}
@@ -190,10 +191,10 @@ header nav{height:100%; margin-left: 50px;}
 header nav .depth1{display:flex; }
 header nav .depth1>li{margin:0 7px; position:relative;}
 header nav .depth1>li a{font-weight:800;font-size:15px;height: 100%;display: block;padding: 0 17px; line-height:70px;}
-header nav .depth1>li a:hover{color:#4dbbff;}
 header nav .depth2{position: absolute;bottom: 0;left: 50%;transform: translate(-50%,100%);width: 100%;pointer-events: none; text-align: center;opacity:0; transition: opacity 0.3s;transition-delay: -0.25s;z-index: 10;}
 header nav .depth2 li{margin:0;}
 header nav .depth2 li a{font-size:14px;font-weight: 500;padding: 0;line-height: initial;padding: 10px 0;}
+header nav .depth2 li:hover a{color:#4dbbff;}
 header .util{height:100%;  display: flex;align-items: center; position:absolute; right:0;}
 header .util .login_before .login_btn{height:28px;line-height:28px;font-size: 12px;padding: 0 10px;color:#333333;font-weight: 800;}
 header .util .login_box.login .login_after{display:block;}
@@ -347,7 +348,8 @@ footer .footer_site .select_site .company_group > ul::-webkit-scrollbar-track {b
 .member .input{margin-bottom:25px;}
 .member .member_tab{display: flex; justify-content: space-between; margin-bottom:40px;}
 .member .member_tab li{cursor:pointer; text-align:center;height: 48px; line-height: 48px; width:49%; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; color: #999; font-weight: 700;}
-.member .member_tab li.on{border-color: #4dbbff; color: #fff; background: #4dbbff;}
+.member .member_tab li.on{border-color: #4dbbff;background: #4dbbff;}
+.member .member_tab li.on a{color: #fff;}
 .member .member_tab li a{display:block; width:100%; height:100%;}
 .member .phone_box{display: flex; justify-content: space-between;}
 .member .phone_box select{width:30%;}
@@ -469,7 +471,7 @@ footer .footer_site .select_site .company_group > ul::-webkit-scrollbar-track {b
 .mypage .more_list li.delete{color:#ff4242;}
 .mypage .list_box.content_box .title{font-size:15px;font-weight: 500; text-overflow: ellipsis; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3;-webkit-box-orient: vertical;}
 
-.mypage .pf_add_box .img{width:190px;height:140px;border-radius:12px;display: flex;align-items: center;overflow: hidden;}
+.mypage .pf_add_box .img{width:190px;height:190px;border-radius:12px;display: flex;align-items: center;overflow: hidden;}
 .mypage .pf_add_box .title{font-size:21px; font-weight:900; color:#333333; margin-bottom:7px; line-height: 1.3;}
 .mypage .pf_add_box .sub{color:#6e6e6e;}
 .mypage .pf_add_box .txt{width: 63%; padding:0 20px;}
@@ -526,7 +528,7 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .mypage.scrap .cp_logo_box .con:nth-child(4n+4){margin-right:0;}
 .mypage.scrap .cp_logo_box .img{width:auto;}
 .mypage.scrap .poster_box .btn_like{top: 310px;}
-.mypage.scrap .trend_box .con{width:calc(100% / 2 - 10px);}
+.mypage.scrap .trend_box .con{width:calc(100% / 2 - 20px); margin-left:20px;}
 .mypage.scrap .trend_box .con:nth-child(even){margin-right:0;}
 .mypage.scrap .trend_box .btn_like{top: 70px;}
 /* 스크랩 탭 */
@@ -539,13 +541,23 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .mypage.contents.write .profile_box .img_wrap{width:170px;}
 .mypage.contents.write .profile_box .form-input-file-wrap.profile{justify-content: flex-start;}
 .mypage.contents.write .profile_box .form-span-file{max-width:130px; height:130px;}
-.mypage.contents.write .profile_box .form-label-file{width:130px; height:130px;left: 0;}
+.mypage.contents.write .profile_box .form-span-file.cp_main{
+    z-index: 2;
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: 270px;
+    height: 180px;
+    border: 2px dashed #dddddd;
+    box-sizing: border-box;
+    background:none;
+    border-radius: 12px;}
+    .mypage.contents.write .profile_box .img_wrap .icon.cp_main{    left: 50%;transform: translate(-50%, 0);}
+.mypage.contents.write .profile_box .form-label-file{width:100%; height:100%;left: 0;}
 .mypage.contents.write .box + .box{margin-top:20px; padding-top:50px; border-top: 1px solid #dddddd}
-.mypage.contents.write .row01>div:first-child{width:47%;}
-.mypage.contents.write .row01>div:last-child{width:55%;}
-.mypage.contents.write .row02>div:nth-child(1){width:33%;}
-.mypage.contents.write .row02>div:nth-child(2){width:33%;}
-.mypage.contents.write .row02>div:nth-child(3){width:33%;}
+.mypage.contents.write .row01>div{width:100%;}
+.mypage.contents.write .row02>div{width:100%;}
+
 .mypage.contents.write .subject input{cursor:pointer;}
 
 .mypage.join .blue_box{ line-height: 1.5;  height: 70px; padding-top: 15px;}

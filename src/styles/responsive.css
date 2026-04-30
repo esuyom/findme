@@ -302,6 +302,7 @@
   .student_list_box .student_info_box .student_mention { font-size: 13px; margin: 4px 0; }
   .student_list_box .student_info_box .student_duty    { font-size: 12px; margin-bottom: 16px; }
   .student_list_box .student_info_box .student_keywords { position:static; }
+  .student_list_box .student_info_box .student_keywords span{font-size:11px;}
   .student_list_box .student_info_box .student_mbti    { 
     left: 13px;
     top: 13px;
@@ -317,6 +318,10 @@
   /* work_interview_box — 2열 유지 */
   .work_interview_box .con  { width: calc(100% / 2 - 20px); margin-right: 0; margin-bottom: 16px; }
   .work_interview_box .wrap { }
+  .work_interview_box .work_interview_thumb{max-height: 100%;
+    height: 0;
+    padding-bottom: 100%;
+    overflow: hidden;}
 
   /* mou_box — 2열 */
   .mou_box .con  {width: calc(100% / 2 - 20px); margin-right: 0; margin-bottom: 16px;}

@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
@@ -13,6 +14,17 @@ const MENU_ITEMS = [
 
 export default function CompanySidebar() {
   const { pathname } = useLocation();
+  const sidebarRef = useRef(null);
+
+  // 모바일: active 항목을 스크롤 맨 앞으로 이동
+  useEffect(() => {
+    const el = sidebarRef.current;
+    if (!el) return;
+    const active = el.querySelector('li.active');
+    if (!active) return;
+    const offset = active.offsetLeft - (el.offsetWidth / 2) + (active.offsetWidth / 2);
+    el.scrollTo({ left: Math.max(0, offset), behavior: 'smooth' });
+  }, [pathname]);
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -22,7 +34,7 @@ export default function CompanySidebar() {
   };
 
   return (
-    <section className="cp sidebar">
+    <section className="cp sidebar" ref={sidebarRef}>
       <div className='btn-wrap'>
       <button type="button" className="type02 w170 mb-2">
         <Link to="/mypage/cp/recruit/write">

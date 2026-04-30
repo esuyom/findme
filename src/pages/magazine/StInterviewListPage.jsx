@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
 import { INTERVIEW_DUMMY } from '../../constants/dummyData';
+import { useContentsStore } from '../../hooks/useContentsStore';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { usePortfolioStore } from '../../hooks/usePortfolioStore';
+import { CURRENT_STUDENT } from '../../constants/currentUser';
 
 const CATEGORIES = [
   '전체',
@@ -19,12 +23,32 @@ const CATEGORIES = [
 const PAGE_SIZE = 9;
 
 export default function StInterviewListPage() {
+  const { contents } = useContentsStore();
+  const { profile: stProfile } = useStudentProfileStore();
+  const { portfolios: myPortfolios } = usePortfolioStore();
+  // 취업성공스토리 카테고리 콘텐츠를 INTERVIEW_DUMMY 형식으로 변환
+  const userContents = contents
+    .filter((ct) => ct.status === 'complete' && ct.formData?.category === '취업성공스토리')
+    .map((ct) => ({
+      id:          `u${ct.id}`,
+      name:        ct.formData?.anonymousName || ct.formData?.name || CURRENT_STUDENT.name,
+      role:        '수강생',
+      major:       ct.formData?.jobGroup || ct.formData?.subject || '',
+      category:    ct.formData?.jobGroup || '전체',
+      profileImg:  ct.formData?.profileImageUrl || stProfile.profileImg || CURRENT_STUDENT.profileImg || '/img/interview/img-profile-default.jpg',
+      portfolios:  myPortfolios.slice(0,4).map((p) => p.thumbData?.[0] || '/img/sub/img-thum-portfolio.png'),
+      isOver:      myPortfolios.length > 3,
+      overCount:   Math.max(0, myPortfolios.length - 3),
+      mention:     ct.formData?.feeling || '',
+      date:        ct.lastModified || ct.date || '',
+    }));
+  const ALL_INTERVIEWS = [...userContents, ...INTERVIEW_DUMMY];
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
   const filtered = selectedCategory === 0
-    ? INTERVIEW_DUMMY
-    : INTERVIEW_DUMMY.filter((item) => item.category === CATEGORIES[selectedCategory]);
+    ? ALL_INTERVIEWS
+    : ALL_INTERVIEWS.filter((item) => item.category === CATEGORIES[selectedCategory]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -78,6 +102,7 @@ export default function StInterviewListPage() {
                             {interview.role}
                           </p>
                           <p className="major">{interview.major}</p>
+                          {interview.date && <p style={{fontSize:11,color:'#aaa',marginTop:2}}>{interview.date?.replace(/-/g,'.')}</p>}
                         </div>
                       </div>
                       <div className={`interview_img_box${interview.isOver ? ' over' : ''}`}>

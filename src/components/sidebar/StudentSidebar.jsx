@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
@@ -14,6 +15,19 @@ const MENU_ITEMS = [
 
 export default function StudentSidebar() {
   const { pathname } = useLocation();
+  const sidebarRef = useRef(null);
+
+  // 모바일: active 항목을 스크롤 맨 앞으로 이동
+  useEffect(() => {
+    const ul = sidebarRef.current;
+    if (!ul) return;
+    const container = ul.closest('.sidebar') || ul.parentElement;
+    if (!container) return;
+    const active = ul.querySelector('li.active');
+    if (!active) return;
+    const offset = active.offsetLeft - (container.offsetWidth / 2) + (active.offsetWidth / 2);
+    container.scrollTo({ left: Math.max(0, offset), behavior: 'smooth' });
+  }, [pathname]);
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -23,7 +37,7 @@ export default function StudentSidebar() {
   };
 
   return (
-    <ul>
+    <ul ref={sidebarRef}>
       {MENU_ITEMS.map((item) => (
         <li
           key={item.label}
