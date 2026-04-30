@@ -36,7 +36,7 @@ export default function StInterviewListPage() {
       major:       ct.formData?.jobGroup || ct.formData?.subject || '',
       category:    ct.formData?.jobGroup || '전체',
       profileImg:  ct.formData?.profileImageUrl || stProfile.profileImg || CURRENT_STUDENT.profileImg || '/img/interview/img-profile-default.jpg',
-      portfolios:  myPortfolios.slice(0,4).map((p) => p.thumbData?.[0] || '/img/sub/img-thum-portfolio.png'),
+      portfolios:  myPortfolios.slice(0,3).map((p) => p.thumbData?.[0] || '/img/sub/img-thum-portfolio.png'),
       isOver:      myPortfolios.length > 3,
       overCount:   Math.max(0, myPortfolios.length - 3),
       mention:     ct.formData?.feeling || '',
@@ -109,7 +109,7 @@ export default function StInterviewListPage() {
                         {interview.portfolios.map((portfolio, idx) => (
                           <div key={idx} className="pf_thumb">
                             <img src={portfolio} alt="" />
-                            {interview.isOver && idx === interview.portfolios.length - 1 && (
+                            {interview.isOver && idx === 2 && (
                               <div className="over_mask">+{interview.overCount}</div>
                             )}
                           </div>

@@ -56,7 +56,7 @@ header .back_btn { display: none; }
 .job_interview_box .interview_info_box .info_txt .major{font-size:15px; color:#282828;}
 .job_interview_box .interview_img_box{display: flex; }
 .job_interview_box .interview_img_box .pf_thumb{width:87px; height:87px; border-radius:12px; overflow:hidden; margin-top: 25px;}
-.job_interview_box .interview_img_box .pf_thumb img{width:100%;}
+.job_interview_box .interview_img_box .pf_thumb img{width: 100%;object-fit: cover;height: 100%;}
 .job_interview_box .interview_img_box .pf_thumb + .pf_thumb{margin-left:10px;}
 .job_interview_box .interview_mention{margin-top: 25px; font-size:15px; color:#282828;overflow: hidden;text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;}
 .job_interview_box .interview_img_box.over .pf_thumb:last-child{position:relative}
@@ -95,7 +95,9 @@ header .back_btn { display: none; }
 .work_interview_box .con{width:250px;margin-right:20px;margin-bottom: 50px;}
 .work_interview_box .con:nth-child(4n+4){margin-right:0;}
 .work_interview_box .work_interview_thumb{border-radius:12px; height:250px; overflow:hidden;}
-.work_interview_box .work_interview_thumb img{}
+.work_interview_box .work_interview_thumb img{height: 100%;
+    width: 100%;
+    object-fit: cover;}
 .work_interview_box .title{font-size:14px;font-weight: 700;text-overflow: ellipsis;overflow: hidden;white-space: normal;display: -webkit-box;-webkit-line-clamp: 2;-webkit-box-orient: vertical;margin-top: 12px;margin-bottom: 5px;height: 35px;line-height: 1.3;}
 .work_interview_box .info{font-size:12px; color:#4dbbff; font-weight:500;}
 
@@ -159,7 +161,7 @@ header .back_btn { display: none; }
 .detail_float{width:340px;}
 .detail_float .name span{margin-left: 4px;  font-size: 14px; font-weight: 400;}
 .detail_float .wrap{border: 1px solid #ddd; border-radius: 12px; padding: 20px;background: #fff;}
-.detail_float .bottom_btn{margin-top:20px;}
+.detail_float .bottom_btn{margin-top:20px;} 
 .detail_float .skill_info{margin: 40px 0 20px;}
 .detail_float .skill_info ul li{padding:16px 0;}
 .detail_float .skill_info ul{padding: 0; border: 0;}
@@ -860,7 +862,7 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .detail_float .quik_area .btn_back img {width:34px; height:34px;}
 .detail_float .quik_area .btn_wish {width:48px; height:48px; border-radius:100%;}
 .detail_float .quik_area .btn_wish #heart-animation {display:flex; align-items:center; width:40px; height:40px; margin:0 auto;}
-.popup.popup_portfolio {height:800px; overflow:hidden;}
+.popup.popup_portfolio {overflow:hidden;}
 .popup .pop_inner_portfolio {margin-top:40px;}
 .popup .pop_inner_portfolio .h4 {font-size:21px; font-weight:800;}
 .popup .pop_inner_portfolio .text {padding-top:15px; font-size:15px; color:#6e6e6e;}

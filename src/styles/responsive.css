@@ -292,7 +292,12 @@
   .job_interview_box .interview_img_box .pf_thumb {
     width: 42px; height: 42px; margin-top: 8px;
   }
+  .job_interview_box .interview_img_box.over .pf_thumb:last-child .over_mask{font-size:16px;}
   .job_interview_box .interview_mention { font-size: 12px; margin-top: 8px; }
+
+  .mypage.contents.write .row02{flex-wrap: wrap;gap: 10px !important;}
+  .mypage.contents.write .row02 .input{margin-bottom:0;}
+  .mypage.contents.write .row02>div{width: calc(100% / 2 - 10px);}
 
   /* student_list_box 카드 — padding 15px */
   .student_list_box .con a { padding: 20px 15px; }
@@ -318,10 +323,9 @@
   /* work_interview_box — 2열 유지 */
   .work_interview_box .con  { width: calc(100% / 2 - 20px); margin-right: 0; margin-bottom: 16px; }
   .work_interview_box .wrap { }
-  .work_interview_box .work_interview_thumb{max-height: 100%;
-    height: 0;
-    padding-bottom: 100%;
-    overflow: hidden;}
+  .work_interview_box .work_interview_thumb{
+    height:43.3vw;
+  }
 
   /* mou_box — 2열 */
   .mou_box .con  {width: calc(100% / 2 - 20px); margin-right: 0; margin-bottom: 16px;}
@@ -686,7 +690,8 @@
   .mypage table .d-flex{flex-direction: column;}
 
   /* ── pf_add_box — 세로 스택 ── */
-  .mypage .pf_add_box li { display: flex; flex-direction: column; }
+  .mypage .pf_add_box ul{display: flex; flex-wrap: wrap;}
+  .mypage .pf_add_box li { display: flex; flex-direction: column; width: calc(100% / 2 - 8px);margin-left: 8px;}
   .mypage .pf_add_box .img { width: 100%; height: 140px; }
   .mypage .pf_add_box .txt { width: 100%; padding: 12px 0 0; }
 
@@ -850,7 +855,7 @@
 }
   .company_recruit_box .con .recruit_company_img{height:auto; max-height:120px;}
   .mypage.scrap .btn_like{top:10px !important;}
-  .portfolio_list ul li{width:calc(50% - 8px)}
+  .portfolio_list ul li{width:calc(50% - 8px); height: 0;padding-bottom: 50%;}
 
   .company_recruit_box .con .recruit_company_logo{width:40px; height:40px; border-radius:8px;}
 
