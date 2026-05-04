@@ -13,6 +13,7 @@ import { RECRUIT_DETAIL } from '../../constants/detailData';
 import { useRecruitScrap } from '../../hooks/useScrapStore';
 import { useResumeStore } from '../../hooks/useResumeStore';
 import { useAuth } from '../../context/AuthContext';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
 import { useApplicationStore } from '../../hooks/useApplicationStore';
 import { CURRENT_STUDENT, CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../constants/currentUser';
 import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
@@ -27,6 +28,7 @@ export default function RecruitDetailPage() {
   const { resumes } = useResumeStore();
   const { add: addApplication, applications } = useApplicationStore();
   const { userType } = useAuth();
+  const { profile: stProfile } = useStudentProfileStore();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { recruits: storeRecruits } = useCpRecruitStore();
   const { profile: cpProfile } = useCompanyProfileStore();
@@ -342,9 +344,9 @@ export default function RecruitDetailPage() {
               <h3>지원정보</h3>
               <div className="apply_info">
                 <ul>
-                  <li><span>이름</span>{CURRENT_STUDENT.name}</li>
-                  <li><span>이메일</span>{CURRENT_STUDENT.email}</li>
-                  <li><span>연락처</span>{CURRENT_STUDENT.phone}</li>
+                  <li><span>이름</span>{stProfile.name || CURRENT_STUDENT.name}</li>
+                  <li><span>이메일</span>{stProfile.email || CURRENT_STUDENT.email}</li>
+                  <li><span>연락처</span>{stProfile.phone || CURRENT_STUDENT.phone}</li>
                 </ul>
               </div>
               <h3>이력서첨부</h3>
