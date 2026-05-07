@@ -8,11 +8,17 @@ import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
 import { STUDENT_DUMMY, RECRUIT_DUMMY } from '../../constants/dummyData';
 import { STUDENT_DETAIL } from '../../constants/detailData';
-import { CURRENT_COMPANY_ID } from '../../constants/currentUser';
+import { CURRENT_COMPANY_ID, CURRENT_STUDENT } from '../../constants/currentUser';
 import { useWishList } from '../../hooks/useWishList';
 import { useCpOfferStore } from '../../hooks/useCpOfferStore';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { useSkillStore } from '../../hooks/useSkillStore';
+import { usePortfolioStore } from '../../hooks/usePortfolioStore';
+import { useResumeStore } from '../../hooks/useResumeStore';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
 import { useAuth } from '../../context/AuthContext';
+
+const CURRENT_USER_ID = 29;
 
 export default function HrDetailPage() {
   const { id } = useParams();
@@ -20,11 +26,17 @@ export default function HrDetailPage() {
   const { toggle, isWished } = useWishList();
   const { userType } = useAuth();
   const { add: addOffer } = useCpOfferStore();
-  const [showResumeModal,    setShowResumeModal]    = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showOfferModal,     setShowOfferModal]     = useState(false);
-  const [showInquiryModal,   setShowInquiryModal]   = useState(false);
-  const [showPortfolioModal, setShowPortfolioModal] = useState(false);
+  const { profile: stProfile } = useStudentProfileStore();
+  const { skills: resumeSkills } = useSkillStore();
+  const { portfolios: myPortfolios } = usePortfolioStore();
+  const { resumes } = useResumeStore();
+  // 대표 이력서(isMain) 없으면 첫 번째, 그것도 없으면 null
+  const mainResume = resumes.find((r) => r.isMain) || resumes[0] || null;
+  const [showResumeModal,  setShowResumeModal]  = useState(false);
+  const [showLoginModal,   setShowLoginModal]   = useState(false);
+  const [showOfferModal,   setShowOfferModal]   = useState(false);
+  const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [viewPf,           setViewPf]           = useState(null);  // 포트폴리오 상세팝업
 
   // 면접제의 폼 상태
   const [offerForm, setOfferForm] = useState({ selectedRecruits: [], deadline: '' });
@@ -41,10 +53,33 @@ export default function HrDetailPage() {
   const handleInquiryChange = (e) =>
     setInquiryForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  // 리스트 데이터 조회
-  const student = STUDENT_DUMMY.find((s) => s.id === numId) || STUDENT_DUMMY[0];
-  // 상세 전용 데이터 (없으면 default)
-  const detail = STUDENT_DETAIL[numId] || STUDENT_DETAIL.default;
+  // id=29이면 수강생 테스트 프로필 (수정 데이터 우선 반영)
+  const isCurrentUser = numId === CURRENT_USER_ID;
+  const rawStudent = STUDENT_DUMMY.find((s) => s.id === numId) || STUDENT_DUMMY[0];
+  const student = isCurrentUser ? {
+    ...rawStudent,
+    name:       stProfile.name       || CURRENT_STUDENT.name       || rawStudent.name,
+    mention:    stProfile.mention    || CURRENT_STUDENT.mention     || rawStudent.mention,
+    keywords:   stProfile.keywords   || CURRENT_STUDENT.keywords    || rawStudent.keywords,
+    mbti:       stProfile.mbti       || CURRENT_STUDENT.mbti        || rawStudent.mbti,
+    region:     stProfile.region     || CURRENT_STUDENT.region      || rawStudent.region,
+    duty:       stProfile.duties     || stProfile.jobGroup          || rawStudent.duty,
+    profileImg: stProfile.profileImg || CURRENT_STUDENT.profileImg  || rawStudent.profileImg,
+  } : rawStudent;
+
+  // 상세 전용 데이터 (없으면 default) — id=29이면 수정된 프로필 데이터 merge
+  const rawDetail = STUDENT_DETAIL[numId] || STUDENT_DETAIL.default;
+  const mappedSkills = resumeSkills.map((s) => ({ name: s.name, percentage: s.degree || 0 }));
+  const detail = isCurrentUser ? {
+    ...rawDetail,
+    phone:     stProfile.phone     || CURRENT_STUDENT.phone     || rawDetail.phone,
+    email:     stProfile.email     || CURRENT_STUDENT.email     || rawDetail.email,
+    address:   CURRENT_STUDENT.address || rawDetail.address,
+    jobStatus: stProfile.jobStatus || rawDetail.jobStatus,
+    career:    stProfile.career    || rawDetail.career,
+    skills:    mappedSkills.length > 0 ? mappedSkills : rawDetail.skills,
+  } : rawDetail;
+
   // 현재 기업의 채용공고만
   const myRecruits = RECRUIT_DUMMY.filter((r) => r.companyId === CURRENT_COMPANY_ID);
 
@@ -73,7 +108,7 @@ export default function HrDetailPage() {
               </a> */}
             </div>
             <div className="photo">
-              <img src="/img/sub/img-teacher.jpg" alt="프로필 사진" />
+              <img src={student.profileImg || '/img/sub/img-teacher.jpg'} alt="프로필 사진" />
             </div>
             <div className="character">
               <ul className="characters">
@@ -138,11 +173,25 @@ export default function HrDetailPage() {
               <h3>{student.name}님의 포트폴리오를 소개합니다.</h3>
               <div className="portfolio_list">
                 <ul className="gap-3">
-                  {detail.portfolioImages.map((img, i) => (
-                    <li key={i} onClick={() => setShowPortfolioModal(true)} style={{ cursor: 'pointer' }}>
-                      <img src={img} alt="portfolio" />
-                    </li>
-                  ))}
+                  {isCurrentUser ? (
+                    myPortfolios.length > 0 ? (
+                      myPortfolios.map((pf, i) => (
+                        <li key={pf.id ?? i} onClick={() => setViewPf(pf)} style={{ cursor: 'pointer' }}>
+                          <img src={(pf.thumbData && pf.thumbData[0]) || '/img/sub/img-thum-portfolio.png'} alt={pf.title} />
+                        </li>
+                      ))
+                    ) : (
+                      <li style={{ listStyle: 'none', color: '#aaa', fontSize: 14, padding: '12px 0' }}>
+                        등록된 포트폴리오가 없습니다.
+                      </li>
+                    )
+                  ) : (
+                    detail.portfolioImages.map((img, i) => (
+                      <li key={i} style={{ cursor: 'default' }}>
+                        <img src={img} alt="portfolio" />
+                      </li>
+                    ))
+                  )}
                 </ul>
               </div>
             </div>
@@ -216,7 +265,7 @@ export default function HrDetailPage() {
               </button>
             </div>
             <div className="profile type02">
-              <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필 사진" /></div>
+              <div className="photo"><img src={student.profileImg || '/img/sub/img-teacher.jpg'} alt="프로필 사진" /></div>
               <div>
                 <ul className="characters">
                   <li className="mbti">{student.mbti}</li>
@@ -231,7 +280,8 @@ export default function HrDetailPage() {
                 </ul>
               </div>
             </div>
-            <div className="contents" id="resumeContents">
+            <div className="contents" id="resumeContents" style={{ maxHeight: '55vh', overflowY: 'auto' }}>
+              {/* 스킬 */}
               <div className="skill_info">
                 <ul>
                   {detail.skills.map((sk) => (
@@ -245,9 +295,61 @@ export default function HrDetailPage() {
                   ))}
                 </ul>
               </div>
+
+              {/* 이력서 본문 — 내 프로필(id=29)이고 이력서가 있을 때 */}
+              {isCurrentUser && mainResume && (
+                <div style={{ marginTop: 24 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, paddingBottom: 12, borderBottom: '2px solid #4dbbff' }}>
+                    <span style={{ fontSize: 15, fontWeight: 700, color: '#222' }}>{mainResume.name}</span>
+                    {mainResume.isMain && (
+                      <span style={{ fontSize: 11, background: '#4dbbff', color: '#fff', borderRadius: 10, padding: '2px 8px', fontWeight: 600 }}>대표</span>
+                    )}
+                    <span style={{ fontSize: 11, color: '#999', marginLeft: 'auto' }}>최종수정 {mainResume.lastModified}</span>
+                  </div>
+                  {[
+                    { label: '자기소개', key: 'intro' },
+                    { label: '경력사항', key: 'experience' },
+                    { label: '학력',     key: 'education' },
+                    { label: '자격증',   key: 'certificate' },
+                    { label: '외국어',   key: 'language' },
+                    { label: '링크',     key: 'link' },
+                  ].map(({ label, key }) => {
+                    const val = mainResume.formData && mainResume.formData[key];
+                    if (!val) return null;
+                    return (
+                      <div key={key} style={{ marginBottom: 18 }}>
+                        <h5 style={{ fontSize: 13, fontWeight: 700, color: '#4dbbff', marginBottom: 6 }}>{label}</h5>
+                        <p style={{ fontSize: 13, color: '#444', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
+                          {val}
+                        </p>
+                      </div>
+                    );
+                  })}
+                  {(mainResume.formData?.region || mainResume.formData?.salary || mainResume.formData?.availableDate) && (
+                    <div style={{ marginTop: 8, padding: '12px 14px', background: '#f8f9fa', borderRadius: 8 }}>
+                      <h5 style={{ fontSize: 13, fontWeight: 700, color: '#4dbbff', marginBottom: 8 }}>희망 조건</h5>
+                      <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 13, color: '#444', lineHeight: 2 }}>
+                        {mainResume.formData?.region        && <li><span style={{ color: '#999', width: 80, display: 'inline-block' }}>희망 지역</span>{mainResume.formData.region}</li>}
+                        {mainResume.formData?.salary        && <li><span style={{ color: '#999', width: 80, display: 'inline-block' }}>희망 연봉</span>{Number(mainResume.formData.salary).toLocaleString()}만원</li>}
+                        {mainResume.formData?.availableDate && <li><span style={{ color: '#999', width: 80, display: 'inline-block' }}>입사 가능일</span>{mainResume.formData.availableDate}</li>}
+                      </ul>
+                    </div>
+                  )}
+                  {!mainResume.formData && (
+                    <p style={{ fontSize: 13, color: '#aaa', textAlign: 'center', padding: '16px 0' }}>
+                      이력서 내용이 없습니다. 마이페이지에서 이력서를 작성해 주세요.
+                    </p>
+                  )}
+                </div>
+              )}
+              {isCurrentUser && !mainResume && (
+                <p style={{ fontSize: 13, color: '#aaa', textAlign: 'center', padding: '24px 0' }}>
+                  등록된 이력서가 없습니다.
+                </p>
+              )}
             </div>
             <div className="btn_center">
-              <button type="button" className="type02 w195" onClick={() => { setShowResumeModal(false); setShowPortfolioModal(true); }}>
+              <button type="button" className="type02 w195" onClick={() => setShowResumeModal(false)}>
                 포트폴리오 보러가기
               </button>
             </div>
@@ -266,7 +368,7 @@ export default function HrDetailPage() {
               </button>
             </div>
             <div className="profile">
-              <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필 사진" /></div>
+              <div className="photo"><img src={student.profileImg || '/img/sub/img-teacher.jpg'} alt="프로필 사진" /></div>
               <div>
                 <div className="name">{student.name} <span className="age">{student.age}</span></div>
                 <div className="part">{student.duty}</div>
@@ -357,7 +459,7 @@ export default function HrDetailPage() {
               </button>
             </div>
             <div className="profile">
-              <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필 사진" /></div>
+              <div className="photo"><img src={student.profileImg || '/img/sub/img-teacher.jpg'} alt="프로필 사진" /></div>
               <div>
                 <div className="name">{student.name} <span className="age">{student.age}</span></div>
                 <div className="part">{student.duty}</div>
@@ -425,6 +527,48 @@ export default function HrDetailPage() {
         </>
       )}
       </div>
+
+      {/* 포트폴리오 상세 팝업 */}
+      {viewPf && (
+        <>
+          <article className="popup popup_portfolio w640" style={{ display: 'block', maxHeight: '85vh', overflowY: 'auto' }}>
+            <div className="d-flex mb-4 justify-content-between">
+              <div className="title">{viewPf.title}</div>
+              <button type="button" className="popup_close" onClick={() => setViewPf(null)}>
+                <img src="/img/common/popup-close.png" alt="닫기" />
+              </button>
+            </div>
+            {viewPf.description && (
+              <p style={{ fontSize: 14, color: '#555', marginBottom: 16, lineHeight: 1.7 }}>{viewPf.description}</p>
+            )}
+            {viewPf.thumbData?.length > 0 && (
+              <div className="mb-4">
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#333', marginBottom: 8 }}>섬네일</p>
+                <div className="d-flex flex-wrap gap-2">
+                  {viewPf.thumbData.map((src, i) => (
+                    <img key={i} src={src} alt="" style={{ width: 120, height: 90, objectFit: 'cover', borderRadius: 8, border: '1px solid #eee' }} />
+                  ))}
+                </div>
+              </div>
+            )}
+            {viewPf.pfData?.length > 0 && (
+              <div>
+                <p style={{ fontSize: 13, fontWeight: 700, color: '#333', marginBottom: 8 }}>포트폴리오 이미지</p>
+                <div className="d-flex flex-column gap-3">
+                  {viewPf.pfData.map((src, i) => (
+                    <img key={i} src={src} alt="" style={{ width: '100%', borderRadius: 8, border: '1px solid #eee' }} />
+                  ))}
+                </div>
+              </div>
+            )}
+            <div className="btn_center mt-4">
+              <button type="button" className="type02 w195" onClick={() => setViewPf(null)}>닫기</button>
+            </div>
+          </article>
+          <div className="popup-dim" style={{ display: 'block' }} onClick={() => setViewPf(null)} />
+        </>
+      )}
+
       {showLoginModal && <LoginPromptModal onClose={() => setShowLoginModal(false)} />}
     </Layout>
   );

@@ -4,10 +4,12 @@ import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/sidebar/StudentSidebar';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
 import { useAuth } from '../../context/AuthContext';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
 
 export default function SecessionPage() {
   const navigate = useNavigate();
   const { logout } = useAuth();
+  const { profile: stProfile } = useStudentProfileStore();
   const [checks, setChecks] = useState({
     unpaidAmount: false,
     agreeSecession: false,
@@ -58,7 +60,7 @@ export default function SecessionPage() {
               <h4>탈퇴계정</h4>
               <div className="email">
                 <img src="/img/common/img-profile-default.jpg" alt="" />
-                {CURRENT_STUDENT.email}
+                {stProfile.email || CURRENT_STUDENT.email}
               </div>
               <ul className="txt dot">
                 <li>

@@ -6,6 +6,7 @@ import { useContestScrap } from '../../hooks/useScrapStore';
 import { useAuth } from '../../context/AuthContext';
 import { useContestInquiryStore } from '../../hooks/useContestInquiryStore';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
 
 export default function TipContestDetailPage() {
@@ -15,14 +16,15 @@ export default function TipContestDetailPage() {
   const { userType } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { add: addInquiry, isInquired } = useContestInquiryStore();
+  const { profile: stProfile } = useStudentProfileStore();
   const [showContactPopup, setShowContactPopup] = useState(false);
   const [inquiryDone, setInquiryDone] = useState(false);
   const [outsideMsg, setOutsideMsg] = useState('');
   const [formData, setFormData] = useState({
-    name: CURRENT_STUDENT.name,
-    phone01: CURRENT_STUDENT.phone.split('-')[0] || '010',
-    phone02: CURRENT_STUDENT.phone.split('-')[1] || '',
-    phone03: CURRENT_STUDENT.phone.split('-')[2] || '',
+    name: stProfile.name || CURRENT_STUDENT.name,
+    phone01: (stProfile.phone || CURRENT_STUDENT.phone).split('-')[0] || '010',
+    phone02: (stProfile.phone || CURRENT_STUDENT.phone).split('-')[1] || '',
+    phone03: (stProfile.phone || CURRENT_STUDENT.phone).split('-')[2] || '',
     location: 'SBS아카데미컴퓨터아트학원 강남지점',
     agreed: false,
   });

@@ -4,6 +4,10 @@ import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
 import { JOB_CATEGORIES, DUTIES_BY_CATEGORY, ALL_DUTIES } from '../../constants/jobData';
 import { STUDENT_DUMMY } from '../../constants/dummyData';
+import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+
+const CURRENT_USER_ID = 29;
 
 const MBTI_LIST = ['ENFJ','ENFP','ENTJ','ENTP','ESFJ','ESFP','ESTJ','ESTP',
                    'INFJ','INFP','INTJ','INTP','ISFJ','ISFP','ISTJ','ISTP'];
@@ -13,6 +17,22 @@ export default function HrCategoryListPage() {
   const [searchParams] = useSearchParams();
   const initialJob = searchParams.get('job') || '';
   const initialLocation = searchParams.get('location') || '';
+  const { profile: stProfile } = useStudentProfileStore();
+
+  // 수강생 프로필 수정 데이터를 id=29 항목에 실시간 merge
+  const allStudents = STUDENT_DUMMY.map((s) => {
+    if (s.id !== CURRENT_USER_ID) return s;
+    return {
+      ...s,
+      name:       stProfile.name       || CURRENT_STUDENT.name       || s.name,
+      mention:    stProfile.mention    || CURRENT_STUDENT.mention     || s.mention,
+      keywords:   stProfile.keywords   || CURRENT_STUDENT.keywords    || s.keywords,
+      mbti:       stProfile.mbti       || CURRENT_STUDENT.mbti        || s.mbti,
+      region:     stProfile.region     || CURRENT_STUDENT.region      || s.region,
+      duty:       stProfile.duties     || stProfile.jobGroup          || s.duty,
+      profileImg: stProfile.profileImg || CURRENT_STUDENT.profileImg  || s.profileImg,
+    };
+  });
 
   const [selectedJob,       setSelectedJob]       = useState(initialJob);
   const [selectedDuties,    setSelectedDuties]     = useState([]);
@@ -53,7 +73,7 @@ export default function HrCategoryListPage() {
     setSelectedDuties((p) => p.includes(duty) ? p.filter((d) => d !== duty) : [...p, duty]);
 
   // 필터링
-  const filtered = STUDENT_DUMMY.filter((s) => {
+  const filtered = allStudents.filter((s) => {
     if (selectedJob) {
       const duties = DUTIES_BY_CATEGORY[selectedJob] || [];
       if (!duties.some((d) => s.duty.includes(d))) return false;
@@ -265,7 +285,7 @@ export default function HrCategoryListPage() {
                 <div key={s.id} className="con">
                   <Link to={`/hr/${s.id}`}>
                     <div className="student_img_box">
-                      <img src="/img/interview/img-profile.jpg" alt="" />
+                      <img src={s.profileImg || '/img/interview/img-profile.jpg'} alt="" />
                     </div>
                     <div className="student_info_box">
                       <p className="student_info">

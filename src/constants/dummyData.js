@@ -58,6 +58,8 @@ export const STUDENT_DUMMY = [
   { id: 26, name: '소지민', age: '(여 25세)', mention: '경남 출신 인테리어 디자이너',                 duty: '인테리어설계, 공간디자인',        keywords: ['감각', '성실함', '소통'],     mbti: 'ESFJ', region: '경남', views: 50  },
   { id: 27, name: '구태영', age: '(남 33세)', mention: '강원 지역 건축 설계 전문가',                  duty: '건축설계, 도면작성',              keywords: ['꼼꼼함', '책임감', '경력'],   mbti: 'ISTJ', region: '강원', views: 45  },
   { id: 28, name: '변수아', age: '(여 29세)', mention: '제주 출신 브랜딩 디자이너',                   duty: '브랜딩, 패키지디자인',            keywords: ['창의력', '감각', '열정'],     mbti: 'ENFP', region: '제주', views: 40  },
+  // ── 현재 로그인 수강생 테스트 프로필 (id=29 고정) ──────────────
+  { id: 29, name: '최수정', age: '(여 34세)', mention: '꼼꼼하고 책임감 있는 전산세무회계 전문가를 목표로 합니다.', duty: '전산회계 1급, ERP 회계정보관리사', keywords: ['책임감', '노력형', '활동적인'], mbti: 'ENFP', region: '서울', views: 10, profileImg: '/img/sub/img-teacher.jpg', isCurrentUser: true },
 ];
 
 export const TIP_DUMMY = [

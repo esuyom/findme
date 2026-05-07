@@ -4,6 +4,10 @@ import SwiperSlider from '../components/common/SwiperSlider';
 import SectionTitle from '../components/common/SectionTitle';
 import StudentCard from '../components/cards/StudentCard';
 import { STUDENT_DUMMY } from '../constants/dummyData';
+import { CURRENT_STUDENT } from '../constants/currentUser';
+import { useStudentProfileStore } from '../hooks/useStudentProfileStore';
+
+const CURRENT_USER_ID = 29;
 
 const CATEGORIES = [
   { img: '/img/common/icon-category001.png', label: '마야&CG' },
@@ -18,19 +22,39 @@ const CATEGORIES = [
 
 const REGIONS = ['서울', '경기', '인천', '대전', '세종', '충남', '충북', '광주', '전남', '전북', '대구', '경북', '부산', '울산', '경남', '강원', '제주', '전국'];
 
-// 최신 등록 인재 (섹션1 - 전체)
-const NEW_STUDENTS = [...STUDENT_DUMMY].slice(0, 8);
-
-// 포트폴리오 보유 인재 (섹션2)
-const PORTFOLIO_STUDENTS = STUDENT_DUMMY.slice(0, 6);
-
-// 조회수 상위 6개 (인기많은 나를 놓치지마!)
-const POPULAR_STUDENTS = [...STUDENT_DUMMY]
-  .sort((a, b) => b.views - a.views)
-  .slice(0, 6);
+/** 수강생 프로필 수정 데이터를 id=29 항목에 merge */
+function mergeCurrentUser(list, stProfile) {
+  return list.map((s) => {
+    if (s.id !== CURRENT_USER_ID) return s;
+    return {
+      ...s,
+      name:       stProfile.name       || CURRENT_STUDENT.name       || s.name,
+      mention:    stProfile.mention    || CURRENT_STUDENT.mention     || s.mention,
+      keywords:   stProfile.keywords   || CURRENT_STUDENT.keywords    || s.keywords,
+      mbti:       stProfile.mbti       || CURRENT_STUDENT.mbti        || s.mbti,
+      region:     stProfile.region     || CURRENT_STUDENT.region      || s.region,
+      duty:       stProfile.duties     || stProfile.jobGroup          || s.duty,
+      profileImg: stProfile.profileImg || CURRENT_STUDENT.profileImg  || s.profileImg,
+    };
+  });
+}
 
 export default function HrListPage() {
   const navigate = useNavigate();
+  const { profile: stProfile } = useStudentProfileStore();
+
+  const allStudents = mergeCurrentUser(STUDENT_DUMMY, stProfile);
+
+  // 최신 등록 인재 (섹션1 - 전체)
+  const NEW_STUDENTS = [...allStudents].slice(0, 8);
+
+  // 포트폴리오 보유 인재 (섹션2)
+  const PORTFOLIO_STUDENTS = allStudents.slice(0, 6);
+
+  // 조회수 상위 6개 (인기많은 나를 놓치지마!)
+  const POPULAR_STUDENTS = [...allStudents]
+    .sort((a, b) => b.views - a.views)
+    .slice(0, 6);
 
   return (
     <Layout containerClass="sub">

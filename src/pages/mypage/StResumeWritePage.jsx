@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
 import { useResumeStore } from '../../hooks/useResumeStore';
 import { useSkillStore } from '../../hooks/useSkillStore';
 
@@ -27,13 +28,14 @@ export default function StResumeWritePage() {
   const location  = useLocation();
   const editId    = location.state?.editId ?? null;
   const { add, update, getById, setMain } = useResumeStore();
+  const { profile: stProfile } = useStudentProfileStore();
   const { skills } = useSkillStore();
   const existing  = editId != null ? getById(editId) : null;
   const [toast, setToast] = useState('');
   const toastTimer = useRef(null);
 
   const [formData, setFormData] = useState({
-    resumeName:   existing?.formData?.resumeName   ?? `${CURRENT_STUDENT.name}의 이력서`,
+    resumeName:   existing?.formData?.resumeName   ?? `${stProfile.name || CURRENT_STUDENT.name}의 이력서`,
     intro:        existing?.formData?.intro        ?? '',
     experience:   existing?.formData?.experience   ?? '',
     education:    existing?.formData?.education    ?? '',

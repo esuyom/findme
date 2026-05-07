@@ -4,9 +4,11 @@ import Pagination from '../../components/common/Pagination';
 import { JOB_INTERVIEW_DUMMY } from '../../constants/detailData';
 import { useContentsStore } from '../../hooks/useContentsStore';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
 
 export default function JobInterviewListPage() {
   const { contents } = useContentsStore();
+  const { profile: stProfile } = useStudentProfileStore();
   const userJobContents = contents
     .filter((ct) => ct.status === 'complete' && ct.formData?.category === '직무인터뷰')
     .map((ct) => ({
@@ -14,7 +16,7 @@ export default function JobInterviewListPage() {
       title:    ct.formData?.feeling || ct.formData?.company || '사용자 인터뷰',
       field:    ct.formData?.jobGroup || '',
       company:  ct.formData?.company  || '',
-      designer: ct.formData?.name || CURRENT_STUDENT.name,
+      designer: ct.formData?.name || stProfile.name || CURRENT_STUDENT.name,
       thumb:    ct.formData?.profileImageUrl || '/img/interview/img-worker.jpg',
     }));
   const ALL_JOB_INTERVIEWS = [...userJobContents, ...JOB_INTERVIEW_DUMMY];

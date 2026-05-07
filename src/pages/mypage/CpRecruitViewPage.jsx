@@ -7,6 +7,8 @@ import 'swiper/css/navigation';
 import Layout from '../../components/layout/Layout';
 import CompanySidebar from '../../components/sidebar/CompanySidebar';
 import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { useSkillStore } from '../../hooks/useSkillStore';
 import { STUDENT_DUMMY } from '../../constants/dummyData';
 import { DUTIES_BY_CATEGORY } from '../../constants/jobData';
 import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
@@ -28,6 +30,17 @@ const STATUS_CLASS  = { active: 'blue',   draft: 'gray',     closed: 'gray'     
 
 export default function CpRecruitViewPage() {
   const { id } = useParams();
+  const { profile: stProfile } = useStudentProfileStore();
+  const { skills: resumeSkills } = useSkillStore();
+  const studentName    = stProfile.name     || CURRENT_STUDENT.name;
+  const studentAge     = CURRENT_STUDENT.age;
+  const studentPhone   = stProfile.phone    || CURRENT_STUDENT.phone;
+  const studentEmail   = stProfile.email    || CURRENT_STUDENT.email;
+  const studentMbti    = stProfile.mbti     || CURRENT_STUDENT.mbti;
+  const studentKw      = stProfile.keywords || CURRENT_STUDENT.keywords || [];
+  const studentSkills  = resumeSkills.length > 0
+    ? resumeSkills.map((s) => ({ name: s.name, percentage: s.degree || 0 }))
+    : studentSkills || [];
   const navigate = useNavigate();
   const { getById, close, remove } = useCpRecruitStore();
   const recruit = getById(Number(id));
@@ -215,11 +228,11 @@ export default function CpRecruitViewPage() {
             <div className="profile">
               <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필" /></div>
               <div>
-                <div className="name">{CURRENT_STUDENT.name} <span className="age">{CURRENT_STUDENT.age}</span></div>
-                <div className="part">{CURRENT_STUDENT.skills?.map((s) => s.name).join(', ')}</div>
+                <div className="name">{studentName} <span className="age">{studentAge}</span></div>
+                <div className="part">{studentSkills?.map((s) => s.name).join(', ')}</div>
                 <ul className="characters">
-                  <li className="mbti">{CURRENT_STUDENT.mbti}</li>
-                  {CURRENT_STUDENT.keywords?.map((k) => <li key={k}>{k}</li>)}
+                  <li className="mbti">{studentMbti}</li>
+                  {studentKw?.map((k) => <li key={k}>{k}</li>)}
                 </ul>
               </div>
             </div>
@@ -251,10 +264,10 @@ export default function CpRecruitViewPage() {
             <div className="profile">
               <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필" /></div>
               <div>
-                <div className="name">{CURRENT_STUDENT.name} <span className="age">{CURRENT_STUDENT.age}</span></div>
+                <div className="name">{studentName} <span className="age">{studentAge}</span></div>
                 <ul className="characters">
-                  <li className="mbti">{CURRENT_STUDENT.mbti}</li>
-                  {CURRENT_STUDENT.keywords?.map((k) => <li key={k}>{k}</li>)}
+                  <li className="mbti">{studentMbti}</li>
+                  {studentKw?.map((k) => <li key={k}>{k}</li>)}
                 </ul>
               </div>
             </div>
@@ -296,20 +309,20 @@ export default function CpRecruitViewPage() {
               <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필" /></div>
               <div>
                 <ul className="characters">
-                  <li className="mbti">{CURRENT_STUDENT.mbti}</li>
-                  {CURRENT_STUDENT.keywords?.map((k) => <li key={k}>{k}</li>)}
+                  <li className="mbti">{studentMbti}</li>
+                  {studentKw?.map((k) => <li key={k}>{k}</li>)}
                 </ul>
-                <div className="name">{CURRENT_STUDENT.name} <span className="age">{CURRENT_STUDENT.age}</span></div>
+                <div className="name">{studentName} <span className="age">{studentAge}</span></div>
                 <ul className="contact_info">
-                  <li><span>연락처</span> {CURRENT_STUDENT.phone}</li>
-                  <li><span>이메일</span> {CURRENT_STUDENT.email}</li>
+                  <li><span>연락처</span> {studentPhone}</li>
+                  <li><span>이메일</span> {studentEmail}</li>
                 </ul>
               </div>
             </div>
             <div className="contents" id="resumeContents">
               <div className="skill_info">
                 <ul>
-                  {CURRENT_STUDENT.skills?.map((s) => (
+                  {studentSkills?.map((s) => (
                     <li key={s.name}>
                       <div className="skill">{s.name}</div>
                       <div className="bar"><div className="outer"><span style={{ width: `${s.percentage}%` }}></span></div></div>

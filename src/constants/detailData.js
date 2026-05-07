@@ -114,6 +114,25 @@ export const STUDENT_DETAIL = {
     skills: [{ name: '편집디자인', percentage: 90 }, { name: '인디자인', percentage: 88 }, { name: '포토샵', percentage: 82 }],
     portfolioImages: ['/img/sub/img-thum-portfolio.png', '/img/sub/img-thum-portfolio.png', '/img/sub/img-thum-portfolio.png', '/img/sub/img-thum-portfolio.png', '/img/sub/img-thum-portfolio.png'],
   },
+  // ── 현재 로그인 수강생 테스트 프로필 (id=29) ──────────────────
+  29: {
+    phone: '010-9988-2108',
+    email: 'sujung.choi@naver.com',
+    address: '서울시 마포구 연남동 123-4',
+    jobStatus: '구직중',
+    career: '신입',
+    skills: [
+      { name: '전산회계 1급', percentage: 92 },
+      { name: 'ERP 회계정보관리사', percentage: 85 },
+      { name: '엑셀(VLOOKUP/피벗)', percentage: 90 },
+      { name: '세무신고(부가세/종소세)', percentage: 78 },
+    ],
+    portfolioImages: [
+      '/img/sub/img-thum-portfolio.png',
+      '/img/sub/img-thum-portfolio.png',
+      '/img/sub/img-thum-portfolio.png',
+    ],
+  },
 };
 
 // ─────────────────────────────────────

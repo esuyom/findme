@@ -50,7 +50,7 @@ header .back_btn { display: none; }
 .job_interview_box .con a{padding:30px; display:block; width:100%; height:100%; background-color:#fff; box-shadow:0 0 11px rgb(68 68 68 / 13%); border-radius:12px; overflow:hidden;}
 .job_interview_box .interview_info_box{display: flex; align-items: center;}
 .job_interview_box .interview_info_box .info_img{width:84px;height:84px;border-radius:50%;overflow:hidden;margin-right: 13px;}
-.job_interview_box .interview_info_box .info_img img{width:100%;}
+.job_interview_box .interview_info_box .info_img img{width:100%;object-fit: cover; height: 100%;}
 .job_interview_box .interview_info_box .info_txt .name{font-size:17px;}
 .job_interview_box .interview_info_box .info_txt .name strong{margin-right:3px;}
 .job_interview_box .interview_info_box .info_txt .major{font-size:15px; color:#282828;}
@@ -205,7 +205,7 @@ header .util .login_box.login .login_before{display:none;}
 header .util .login_after{display:none;}
 header .util .mypage_btn{border:0;}
 header .util .login_after .mypage_btn a{width: 33px;height: 33px;position:relative; display: flex;  align-items: center;}
-header .util .login_after .mypage_btn img{width:100%;vertical-align:top;border-radius: 50%;border: 2px solid #fff;box-shadow: 2px 2px 2px #0000001f;}
+header .util .login_after .mypage_btn img{width:100%; height:100%; vertical-align:top;border-radius: 50%;border: 2px solid #fff;box-shadow: 2px 2px 2px #0000001f;}
 header .util .login_after .mypage_btn.on a::after{content:"";width: 8px;height: 8px;border-radius:50%;background:#4dbbff;position:absolute;display:block;right: 3px;top: 3px;}
 header .util .search_btn{margin-right: 15px;display: flex;line-height: initial;align-items: center;padding: 5px;}
 header .util .search_btn img{width: 23px;height: 23px;}

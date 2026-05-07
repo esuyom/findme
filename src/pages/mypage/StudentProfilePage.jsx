@@ -149,7 +149,7 @@ export default function StudentProfilePage() {
 
             <div className="input">
               <h5 className="sub_title">한 줄 소개</h5>
-              <textarea className="normal" placeholder="내용을 입력해 주세요." defaultValue={CURRENT_STUDENT.mention || ''} />
+              <textarea className="normal" placeholder="내용을 입력해 주세요." defaultValue={stProfile.mention || CURRENT_STUDENT.mention || ''} />
             </div>
 
             <div className="input job_group">
