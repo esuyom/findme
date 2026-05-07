@@ -30,32 +30,34 @@ export default function HrDetailPage() {
   const { skills: resumeSkills } = useSkillStore();
   const { portfolios: myPortfolios } = usePortfolioStore();
   const { resumes } = useResumeStore();
-  // 대표 이력서(isMain) 없으면 첫 번째, 그것도 없으면 null
+
   const mainResume = resumes.find((r) => r.isMain) || resumes[0] || null;
+
   const [showResumeModal,  setShowResumeModal]  = useState(false);
   const [showLoginModal,   setShowLoginModal]   = useState(false);
   const [showOfferModal,   setShowOfferModal]   = useState(false);
   const [showInquiryModal, setShowInquiryModal] = useState(false);
-  const [viewPf,           setViewPf]           = useState(null);  // 포트폴리오 상세팝업
+  const [viewPf,           setViewPf]           = useState(null);
 
-  // 면접제의 폼 상태
+  // 면접제의 폼
   const [offerForm, setOfferForm] = useState({ selectedRecruits: [], deadline: '' });
-  const toggleOfferRecruit = (id) =>
+  const toggleOfferRecruit = (rid) =>
     setOfferForm((prev) => ({
       ...prev,
-      selectedRecruits: prev.selectedRecruits.includes(id)
-        ? prev.selectedRecruits.filter((x) => x !== id)
-        : [...prev.selectedRecruits, id],
+      selectedRecruits: prev.selectedRecruits.includes(rid)
+        ? prev.selectedRecruits.filter((x) => x !== rid)
+        : [...prev.selectedRecruits, rid],
     }));
 
-  // 채용담당자 문의 폼 상태
+  // 채용담당자 문의 폼
   const [inquiryForm, setInquiryForm] = useState({ title: '', content: '', phone: '', email: '' });
   const handleInquiryChange = (e) =>
     setInquiryForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  // id=29이면 수강생 테스트 프로필 (수정 데이터 우선 반영)
+  // ── id=29 이면 수강생 본인 프로필로 override ─────────────────
   const isCurrentUser = numId === CURRENT_USER_ID;
   const rawStudent = STUDENT_DUMMY.find((s) => s.id === numId) || STUDENT_DUMMY[0];
+
   const student = isCurrentUser ? {
     ...rawStudent,
     name:       stProfile.name       || CURRENT_STUDENT.name       || rawStudent.name,
@@ -67,9 +69,9 @@ export default function HrDetailPage() {
     profileImg: stProfile.profileImg || CURRENT_STUDENT.profileImg  || rawStudent.profileImg,
   } : rawStudent;
 
-  // 상세 전용 데이터 (없으면 default) — id=29이면 수정된 프로필 데이터 merge
   const rawDetail = STUDENT_DETAIL[numId] || STUDENT_DETAIL.default;
   const mappedSkills = resumeSkills.map((s) => ({ name: s.name, percentage: s.degree || 0 }));
+
   const detail = isCurrentUser ? {
     ...rawDetail,
     phone:     stProfile.phone     || CURRENT_STUDENT.phone     || rawDetail.phone,
@@ -80,13 +82,8 @@ export default function HrDetailPage() {
     skills:    mappedSkills.length > 0 ? mappedSkills : rawDetail.skills,
   } : rawDetail;
 
-  // 현재 기업의 채용공고만
   const myRecruits = RECRUIT_DUMMY.filter((r) => r.companyId === CURRENT_COMPANY_ID);
-
-  // 직군 목록 (최대 3개)
   const duties = student.duty.split(',').map((d) => d.trim()).filter(Boolean).slice(0, 3);
-
-  // 직군별 관련 인재 (본인 제외, 각 최대 8명)
   const relatedByDuty = duties.map((duty) => ({
     duty,
     safeKey: duty.replace(/[^a-zA-Z0-9가-힣]/g, '-'),
@@ -94,6 +91,8 @@ export default function HrDetailPage() {
       (s) => s.id !== numId && s.duty.includes(duty)
     ).slice(0, 8),
   }));
+
+  const profileImg = student.profileImg || '/img/sub/img-teacher.jpg';
 
   return (
     <Layout containerClass="sub">
@@ -103,12 +102,9 @@ export default function HrDetailPage() {
           <div className="detail_profile">
             <div className="top">
               <div>프로필</div>
-              {/* <a href="#">
-                <img src="/img/common/icon-profile-edit.png" alt="프로필 수정이동" />
-              </a> */}
             </div>
             <div className="photo">
-              <img src={student.profileImg || '/img/sub/img-teacher.jpg'} alt="프로필 사진" />
+              <img src={profileImg} alt="프로필 사진" />
             </div>
             <div className="character">
               <ul className="characters">
@@ -146,7 +142,6 @@ export default function HrDetailPage() {
                   initialOn={isWished(numId)}
                   onToggle={() => toggle(numId)}
                 />
-              
                 {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
               </div>
             </div>
@@ -175,11 +170,14 @@ export default function HrDetailPage() {
                 <ul className="gap-3">
                   {isCurrentUser ? (
                     myPortfolios.length > 0 ? (
-                      myPortfolios.map((pf, i) => (
-                        <li key={pf.id ?? i} onClick={() => setViewPf(pf)} style={{ cursor: 'pointer' }}>
-                          <img src={(pf.thumbData && pf.thumbData[0]) || '/img/sub/img-thum-portfolio.png'} alt={pf.title} />
-                        </li>
-                      ))
+                      myPortfolios.map((pf, i) => {
+                        const thumb = (pf.thumbData && pf.thumbData[0]) || '/img/sub/img-thum-portfolio.png';
+                        return (
+                          <li key={pf.id || i} onClick={() => setViewPf(pf)} style={{ cursor: 'pointer' }}>
+                            <img src={thumb} alt={pf.title} />
+                          </li>
+                        );
+                      })
                     ) : (
                       <li style={{ listStyle: 'none', color: '#aaa', fontSize: 14, padding: '12px 0' }}>
                         등록된 포트폴리오가 없습니다.
@@ -231,7 +229,7 @@ export default function HrDetailPage() {
                     <SwiperSlide key={s.id} className="con">
                       <Link to={`/hr/${s.id}`}>
                         <div className="student_img_box">
-                          <img src="/img/interview/img-profile.jpg" alt="" />
+                          <img src={s.profileImg || '/img/interview/img-profile.jpg'} alt="" />
                         </div>
                         <div className="student_info_box">
                           <p className="student_info">
@@ -255,6 +253,7 @@ export default function HrDetailPage() {
         </div>
       </section>
 
+      {/* ── 이력서보기 팝업 ─────────────────────────────────── */}
       {showResumeModal && (
         <>
           <article className="popup pop_recruiter pop_recruiter_resume w640" style={{ display: 'block' }} id="popResume">
@@ -265,7 +264,7 @@ export default function HrDetailPage() {
               </button>
             </div>
             <div className="profile type02">
-              <div className="photo"><img src={student.profileImg || '/img/sub/img-teacher.jpg'} alt="프로필 사진" /></div>
+              <div className="photo"><img src={profileImg} alt="프로필 사진" /></div>
               <div>
                 <ul className="characters">
                   <li className="mbti">{student.mbti}</li>
@@ -281,7 +280,6 @@ export default function HrDetailPage() {
               </div>
             </div>
             <div className="contents" id="resumeContents" style={{ maxHeight: '55vh', overflowY: 'auto' }}>
-              {/* 스킬 */}
               <div className="skill_info">
                 <ul>
                   {detail.skills.map((sk) => (
@@ -295,8 +293,6 @@ export default function HrDetailPage() {
                   ))}
                 </ul>
               </div>
-
-              {/* 이력서 본문 — 내 프로필(id=29)이고 이력서가 있을 때 */}
               {isCurrentUser && mainResume && (
                 <div style={{ marginTop: 24 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, paddingBottom: 12, borderBottom: '2px solid #4dbbff' }}>
@@ -319,19 +315,17 @@ export default function HrDetailPage() {
                     return (
                       <div key={key} style={{ marginBottom: 18 }}>
                         <h5 style={{ fontSize: 13, fontWeight: 700, color: '#4dbbff', marginBottom: 6 }}>{label}</h5>
-                        <p style={{ fontSize: 13, color: '#444', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>
-                          {val}
-                        </p>
+                        <p style={{ fontSize: 13, color: '#444', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{val}</p>
                       </div>
                     );
                   })}
-                  {(mainResume.formData?.region || mainResume.formData?.salary || mainResume.formData?.availableDate) && (
+                  {(mainResume.formData && (mainResume.formData.region || mainResume.formData.salary || mainResume.formData.availableDate)) && (
                     <div style={{ marginTop: 8, padding: '12px 14px', background: '#f8f9fa', borderRadius: 8 }}>
                       <h5 style={{ fontSize: 13, fontWeight: 700, color: '#4dbbff', marginBottom: 8 }}>희망 조건</h5>
                       <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 13, color: '#444', lineHeight: 2 }}>
-                        {mainResume.formData?.region        && <li><span style={{ color: '#999', width: 80, display: 'inline-block' }}>희망 지역</span>{mainResume.formData.region}</li>}
-                        {mainResume.formData?.salary        && <li><span style={{ color: '#999', width: 80, display: 'inline-block' }}>희망 연봉</span>{Number(mainResume.formData.salary).toLocaleString()}만원</li>}
-                        {mainResume.formData?.availableDate && <li><span style={{ color: '#999', width: 80, display: 'inline-block' }}>입사 가능일</span>{mainResume.formData.availableDate}</li>}
+                        {mainResume.formData.region        && <li><span style={{ color: '#999', width: 80, display: 'inline-block' }}>희망 지역</span>{mainResume.formData.region}</li>}
+                        {mainResume.formData.salary        && <li><span style={{ color: '#999', width: 80, display: 'inline-block' }}>희망 연봉</span>{Number(mainResume.formData.salary).toLocaleString()}만원</li>}
+                        {mainResume.formData.availableDate && <li><span style={{ color: '#999', width: 80, display: 'inline-block' }}>입사 가능일</span>{mainResume.formData.availableDate}</li>}
                       </ul>
                     </div>
                   )}
@@ -343,14 +337,12 @@ export default function HrDetailPage() {
                 </div>
               )}
               {isCurrentUser && !mainResume && (
-                <p style={{ fontSize: 13, color: '#aaa', textAlign: 'center', padding: '24px 0' }}>
-                  등록된 이력서가 없습니다.
-                </p>
+                <p style={{ fontSize: 13, color: '#aaa', textAlign: 'center', padding: '24px 0' }}>등록된 이력서가 없습니다.</p>
               )}
             </div>
             <div className="btn_center">
               <button type="button" className="type02 w195" onClick={() => setShowResumeModal(false)}>
-                포트폴리오 보러가기
+                닫기
               </button>
             </div>
           </article>
@@ -358,6 +350,7 @@ export default function HrDetailPage() {
         </>
       )}
 
+      {/* ── 면접제의 팝업 ─────────────────────────────────── */}
       {showOfferModal && (
         <>
           <article className="popup pop_recruiter pop_recruiter_offer w640" style={{ display: 'block' }}>
@@ -368,7 +361,7 @@ export default function HrDetailPage() {
               </button>
             </div>
             <div className="profile">
-              <div className="photo"><img src={student.profileImg || '/img/sub/img-teacher.jpg'} alt="프로필 사진" /></div>
+              <div className="photo"><img src={profileImg} alt="프로필 사진" /></div>
               <div>
                 <div className="name">{student.name} <span className="age">{student.age}</span></div>
                 <div className="part">{student.duty}</div>
@@ -382,19 +375,14 @@ export default function HrDetailPage() {
               <h3>채용공고 선택</h3>
               <div className="pick_list">
                 {myRecruits.length === 0 ? (
-                  <p style={{ color: '#888', fontSize: '14px', padding: '12px 0' }}>
-                    등록된 채용공고가 없습니다.
-                  </p>
+                  <p style={{ color: '#888', fontSize: '14px', padding: '12px 0' }}>등록된 채용공고가 없습니다.</p>
                 ) : (
                   <ul>
                     {myRecruits.map((r) => (
                       <li key={r.id}>
-                        <input
-                          type="checkbox"
-                          id={`offer_r_${r.id}`}
+                        <input type="checkbox" id={`offer_r_${r.id}`}
                           checked={offerForm.selectedRecruits.includes(r.id)}
-                          onChange={() => toggleOfferRecruit(r.id)}
-                        />
+                          onChange={() => toggleOfferRecruit(r.id)} />
                         <label htmlFor={`offer_r_${r.id}`}>
                           <span style={{ fontWeight: 600 }}>{r.title}</span>
                           <span style={{ color: '#888', fontSize: '12px', marginLeft: '8px' }}>{r.location}</span>
@@ -407,40 +395,26 @@ export default function HrDetailPage() {
               <h3>답변기한</h3>
               <div className="data_area">
                 <div className="date-form w220">
-                  <input
-                    type="date"
-                    aria-label="deadline"
-                    className="form-control start-date"
+                  <input type="date" aria-label="deadline" className="form-control start-date"
                     value={offerForm.deadline}
-                    onChange={(e) => setOfferForm((prev) => ({ ...prev, deadline: e.target.value }))}
-                  />
+                    onChange={(e) => setOfferForm((prev) => ({ ...prev, deadline: e.target.value }))} />
                 </div>
                 <div className="text">지원자가 면접제의에 응답할 수 있는 기간입니다.</div>
               </div>
             </div>
             <div className="btn_center">
-              <button
-                type="button"
-                className="type02 w195"
+              <button type="button" className="type02 w195"
                 onClick={() => {
                   if (!offerForm.selectedRecruits.length) { alert('채용공고를 선택해 주세요.'); return; }
                   if (!offerForm.deadline) { alert('답변기한을 선택해 주세요.'); return; }
                   const selectedTitles = myRecruits
                     .filter((r) => offerForm.selectedRecruits.includes(r.id))
                     .map((r) => r.title);
-                  addOffer({
-                    studentId:    numId,
-                    studentName:  student.name,
-                    studentAge:   student.age,
-                    jobGroup:     student.duty,
-                    recruitTitles: selectedTitles,
-                    deadline:     offerForm.deadline,
-                  });
-                  alert(`${student.name}님께 면접제의를 발송했습니다.`);
+                  addOffer({ studentId: numId, studentName: student.name, studentAge: student.age, jobGroup: student.duty, recruitTitles: selectedTitles, deadline: offerForm.deadline });
+                  alert(student.name + '님께 면접제의를 발송했습니다.');
                   setOfferForm({ selectedRecruits: [], deadline: '' });
                   setShowOfferModal(false);
-                }}
-              >
+                }}>
                 면접제의하기
               </button>
             </div>
@@ -449,6 +423,7 @@ export default function HrDetailPage() {
         </>
       )}
 
+      {/* ── 채용담당자 문의 팝업 ──────────────────────────── */}
       {showInquiryModal && (
         <>
           <article className="popup pop_recruiter pop_recruiter_inquiry w640" style={{ display: 'block' }}>
@@ -459,7 +434,7 @@ export default function HrDetailPage() {
               </button>
             </div>
             <div className="profile">
-              <div className="photo"><img src={student.profileImg || '/img/sub/img-teacher.jpg'} alt="프로필 사진" /></div>
+              <div className="photo"><img src={profileImg} alt="프로필 사진" /></div>
               <div>
                 <div className="name">{student.name} <span className="age">{student.age}</span></div>
                 <div className="part">{student.duty}</div>
@@ -471,45 +446,16 @@ export default function HrDetailPage() {
             </div>
             <div className="contents">
               <h3>제목</h3>
-              <input
-                type="text"
-                className="normal"
-                name="title"
-                placeholder="제목을 입력해 주세요."
-                value={inquiryForm.title}
-                onChange={handleInquiryChange}
-              />
+              <input type="text" className="normal" name="title" placeholder="제목을 입력해 주세요." value={inquiryForm.title} onChange={handleInquiryChange} />
               <h3>내용</h3>
-              <textarea
-                className="normal"
-                name="content"
-                placeholder="내용을 입력해 주세요."
-                value={inquiryForm.content}
-                onChange={handleInquiryChange}
-              />
+              <textarea className="normal" name="content" placeholder="내용을 입력해 주세요." value={inquiryForm.content} onChange={handleInquiryChange} />
               <h3>연락처</h3>
-              <input
-                type="tel"
-                className="normal"
-                name="phone"
-                placeholder='"-"없이 번호만 입력해 주세요.'
-                value={inquiryForm.phone}
-                onChange={handleInquiryChange}
-              />
+              <input type="tel" className="normal" name="phone" placeholder='"-"없이 번호만 입력해 주세요.' value={inquiryForm.phone} onChange={handleInquiryChange} />
               <h3>이메일</h3>
-              <input
-                type="email"
-                className="normal"
-                name="email"
-                placeholder="답변 받으실 이메일을 입력해 주세요.(example@findme.com)"
-                value={inquiryForm.email}
-                onChange={handleInquiryChange}
-              />
+              <input type="email" className="normal" name="email" placeholder="답변 받으실 이메일을 입력해 주세요.(example@findme.com)" value={inquiryForm.email} onChange={handleInquiryChange} />
             </div>
             <div className="btn_center">
-              <button
-                type="button"
-                className="type02 w195"
+              <button type="button" className="type02 w195"
                 onClick={() => {
                   if (!inquiryForm.title.trim()) { alert('제목을 입력해 주세요.'); return; }
                   if (!inquiryForm.content.trim()) { alert('내용을 입력해 주세요.'); return; }
@@ -517,8 +463,7 @@ export default function HrDetailPage() {
                   alert('문의가 접수되었습니다.');
                   setShowInquiryModal(false);
                   setInquiryForm({ title: '', content: '', phone: '', email: '' });
-                }}
-              >
+                }}>
                 문의하기
               </button>
             </div>
@@ -528,7 +473,7 @@ export default function HrDetailPage() {
       )}
       </div>
 
-      {/* 포트폴리오 상세 팝업 */}
+      {/* ── 포트폴리오 상세 팝업 ──────────────────────────── */}
       {viewPf && (
         <>
           <article className="popup popup_portfolio w640" style={{ display: 'block', maxHeight: '85vh', overflowY: 'auto' }}>
@@ -541,7 +486,7 @@ export default function HrDetailPage() {
             {viewPf.description && (
               <p style={{ fontSize: 14, color: '#555', marginBottom: 16, lineHeight: 1.7 }}>{viewPf.description}</p>
             )}
-            {viewPf.thumbData?.length > 0 && (
+            {viewPf.thumbData && viewPf.thumbData.length > 0 && (
               <div className="mb-4">
                 <p style={{ fontSize: 13, fontWeight: 700, color: '#333', marginBottom: 8 }}>섬네일</p>
                 <div className="d-flex flex-wrap gap-2">
@@ -551,7 +496,7 @@ export default function HrDetailPage() {
                 </div>
               </div>
             )}
-            {viewPf.pfData?.length > 0 && (
+            {viewPf.pfData && viewPf.pfData.length > 0 && (
               <div>
                 <p style={{ fontSize: 13, fontWeight: 700, color: '#333', marginBottom: 8 }}>포트폴리오 이미지</p>
                 <div className="d-flex flex-column gap-3">

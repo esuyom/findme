@@ -867,4 +867,10 @@
   .mypage .pw .noti{font-size:12px;}
 
   .mypage table thead tr{border-left:0; border-right:0;}
+
+
+  .pop_recruiter .type02 .photo{width:100px; height:100px;}
+  .pop_recruiter .type02 .name{font-size:18px;}
+  .pop_recruiter .photo{width:90px; height:90px;margin-right: 10px;}
+  .pop_recruiter .profile{padding:15px;}
  }

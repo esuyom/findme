@@ -69,7 +69,7 @@ header .back_btn { display: none; }
 .student_list_box .con{height: 464px;}
 .student_list_box .con a{padding:35px 30px;}
 .student_list_box .student_img_box{width:150px;height:150px;border-radius:50%;overflow:hidden;margin: 0 auto;}
-.student_list_box .student_img_box img{width:100%;}
+.student_list_box .student_img_box img{width:100%; height:100%; object-fit: cover;}
 .student_list_box .student_info_box{margin-top: 25px;}
 .student_list_box .student_info_box .name{font-size:25px;font-weight: 800;}
 .student_list_box .student_info_box .age{font-size:18px;margin-left: 5px;}
@@ -172,7 +172,7 @@ header .back_btn { display: none; }
 .detail_float .txt{color:#666666;font-size:12px;word-break: keep-all;margin-top: 15px;font-weight: 500;}
 .detail_float .detail_profile .photo.mou{ display: flex; justify-content: center; align-items: center; border: 1px solid #ddd;}
 .detail_float .detail_profile .photo.mou img{ width: 70%;}
-.detail_float .detail_profile .photo img{width:100%;}
+.detail_float .detail_profile .photo img{width:100%; height:100%; object-fit: cover;}
 
 /* line_cate_box */
 .line_cate_box{ margin: 50px 0 40px;}
@@ -875,13 +875,15 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .pop-slide .swiper-button-next {width:24px; height:24px; margin-top:5px; background:url('/img/common/icon-btn-slide-02.png') no-repeat center / cover;}
 .pop_recruiter .profile {display:flex; align-items:center; padding:20px; background:#f2f4f7; border-radius:12px;}
 .pop_recruiter .photo {width: 106px; height: 106px; margin-right:20px; border-radius: 100%; overflow: hidden;}
-.pop_recruiter .characters {display: flex; align-items: center; justify-content: center; gap: 4px; margin-top:10px;}
+.pop_recruiter .photo img{width:100%; height:100%; object-fit: cover;}
+.pop_recruiter .characters {display: flex; align-items: center; justify-content: flex-start; gap: 4px; margin-top:10px;}
 .pop_recruiter .characters li {height: 20px; line-height: 20px; padding: 0 5px; font-size: 11px; border-radius: 4px; background: #ddd;}
 .pop_recruiter .characters li.mbti {color: #fff; background: #4dbbff;}
 .pop_recruiter .name {font-size: 18px; font-weight: 800;}
 .pop_recruiter .name .age {margin-left: 4px; font-size: 14px; font-weight: 400;}
 .pop_recruiter .profile.type02 {padding:0; background:#fff; border-radius:0;}
 .pop_recruiter .type02 .photo {width:150px; height:150px; border-radius:4px;}
+.pop_recruiter .type02 .photo img{width:100%; height:100%; object-fit: cover;}
 .pop_recruiter .type02 .characters {margin-top:0; margin-bottom:10px;}
 .pop_recruiter .type02 .contact_info {font-size:14px; font-weight:700;}
 .pop_recruiter .type02 .contact_info span {padding-right:5px; color:rgba(0,0,0,.5);}

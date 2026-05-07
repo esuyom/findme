@@ -11,7 +11,7 @@ const NAV_ITEMS = [
     badge: 'NEW',
     children: [
       { label: '인재리스트', to: '/hr' },
-      { label: '포트폴리오 리스트', to: '#' },
+      // { label: '포트폴리오 리스트', to: '#' },
     ],
   },
   {
