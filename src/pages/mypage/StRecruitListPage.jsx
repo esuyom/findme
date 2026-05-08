@@ -4,7 +4,9 @@ import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/sidebar/StudentSidebar';
 import { useApplicationStore } from '../../hooks/useApplicationStore';
 import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import { useCpOfferStore } from '../../hooks/useCpOfferStore';
 import { RECRUIT_DUMMY } from '../../constants/dummyData';
+import { CURRENT_STUDENT } from '../../constants/currentUser';
 
 export default function StRecruitListPage() {
   const { applications, remove } = useApplicationStore();
@@ -29,7 +31,9 @@ export default function StRecruitListPage() {
     }
     return '진행중';
   };
-  const [interviewOffers] = useState([]);
+  const { offers: allOffers, updateStatus: updateOfferStatus } = useCpOfferStore();
+  // 현재 로그인 수강생(id=29)에게 온 면접제의만 필터
+  const interviewOffers = allOffers.filter((o) => o.studentId === 29);
   const [confirmId, setConfirmId] = useState(null); // 재확인 팝업 대상 id
 
   const handleCancelClick = (id) => setConfirmId(id);
@@ -144,20 +148,22 @@ export default function StRecruitListPage() {
                       <tr key={offer.id}>
                         <td>{offer.date}</td>
                         <td>
-                          <p className="silver">{offer.company}</p>
-                          <p className="title">{offer.title}</p>
-                          <p className="field">지원분야 : {offer.field}</p>
-                          <p className="loca">면접장소 : {offer.location}</p>
+                          <p className="title">{offer.recruitTitles && offer.recruitTitles.join(', ')}</p>
+                          <p className="field">직무 : {offer.jobGroup}</p>
                         </td>
                         <td>{offer.deadline}</td>
                         <td>
-                          {offer.status === 'pending' ? (
+                          {offer.status === '대기중' ? (
                             <>
-                              <button type="button" className="tb sm">수락</button>
-                              <button type="button" className="tb sm ms-1">거절</button>
+                              <button type="button" className="tb sm"
+                                onClick={() => updateOfferStatus(offer.id, '수락')}>수락</button>
+                              <button type="button" className="tb sm ms-1"
+                                onClick={() => updateOfferStatus(offer.id, '거절')}>거절</button>
                             </>
                           ) : (
-                            <button type="button" className="tb sm" onClick={() => handleCancelClick(offer.id)}>취소</button>
+                            <span style={{ fontSize: 12, color: offer.status === '수락' ? '#4dbbff' : '#999', fontWeight: 600 }}>
+                              {offer.status}
+                            </span>
                           )}
                         </td>
                       </tr>

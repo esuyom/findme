@@ -221,11 +221,9 @@ header.gnb_member a + a::before{content:"";width:1px;height: 9px;background:#999
 
 /* mypage - sidebar */
 .sidebar{width:250px; padding:50px 10px; border-right:1px solid #eaeaea; }
-.sidebar ul{}
-.sidebar ul li{color:rgb(51 51 51 / 40%);margin-bottom: 30px;font-weight: 600;position:relative;}
-.sidebar ul li a{padding:10px;position: relative;}
+.sidebar ul li a{display:block; width: fit-content; padding:10px;position: relative;color:rgb(51 51 51 / 40%);margin-bottom: 10px;font-weight: 600;position:relative;}
 .sidebar ul li .bubble{width:107px;font-size: 10px;font-weight: 500;right: 89px;top: -17px;height: 17px;line-height: 17px;}
-.sidebar ul li.active{color:#333333;font-weight: 700;}
+.sidebar ul li.active a{color:#333333;font-weight: 700;}
 .sidebar ul li.on a::after{content:"";width: 7px;height: 7px;border-radius:50%;background:#4dbbff;position:absolute;display:block;right: -2px;top: 12px;}
 .sidebar ul li .logout{
     background: none;
@@ -954,7 +952,7 @@ input[type='text'].normal.type02 {height:59px; line-height:48px; padding:0 28px;
 .select-box .selected {display: block; width:100%; height:100%;}
 .options-container {display: none; position: absolute; top: 110%; left: 0; width:max-content; max-width:450px; padding:30px; background: #fff; border: 1px solid #ccc; border-radius:20px; z-index: 5; box-shadow: 3.214px 3.83px 10px 0px rgba(40, 40, 40, 0.3);}
 .options-container.active {display:block;}
-.cu-option {display:inline-block; padding:0 16px; cursor: pointer; border-radius:13px; background:#eaeaea; font-size:13px; color:#231f20;}
+.cu-option {display:inline-block; line-height:1; padding:15px 16px; cursor: pointer; border-radius:13px; background:#eaeaea; font-size:13px; color:#231f20;}
 .cu-option.active {color:#fff; background:#4dbbff;}
 .recruit_detail_txt h4 {font-size:21px; font-weight:800; color:#333;}
 .float_detail_txt b {color:#4dbbff;}
@@ -1028,6 +1026,7 @@ header.gnb_mypage .wrap {max-width:100%; width:100%; margin:0 40px;}
 .recruit_notice .list .applicant_info .profile {width:76px; height:76px; border:0; box-shadow:none;}
 .applicant_info {display:flex; align-items:center; font-size:12px;}
 .applicant_info .profile {flex:none; width:76px; height:76px; border-radius: 50%; overflow: hidden;}
+.applicant_info .profile img {width:100%; height:100%; object-fit:cover;}
 .applicant_info .name {font-size:15px; font-weight:800; white-space:nowrap;}
 .applicant_info .age {margin:0 9px 0 4px; font-size:11px; white-space:nowrap;}
 .applicant_info .mbti {height:18px; line-height:18px; padding:0 5px; font-size:10px; font-weight:800; color:#fff; background:#4dbbff; border-radius:4px;}

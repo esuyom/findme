@@ -4,7 +4,7 @@ import Layout from '../../components/layout/Layout';
 import CompanySidebar from '../../components/sidebar/CompanySidebar';
 import { STUDENT_DUMMY } from '../../constants/dummyData';
 import { STUDENT_DETAIL } from '../../constants/detailData';
-import { JOB_CATEGORIES } from '../../constants/jobData';
+import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
 import { useWishList } from '../../hooks/useWishList';
 import LottieButton from '../../components/common/LottieButton';
 import { useCpOfferStore } from '../../hooks/useCpOfferStore';
@@ -30,6 +30,18 @@ function parseCareer(career) {
   if (!career || career === '신입') return 0;
   const m = career.match(/\d+/);
   return m ? Number(m[0]) : 0;
+}
+
+// duty 문자열 → 직군 역매핑
+function inferJobGroup(dutyStr) {
+  if (!dutyStr) return '';
+  const duties = dutyStr.split(',').map((d) => d.trim());
+  for (const [group, groupDuties] of Object.entries(DUTIES_BY_CATEGORY)) {
+    if (duties.some((d) => groupDuties.some((gd) => d.includes(gd) || gd.includes(d)))) {
+      return group;
+    }
+  }
+  return dutyStr.split(',')[0].trim();
 }
 
 export default function CpHrSearchPage() {
@@ -65,7 +77,7 @@ export default function CpHrSearchPage() {
     if (!offerDeadline)                { alert('답변 기한을 설정해주세요.'); return; }
     if (selectedRecruits.length === 0) { alert('채용공고를 선택해주세요.'); return; }
     const titles = selectedRecruits.map((id) => recruits.find((r) => r.id === id)?.title || '').filter(Boolean);
-    addOffer({ studentId: offerModal.id, studentName: offerModal.name, studentAge: offerModal.age, jobGroup: offerModal.duty.split(',')[0].trim(), recruitTitles: titles, deadline: offerDeadline });
+    addOffer({ studentId: offerModal.id, studentName: offerModal.name, studentAge: offerModal.age, jobGroup: inferJobGroup(offerModal.duty), duty: offerModal.duty, recruitTitles: titles, deadline: offerDeadline, profileImg: offerModal.profileImg || '' });
     setOfferDone(true);
     setTimeout(() => { setOfferModal(null); setOfferDone(false); setOfferDeadline(''); setSelectedRecruits([]); }, 1500);
   };
@@ -81,7 +93,13 @@ export default function CpHrSearchPage() {
       const studentStatus = detail.jobStatus || '구직중';
 
       const mQuery  = !q || s.name.includes(q) || s.duty.toLowerCase().includes(q) || s.mention.toLowerCase().includes(q);
-      const mGroup  = !jobGroup || s.duty.includes(jobGroup);
+      // 직군 → 해당 직군의 직무 목록과 수강생 duty 비교
+      const mGroup = !jobGroup || (() => {
+        const groupDuties = DUTIES_BY_CATEGORY[jobGroup] || [];
+        return s.duty.split(',').some((d) =>
+          groupDuties.some((gd) => d.trim().includes(gd) || gd.includes(d.trim()))
+        );
+      })();
       const mRegion = region === '전체' || s.region === region;
       const mMbti   = !mbti || s.mbti === mbti;
       const mGender = gender === '전체' || studentGender === gender;
@@ -134,7 +152,7 @@ export default function CpHrSearchPage() {
         <CompanySidebar />
         <section className="width100">
           <section className="top_contents">
-            <h4 className="big_title">인재 검색</h4>
+            <h4 className="big_title">우리 회사에 딱! 맞는 인재 검색하기</h4>
 
             {/* 검색 입력 */}
             <div className="d-flex gap-2 mb-3">
@@ -147,13 +165,13 @@ export default function CpHrSearchPage() {
             </div>
 
             {/* 1행 필터 */}
-            <div className="d-flex gap-2 mb-2">
+            <div className="d-flex gap-2 mb-2 cp_hr_filter_row1">
               <div className="col custom-select" style={{ position: 'relative' }}>
                 <div className={`select-box type2${openSel === 'job' ? ' active' : ''}`} onClick={() => toggleSel('job')} style={{ cursor: 'pointer' }}>
                   <span className="selected">{jobGroup || '직군 선택'}</span>
                 </div>
                 {openSel === 'job' && (
-                  <div className="options-container active" style={{ position: 'absolute', zIndex: 100, top: '110%', left: 0 }}>
+                  <div className="options-container active">
                     <div className="gray">직군을 선택해주세요.</div>
                     <div className="d-flex flex-wrap gap-2 mt-3">
                       <div className={`cu-option${!jobGroup ? ' active' : ''}`} onClick={() => { setJobGroup(''); setOpenSel(''); }}>전체</div>
@@ -170,7 +188,7 @@ export default function CpHrSearchPage() {
             </div>
 
             {/* 2행 필터 */}
-            <div className="d-flex gap-2 mb-4">
+            <div className="d-flex gap-2 mb-4 cp_hr_filter_row2">
               <CuSelect id="mbti"   label="MBTI 선택" value={mbti}   options={['전체', ...MBTI_LIST]} onChange={(v) => setMbti(v === '전체' ? '' : v)} />
               <CuSelect id="career" label="경력 선택" value={career} options={CAREER_OPT}             onChange={setCareer} />
               <div className="col" />
@@ -200,7 +218,7 @@ export default function CpHrSearchPage() {
                       <div className="hr_info slash d-flex align-items-center mb-4">
                         <span className="profile"><img src="/img/common/img-profile-default2.png" alt="profile" /></span>
                         <div><Link to={`/hr/${student.id}`} style={{ fontWeight: 700 }}>{student.name}</Link>{' '}<span className="age">{student.age}</span></div>
-                        <div>{student.duty.split(',')[0].trim()} 직군</div>
+                        <div>{inferJobGroup(student.duty)} 직군</div>
                         <div>{student.mbti}</div>
                         <div style={{ color: '#4dbbff', fontSize: 12 }}>{detail.jobStatus}</div>
                       </div>
@@ -244,7 +262,7 @@ export default function CpHrSearchPage() {
               </div>
               <div>
                 <div style={{ fontSize: 17, fontWeight: 800 }}>{offerModal.name} <span style={{ fontSize: 13, fontWeight: 400 }}>{offerModal.age}</span></div>
-                <div style={{ fontSize: 12, color: '#4dbbff', fontWeight: 600 }}>{offerModal.duty.split(',')[0].trim()}</div>
+                <div style={{ fontSize: 12, color: '#4dbbff', fontWeight: 600 }}>{inferJobGroup(offerModal.duty)}</div>
               </div>
             </div>
             <div className="contents no_scroll" style={{ marginTop: 16 }}>
@@ -278,7 +296,7 @@ export default function CpHrSearchPage() {
             </div>
           </article>
           <div className="popup-dim" style={{ display: 'block' }} onClick={() => { setOfferModal(null); setSelectedRecruits([]); setOfferDeadline(''); }} />
-        </>
+               </>
       )}
     </Layout>
   );

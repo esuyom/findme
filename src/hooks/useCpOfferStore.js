@@ -23,16 +23,18 @@ export function useCpOfferStore() {
   };
 
   /** HrDetailPage 면접제의 시 저장 */
-  const add = ({ studentId, studentName, studentAge, jobGroup, recruitTitles, deadline }) => {
+  const add = ({ studentId, studentName, studentAge, jobGroup, duty, recruitTitles, deadline, profileImg }) => {
     const item = {
       id: Date.now(),
       date: todayStr(),
       studentId,
       studentName,
       studentAge,
-      jobGroup,
+      jobGroup: jobGroup || '',
+      duty: duty || '',
       recruitTitles,
       deadline,
+      profileImg: profileImg || '',
       status: '대기중',
     };
     _commit([item, ...ref.current]);
@@ -41,5 +43,8 @@ export function useCpOfferStore() {
 
   const remove = (id) => _commit(ref.current.filter((o) => o.id !== id));
 
-  return { offers, add, remove };
+  const updateStatus = (id, status) =>
+    _commit(ref.current.map((o) => (o.id === id ? { ...o, status } : o)));
+
+  return { offers, add, remove, updateStatus };
 }

@@ -416,6 +416,19 @@
   .hr_filter_row2 > .col { flex: 0 0 calc(50% - 4px) !important; min-width: 0; }
 
   /* ────────────────────────────────────────────────────
+     인재검색 필터 (CpHrSearchPage) — 모바일 2열
+  ──────────────────────────────────────────────────── */
+  .cp_hr_filter_row1 { flex-wrap: wrap; gap: 8px !important; }
+  .cp_hr_filter_row1 > .col,
+  .cp_hr_filter_row1 > .custom-select { flex: 0 0 calc(50% - 4px) !important; min-width: 0; }
+
+  .cp_hr_filter_row2 { flex-wrap: wrap; gap: 8px !important; }
+  .cp_hr_filter_row2 > .col,
+  .cp_hr_filter_row2 > .custom-select { flex: 0 0 calc(50% - 4px) !important; min-width: 0; }
+  /* 빈 col 2개는 모바일에서 숨김 */
+  .cp_hr_filter_row2 > .col:empty { display: none; }
+
+  /* ────────────────────────────────────────────────────
      인풋 / 셀렉트 — 40px 높이 통일
   ──────────────────────────────────────────────────── */
   select,
@@ -454,7 +467,8 @@
   /* 채용 셀렉트 폰트 재조정 */
   .recruit .recruit_select_box select { font-size: 16px !important; }
 
-
+  .tb_list_container{margin-top:15px;}
+  .recruit_notice .list .applicant_info .profile{width:60px; height:60px;}
 
   /* ── 채용 셀렉트 — 세로 스택 ── */
   .recruit .recruit_select_box {margin-bottom:15px !important; }
@@ -639,6 +653,7 @@
     font-size: 13px;
     font-weight: 600;
     color: #33333366;
+    margin-bottom:0;
   }
   .mypage .sidebar ul li.active,
   .mypage .cp.sidebar ul li.active {
@@ -748,7 +763,7 @@
   .tb_list_container .list_wrap .list.row > div.col-4{font-size:15px; font-weight:600;}
   .px-4{padding:0 !important;}
   .recruit_notice.second .guide{font-size:12px;padding:10px;}
-  .mypage.cp .top_contents{padding:20px 0;}
+  .mypage.cp .top_contents{padding:30px 0 0 0;}
 
   /* ── 지원자 탭 ── */
   .recruit_notice .notice_cate ul {

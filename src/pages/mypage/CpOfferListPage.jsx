@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import CompanySidebar from '../../components/sidebar/CompanySidebar';
 import { useCpOfferStore } from '../../hooks/useCpOfferStore';
 
 export default function CpOfferListPage() {
   const { offers, remove } = useCpOfferStore();
+  const navigate = useNavigate();
   const [showSMSModal, setShowSMSModal] = useState(false);
   const [smsTarget,    setSmsTarget]    = useState(null);
   const [smsContent,   setSmsContent]   = useState('');
@@ -41,11 +43,17 @@ export default function CpOfferListPage() {
                     <div className="list_wrap">
                       {offers.map((offer) => (
                         <div key={offer.id} className="list fb-15 row g-0 align-items-start">
-                          <div className="col">{offer.jobGroup}</div>
+                          <div className="col">
+                            {offer.jobGroup
+                              ? <>{offer.jobGroup}{offer.duty && <span style={{ color: '#999', fontSize: 11 }}> ({offer.duty})</span>}</>
+                              : offer.duty}
+                          </div>
                           <div className="col-2">
-                            <div className="applicant_info resume cursor_pointer">
+                            <div className="applicant_info resume cursor_pointer"
+                               onClick={() => navigate(`/hr/${offer.studentId}`)}
+                               style={{ cursor: 'pointer' }}>
                               <div className="profile">
-                                <img src="/img/common/img-profile-default2.png" alt="profile" />
+                                <img src={offer.profileImg || '/img/common/img-profile-default2.png'} alt="profile" />
                               </div>
                               <div className="info">
                                 <div className="d-flex align-items-center">
@@ -63,8 +71,8 @@ export default function CpOfferListPage() {
                           <div className="col">{offer.deadline}</div>
                           <div className="col">{offer.status}</div>
                           <div className="col">
-                            <button type="button" className="sm tb me-1" onClick={() => openSms(offer)}>일정조율</button>
-                            <button type="button" className="sm tb" onClick={() => remove(offer.id)}>삭제</button>
+                            <button type="button" className="sm tb me-1" onClick={() => openSms(offer)}>메시지 발송</button>
+                            <button type="button" className="sm tb" onClick={() => remove(offer.id)}>요청취소</button>
                           </div>
                         </div>
                       ))}
@@ -88,7 +96,7 @@ export default function CpOfferListPage() {
             </div>
             {smsTarget && (
               <div className="profile">
-                <div className="photo"><img src="/img/sub/img-teacher.jpg" alt="프로필" /></div>
+                <div className="photo"><img src={smsTarget.profileImg || '/img/common/img-profile-default2.png'} alt="프로필" /></div>
                 <div>
                   <div className="name">{smsTarget.studentName} <span className="age">{smsTarget.studentAge}</span></div>
                   <div className="part">{smsTarget.jobGroup}</div>

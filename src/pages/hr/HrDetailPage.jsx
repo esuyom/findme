@@ -7,10 +7,12 @@ import 'swiper/css/navigation';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
 import { STUDENT_DUMMY, RECRUIT_DUMMY } from '../../constants/dummyData';
+import { DUTIES_BY_CATEGORY } from '../../constants/jobData';
 import { STUDENT_DETAIL } from '../../constants/detailData';
 import { CURRENT_COMPANY_ID, CURRENT_STUDENT } from '../../constants/currentUser';
 import { useWishList } from '../../hooks/useWishList';
 import { useCpOfferStore } from '../../hooks/useCpOfferStore';
+import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
 import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
 import { useSkillStore } from '../../hooks/useSkillStore';
 import { usePortfolioStore } from '../../hooks/usePortfolioStore';
@@ -20,12 +22,25 @@ import { useAuth } from '../../context/AuthContext';
 
 const CURRENT_USER_ID = 29;
 
+// duty 문자열로 직군 역매핑
+function inferJobGroup(dutyStr) {
+  if (!dutyStr) return '';
+  const duties = dutyStr.split(',').map((d) => d.trim());
+  for (const [group, groupDuties] of Object.entries(DUTIES_BY_CATEGORY)) {
+    if (duties.some((d) => groupDuties.some((gd) => d.includes(gd) || gd.includes(d)))) {
+      return group;
+    }
+  }
+  return '';
+}
+
 export default function HrDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
   const { toggle, isWished } = useWishList();
   const { userType } = useAuth();
   const { add: addOffer } = useCpOfferStore();
+  const { recruits: storeRecruits } = useCpRecruitStore();
   const { profile: stProfile } = useStudentProfileStore();
   const { skills: resumeSkills } = useSkillStore();
   const { portfolios: myPortfolios } = usePortfolioStore();
@@ -82,7 +97,10 @@ export default function HrDetailPage() {
     skills:    mappedSkills.length > 0 ? mappedSkills : rawDetail.skills,
   } : rawDetail;
 
-  const myRecruits = RECRUIT_DUMMY.filter((r) => r.companyId === CURRENT_COMPANY_ID);
+  // 기업이 직접 등록한 활성 공고만 표시 (더미 데이터 제외)
+  const myRecruits = storeRecruits
+    .filter((r) => r.status === 'active')
+    .map((r) => ({ id: r.id, title: r.title || '(제목 없음)', location: r.region1 || '서울', companyId: CURRENT_COMPANY_ID }));
   const duties = student.duty.split(',').map((d) => d.trim()).filter(Boolean).slice(0, 3);
   const relatedByDuty = duties.map((duty) => ({
     duty,
@@ -126,9 +144,23 @@ export default function HrDetailPage() {
                 <a href="#"><img src="/img/common/icon-profile-link.png" alt="공유하기" /></a>
               </div>
               <div className="btn_list">
-                <button type="button" className="resume" onClick={() => setShowResumeModal(true)}>이력서보기</button>
-                <button type="button" className="recruiter_offer" onClick={() => setShowOfferModal(true)}>면접제의하기</button>
-                <button type="button" className="recruiter" onClick={() => setShowInquiryModal(true)}>채용담당자 문의하기</button>
+                {/* 게스트: 로그인 유도 / 수강생: 버튼 숨김 / 기업: 정상 동작 */}
+                {userType !== 'student' && (
+                  <>
+                    <button
+                      type="button" className="resume"
+                      onClick={() => userType === 'company' ? setShowResumeModal(true) : setShowLoginModal(true)}
+                    >이력서보기</button>
+                    <button
+                      type="button" className="recruiter_offer"
+                      onClick={() => userType === 'company' ? setShowOfferModal(true) : setShowLoginModal(true)}
+                    >면접제의하기</button>
+                    <button
+                      type="button" className="recruiter"
+                      onClick={() => userType === 'company' ? setShowInquiryModal(true) : setShowLoginModal(true)}
+                    >채용담당자 문의하기</button>
+                  </>
+                )}
               </div>
             </div>
             <div className="quik_area">
@@ -410,7 +442,7 @@ export default function HrDetailPage() {
                   const selectedTitles = myRecruits
                     .filter((r) => offerForm.selectedRecruits.includes(r.id))
                     .map((r) => r.title);
-                  addOffer({ studentId: numId, studentName: student.name, studentAge: student.age, jobGroup: student.duty, recruitTitles: selectedTitles, deadline: offerForm.deadline });
+                  addOffer({ studentId: numId, studentName: student.name, studentAge: student.age, jobGroup: isCurrentUser ? (stProfile.jobGroup || '') : inferJobGroup(student.duty), duty: student.duty, recruitTitles: selectedTitles, deadline: offerForm.deadline, profileImg: profileImg });
                   alert(student.name + '님께 면접제의를 발송했습니다.');
                   setOfferForm({ selectedRecruits: [], deadline: '' });
                   setShowOfferModal(false);
