@@ -129,7 +129,7 @@ header .back_btn { display: none; }
 .sub_select_box{display: flex;}
 .sub_select_box label{margin-right:8px;}
 .sub_select_box label input{display:none;}
-.sub_select_box label input + span{padding: 9px 15px;border-radius:16px;background:#f2f8fb;color:#666666;font-size: 12px;font-weight: 500;}
+.sub_select_box label input + span{display:block;padding: 9px 15px;border-radius:16px;background:#f2f8fb;color:#666666;font-size: 12px;font-weight: 500;}
 .sub_select_box label input:checked + span{background:#4dbbff; color:#fff;}
 
 /* quik_area */

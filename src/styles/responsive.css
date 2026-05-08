@@ -90,8 +90,9 @@
   .sidebar ul li .bubble{display:none;}
 
     /* ── 필터 셀렉트 박스 ── */
-    .sub_select_box { flex-wrap: wrap; gap: 8px; }
-    .sub_select_box label { margin-right: 0; margin-bottom:10px;}
+    .sub_select_box { flex-wrap: nowrap; overflow-x: auto; gap: 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .sub_select_box::-webkit-scrollbar { display: none; }
+    .sub_select_box label { margin-right: 0; margin-bottom: 0; flex-shrink: 0; }
 
     
   .recruit_company_img .swiper-slide img{width:100%;}
@@ -112,6 +113,9 @@
   }
   .section + .section { margin-top: 30px; }
   body{font-size:13px;}
+
+  .swiper-container{padding-top:15px;}
+  .job_interview_box .swiper-wrapper{padding-top:10px;}
   /* ────────────────────────────────────────────────────
      GNB — 햄버거 메뉴
   ──────────────────────────────────────────────────── */
@@ -453,9 +457,10 @@
 
 
   /* ── 채용 셀렉트 — 세로 스택 ── */
-  .recruit .recruit_select_box { }
+  .recruit .recruit_select_box {margin-bottom:15px !important; }
   .recruit .job_select { margin-left: 0; }
-
+  .sub_select_box label input + span{padding:3px 10px;}
+  .mypage .keywords label:nth-child(even) span{margin-left:0;}
   
   .w400{width:100%;}
   .multi_input label span{
