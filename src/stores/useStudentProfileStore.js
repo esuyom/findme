@@ -63,7 +63,9 @@ export function useStudentProfileStore() {
     _profile = { ..._profile, ...fields };
     saveMeta(_profile);
     if ('profileImg' in fields) {
-      saveImage(IMG_KEY, fields.profileImg).catch(() => {});
+      saveImage(IMG_KEY, fields.profileImg).catch((err) => {
+        console.warn('[useStudentProfileStore] 이미지 저장 실패:', err);
+      });
     }
     _notify();
   };

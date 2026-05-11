@@ -85,7 +85,9 @@ export function useCompanyProfileStore() {
     _profile = { ..._profile, ...fields };
     saveMeta(_profile);
     if ('logoPreview' in fields) {
-      saveImage(LOGO_KEY, fields.logoPreview).catch(() => {});
+      saveImage(LOGO_KEY, fields.logoPreview).catch((err) => {
+        console.warn('[useCompanyProfileStore] 이미지 저장 실패:', err);
+      });
     }
     _notify();
   };
