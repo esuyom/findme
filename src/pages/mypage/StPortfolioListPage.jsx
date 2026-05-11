@@ -4,6 +4,7 @@ import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
 import { usePortfolioStore } from '../../stores/usePortfolioStore';
 import { compressImage } from '../../utils/compressImage';
 import Toast from '../../components/common/Toast';
+import EmptyState from '../../components/common/EmptyState';
 
 const EMPTY_FORM = { title: '', description: '', thumbData: [], pfData: [] };
 
@@ -132,7 +133,12 @@ export default function StPortfolioListPage() {
             </button>
 
             {portfolios.length === 0 ? (
-              <p style={{ color: '#aaa', fontSize: '14px', padding: '16px 0' }}>등록된 포트폴리오가 없습니다.</p>
+              <EmptyState
+                message="등록된 포트폴리오가 없습니다."
+                subMessage="포트폴리오를 등록해 취업 경쟁력을 높여보세요."
+                actionLabel="포트폴리오 등록하기"
+                onAction={openAdd}
+              />
             ) : (
               <div className="pf_add_box">
                 <ul>

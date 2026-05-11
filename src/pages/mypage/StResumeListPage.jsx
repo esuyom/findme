@@ -1,10 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
 import { JOB_CATEGORIES } from '../../mocks/jobData';
 import { useResumeStore } from '../../stores/useResumeStore';
 import { useSkillStore } from '../../stores/useSkillStore';
+import EmptyState from '../../components/common/EmptyState';
 
 // 직군별 스킬 더미데이터
 const SKILLS_BY_CATEGORY = {
@@ -20,6 +21,7 @@ const SKILLS_BY_CATEGORY = {
 
 export default function StResumeListPage() {
 
+  const navigate = useNavigate();
   const { resumes, remove, rename, copy, setMain } = useResumeStore();
 
   // 스킬 관리 (localStorage 연동)
@@ -177,6 +179,14 @@ export default function StResumeListPage() {
           <div className="box mt-5">
             <h4>이력서관리</h4>
             <div className="list_box">
+              {resumes.length === 0 ? (
+                <EmptyState
+                  message="등록된 이력서가 없습니다."
+                  subMessage="나를 표현할 이력서를 작성해 보세요."
+                  actionLabel="이력서 작성하기"
+                  onAction={() => navigate('/mypage/resume/write')}
+                />
+              ) : (
               <ul className="d-flex gap-3 flex-wrap" ref={menuRef}>
                 {/* 등록 버튼 */}
                 <li className="add_box">
@@ -239,6 +249,7 @@ export default function StResumeListPage() {
                   </li>
                 ))}
               </ul>
+              )}
             </div>
           </div>
         </section>

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
+import EmptyState from '../../components/common/EmptyState';
 
 const STATUS_LABEL = { active: '채용중', draft: '임시저장', closed: '채용종료' };
 const STATUS_CLASS = { active: 'blue', draft: 'gray', closed: 'gray' };
@@ -62,12 +63,16 @@ export default function CpRecruitListPage() {
               </div>
 
               {filtered.length === 0 ? (
-                <p style={{ padding: '24px 16px', color: '#aaa', fontSize: '14px' }}>
-                  {activeTab === 'active' ? '채용중인 공고가 없습니다.' : activeTab === 'draft' ? '임시저장된 공고가 없습니다.' : '마감된 공고가 없습니다.'}
-                  {activeTab === 'active' && (
-                    <Link to="/mypage/cp/recruit/write" style={{ color: '#4dbbff', marginLeft: '8px' }}>공고 등록하기</Link>
-                  )}
-                </p>
+                <EmptyState
+                  message={
+                    activeTab === 'active' ? '채용중인 공고가 없습니다.' :
+                    activeTab === 'draft'  ? '임시저장된 공고가 없습니다.' :
+                                            '마감된 공고가 없습니다.'
+                  }
+                  subMessage={activeTab === 'active' ? '새 채용공고를 등록하고 인재를 찾아보세요.' : undefined}
+                  actionLabel={activeTab === 'active' ? '채용공고 등록하기' : undefined}
+                  onAction={activeTab === 'active' ? () => navigate('/mypage/cp/recruit/write') : undefined}
+                />
               ) : (
                 <section className="tb_list_container">
                   <div className="title row g-0">
