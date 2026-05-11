@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from 'react';
-import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { useState, useMemo } from 'react';
+import { useNavigate, useSearchParams, Link, Navigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
@@ -41,7 +41,7 @@ const ALL_DATA = {
     name: s.name,
     major: s.major,
     img: s.profileImg,
-    portfolios: s.portfolios.length,
+    portfolios: s.portfolios.length + (s.overCount ?? 0),
     mention: s.mention,
   })),
 };
@@ -84,9 +84,7 @@ export default function SearchResultPage() {
   const [inputValue, setInputValue] = useState(initialQuery);
   const [activeTab, setActiveTab] = useState('all');
 
-  useEffect(() => {
-    if (!initialQuery) navigate('/search', { replace: true });
-  }, [initialQuery, navigate]);
+  if (!initialQuery) return <Navigate to="/search" replace />;
 
   const filtered = useMemo(() => filterByQuery(ALL_DATA, initialQuery), [initialQuery]);
 
