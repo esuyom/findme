@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import StudentSidebar from '../../components/sidebar/StudentSidebar';
-import { useApplicationStore } from '../../hooks/useApplicationStore';
-import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
-import { useCpOfferStore } from '../../hooks/useCpOfferStore';
-import { RECRUIT_DUMMY } from '../../constants/dummyData';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
+import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
+import { useApplicationStore } from '../../stores/useApplicationStore';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
+import { useCpOfferStore } from '../../stores/useCpOfferStore';
+import { RECRUIT_DUMMY } from '../../mocks/dummyData';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
 
 export default function StRecruitListPage() {
   const { applications, remove } = useApplicationStore();

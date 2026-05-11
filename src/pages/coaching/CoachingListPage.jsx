@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
-import { COACHING_ITEMS } from '../../constants/pageData';
+import { COACHING_ITEMS } from '../../mocks/pageData';
 
 const MENU_ITEMS = [
   { label: '전체',     id: 0, category: null },

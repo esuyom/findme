@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import { JOB_INTERVIEW_DUMMY, JOB_INTERVIEW_DETAIL } from '../../constants/detailData';
-import { useContentsStore } from '../../hooks/useContentsStore';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { JOB_INTERVIEW_DUMMY, JOB_INTERVIEW_DETAIL } from '../../mocks/detailData';
+import { useContentsStore } from '../../stores/useContentsStore';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 export default function JobInterviewDetailPage() {
   const { id } = useParams();

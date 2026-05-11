@@ -601,7 +601,7 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .mypage.cp.recruit.write .pay_noti{font-size:14px; color:#999999; font-weight:500; }
 
 .mypage.cp.info .contents{width:846px; }
-.mypage.cp.info .multi_input label span{margin-left:7px;}
+.mypage.cp.info .multi_input label span{margin-left:7px;height: 40px;line-height: 40px;}
 .mypage.cp.info .multi_input label:nth-child(3n+1) span{margin-left:0;}
 .img_wrap .form-input-file-wrap.cp{position: relative;}
 .img_wrap .form-input-file.cp {display:none;}

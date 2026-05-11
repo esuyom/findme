@@ -1,12 +1,12 @@
 import { useState, useMemo } from 'react';
-import Layout from '../components/layout/Layout';
-import RecruitCard from '../components/cards/RecruitCard';
-import Pagination from '../components/common/Pagination';
-import { JOB_CATEGORIES } from '../constants/jobData';
-import { useCompanyProfileStore } from '../hooks/useCompanyProfileStore';
-import { useCpRecruitStore } from '../hooks/useCpRecruitStore';
-import { CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../constants/currentUser';
-import { RECRUIT_DUMMY } from '../constants/dummyData';
+import Layout from '../../components/layout/Layout';
+import RecruitCard from '../../components/cards/RecruitCard';
+import Pagination from '../../components/common/Pagination';
+import { JOB_CATEGORIES } from '../../mocks/jobData';
+import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
+import { CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../mocks/currentUser';
+import { RECRUIT_DUMMY } from '../../mocks/dummyData';
 
 const FILTER_TAGS = [
   '연봉 업계 평균 이상', '일한만큼 받는 보상', '퇴사율 10% 이하',

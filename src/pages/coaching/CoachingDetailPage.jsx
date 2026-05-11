@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
-import { useCoachingScrap } from '../../hooks/useScrapStore';
+import { useCoachingScrap } from '../../stores/useScrapStore';
 import { useAuth } from '../../context/AuthContext';
-import { useJoinStore } from '../../hooks/useJoinStore';
+import { useJoinStore } from '../../stores/useJoinStore';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
 
 const COACHING_DATA = {

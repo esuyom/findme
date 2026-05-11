@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CURRENT_COMPANY } from '../constants/currentUser';
+import { CURRENT_COMPANY } from '../mocks/currentUser';
 
 const STORAGE_KEY = 'findme_company_profile';
 

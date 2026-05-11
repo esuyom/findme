@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import CompanySidebar from '../../components/sidebar/CompanySidebar';
-import { useCompanyInquiryStore } from '../../hooks/useCompanyInquiryStore';
-import { CURRENT_COMPANY_ID } from '../../constants/currentUser';
+import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
+import { useCompanyInquiryStore } from '../../stores/useCompanyInquiryStore';
+import { CURRENT_COMPANY_ID } from '../../mocks/currentUser';
 
 export default function CpInquiryListPage() {
   const { getByCompanyId, remove } = useCompanyInquiryStore();

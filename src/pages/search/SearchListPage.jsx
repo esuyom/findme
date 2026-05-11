@@ -5,7 +5,7 @@ import SwiperSlider from '../../components/common/SwiperSlider';
 import SectionTitle from '../../components/common/SectionTitle';
 import RecruitListCard from '../../components/cards/RecruitListCard';
 import StudentCard from '../../components/cards/StudentCard';
-import { RECRUIT_DUMMY, STUDENT_DUMMY } from '../../constants/dummyData';
+import { RECRUIT_DUMMY, STUDENT_DUMMY } from '../../mocks/dummyData';
 
 const POPULAR_RECRUITS = [...RECRUIT_DUMMY].sort((a, b) => b.views - a.views).slice(0, 8);
 const POPULAR_STUDENTS = [...STUDENT_DUMMY].sort((a, b) => b.views - a.views).slice(0, 8);

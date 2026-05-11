@@ -1,11 +1,11 @@
 import { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
-import { CURRENT_COMPANY } from '../../constants/currentUser';
-import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
+import { CURRENT_COMPANY } from '../../mocks/currentUser';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 import { compressImage } from '../../utils/compressImage';
-import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
+import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
 
 const REGION1 = ['서울', '경기', '인천', '부산', '대구', '광주', '대전', '울산', '세종', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주'];
 const REGION2 = {

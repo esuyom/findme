@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import MemberLayout from '../../components/layout/MemberLayout';
-import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
+import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
 
 export default function JoinProfilePage() {
   const [profileImage, setProfileImage] = useState(null);

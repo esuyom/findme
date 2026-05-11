@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
-import { JOB_CATEGORIES, DUTIES_BY_CATEGORY, ALL_DUTIES } from '../../constants/jobData';
-import { STUDENT_DUMMY } from '../../constants/dummyData';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { JOB_CATEGORIES, DUTIES_BY_CATEGORY, ALL_DUTIES } from '../../mocks/jobData';
+import { STUDENT_DUMMY } from '../../mocks/dummyData';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 const CURRENT_USER_ID = 29;
 

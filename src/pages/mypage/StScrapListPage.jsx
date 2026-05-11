@@ -1,20 +1,20 @@
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import StudentSidebar from '../../components/sidebar/StudentSidebar';
+import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
 import LottieButton from '../../components/common/LottieButton';
 import { useState } from 'react';
-import { RECRUIT_DUMMY } from '../../constants/dummyData';
-import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
-import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
-import { CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../constants/currentUser';
-import { COACHING_ITEMS, TIP_TREND_ITEMS, TIP_CONTEST_ITEMS } from '../../constants/pageData';
+import { RECRUIT_DUMMY } from '../../mocks/dummyData';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
+import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
+import { CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../mocks/currentUser';
+import { COACHING_ITEMS, TIP_TREND_ITEMS, TIP_CONTEST_ITEMS } from '../../mocks/pageData';
 import {
   useRecruitScrap,
   useCompanyScrap,
   useCoachingScrap,
   useTrendScrap,
   useContestScrap,
-} from '../../hooks/useScrapStore';
+} from '../../stores/useScrapStore';
 
 const ICON_SCRAP = '/img/sub/icon-save.json';
 const ICON_WISH  = '/img/sub/icon-wish1.json';

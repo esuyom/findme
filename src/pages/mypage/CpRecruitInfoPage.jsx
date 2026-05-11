@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import CompanySidebar from '../../components/sidebar/CompanySidebar';
-import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
-import { useWishList } from '../../hooks/useWishList';
-import { useCpOfferStore } from '../../hooks/useCpOfferStore';
-import { STUDENT_DUMMY } from '../../constants/dummyData';
+import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
+import { useWishList } from '../../stores/useWishListStore';
+import { useCpOfferStore } from '../../stores/useCpOfferStore';
+import { STUDENT_DUMMY } from '../../mocks/dummyData';
 
 const RECOMMEND_STUDENTS = STUDENT_DUMMY.slice(0, 5);
 

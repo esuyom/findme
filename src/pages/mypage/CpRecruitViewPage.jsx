@@ -5,13 +5,13 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import Layout from '../../components/layout/Layout';
-import CompanySidebar from '../../components/sidebar/CompanySidebar';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
-import { useSkillStore } from '../../hooks/useSkillStore';
-import { STUDENT_DUMMY } from '../../constants/dummyData';
-import { DUTIES_BY_CATEGORY } from '../../constants/jobData';
-import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
+import { useSkillStore } from '../../stores/useSkillStore';
+import { STUDENT_DUMMY } from '../../mocks/dummyData';
+import { DUTIES_BY_CATEGORY } from '../../mocks/jobData';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 
 function getMatchingStudents(jobGroup, duties) {
   const jobDuties = DUTIES_BY_CATEGORY[jobGroup] || [];

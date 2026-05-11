@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
-import { TIP_CONTEST_ITEMS } from '../../constants/pageData';
+import { TIP_CONTEST_ITEMS } from '../../mocks/pageData';
 
 export default function TipContestListPage() {
   const contestItems = TIP_CONTEST_ITEMS.map((item) => ({ ...item, dateRange: item.period }));

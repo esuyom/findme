@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import Layout from '../components/layout/Layout';
-import SwiperSlider from '../components/common/SwiperSlider';
-import SectionTitle from '../components/common/SectionTitle';
-import StudentCard from '../components/cards/StudentCard';
-import { STUDENT_DUMMY } from '../constants/dummyData';
-import { CURRENT_STUDENT } from '../constants/currentUser';
-import { useStudentProfileStore } from '../hooks/useStudentProfileStore';
+import Layout from '../../components/layout/Layout';
+import SwiperSlider from '../../components/common/SwiperSlider';
+import SectionTitle from '../../components/common/SectionTitle';
+import StudentCard from '../../components/cards/StudentCard';
+import { STUDENT_DUMMY } from '../../mocks/dummyData';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 const CURRENT_USER_ID = 29;
 

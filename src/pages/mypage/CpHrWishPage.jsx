@@ -1,13 +1,13 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import CompanySidebar from '../../components/sidebar/CompanySidebar';
-import { STUDENT_DUMMY } from '../../constants/dummyData';
-import { STUDENT_DETAIL } from '../../constants/detailData';
-import { useWishList } from '../../hooks/useWishList';
+import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
+import { STUDENT_DUMMY } from '../../mocks/dummyData';
+import { STUDENT_DETAIL } from '../../mocks/detailData';
+import { useWishList } from '../../stores/useWishListStore';
 import LottieButton from '../../components/common/LottieButton';
-import { useCpOfferStore } from '../../hooks/useCpOfferStore';
-import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import { useCpOfferStore } from '../../stores/useCpOfferStore';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 
 export default function CpHrWishPage() {
   const { wishList, remove, toggle, isWished } = useWishList();

@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
-import { useContestScrap } from '../../hooks/useScrapStore';
+import { useContestScrap } from '../../stores/useScrapStore';
 import { useAuth } from '../../context/AuthContext';
-import { useContestInquiryStore } from '../../hooks/useContestInquiryStore';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { useContestInquiryStore } from '../../stores/useContestInquiryStore';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
 
 export default function TipContestDetailPage() {

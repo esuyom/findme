@@ -6,12 +6,12 @@ import { AuthProvider } from './context/AuthContext';
 import HomePage from './pages/HomePage';
 
 // 인재리스트
-import HrListPage from './pages/HrListPage';
+import HrListPage from './pages/hr/HrListPage';
 import HrDetailPage from './pages/hr/HrDetailPage';
 import HrCategoryListPage from './pages/hr/HrCategoryListPage';
 
 // 채용정보
-import RecruitListPage from './pages/RecruitListPage';
+import RecruitListPage from './pages/recruit/RecruitListPage';
 import RecruitDetailPage from './pages/recruit/RecruitDetailPage';
 import CompanyDetailPage from './pages/recruit/CompanyDetailPage';
 

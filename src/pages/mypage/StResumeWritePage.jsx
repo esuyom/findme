@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
-import { useResumeStore } from '../../hooks/useResumeStore';
-import { useSkillStore } from '../../hooks/useSkillStore';
+import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
+import { useResumeStore } from '../../stores/useResumeStore';
+import { useSkillStore } from '../../stores/useSkillStore';
 
 const REGION_LIST = ['서울','경기','인천','부산','대구','광주','대전','울산','세종','강원','충북','충남','전북','전남','경북','경남','제주'];
 

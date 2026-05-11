@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import MemberLayout from '../../components/layout/MemberLayout';
-import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
+import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
 
 const INDUSTRIES = [
   '농림어업', '광업', '제조', '전기/가스', '상수도/환경', '건설', '판매/유통',

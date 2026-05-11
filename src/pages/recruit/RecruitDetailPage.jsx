@@ -8,16 +8,16 @@ import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import { RECRUIT_DUMMY } from '../../constants/dummyData';
-import { RECRUIT_DETAIL } from '../../constants/detailData';
-import { useRecruitScrap } from '../../hooks/useScrapStore';
-import { useResumeStore } from '../../hooks/useResumeStore';
+import { RECRUIT_DUMMY } from '../../mocks/dummyData';
+import { RECRUIT_DETAIL } from '../../mocks/detailData';
+import { useRecruitScrap } from '../../stores/useScrapStore';
+import { useResumeStore } from '../../stores/useResumeStore';
 import { useAuth } from '../../context/AuthContext';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
-import { useApplicationStore } from '../../hooks/useApplicationStore';
-import { CURRENT_STUDENT, CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../constants/currentUser';
-import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
-import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
+import { useApplicationStore } from '../../stores/useApplicationStore';
+import { CURRENT_STUDENT, CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../mocks/currentUser';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
+import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
 
 export default function RecruitDetailPage() {

@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
-import { TIP_DUMMY } from '../../constants/dummyData';
-import { useTrendScrap } from '../../hooks/useScrapStore';
+import { TIP_DUMMY } from '../../mocks/dummyData';
+import { useTrendScrap } from '../../stores/useScrapStore';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
 import { useAuth } from '../../context/AuthContext';
 

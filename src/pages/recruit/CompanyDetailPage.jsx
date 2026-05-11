@@ -2,12 +2,12 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import Layout from '../../components/layout/Layout';
 import LottieButton from '../../components/common/LottieButton';
-import { RECRUIT_DUMMY } from '../../constants/dummyData';
-import { COMPANY_DETAIL } from '../../constants/detailData';
-import { useCompanyScrap } from '../../hooks/useScrapStore';
-import { useCompanyInquiryStore } from '../../hooks/useCompanyInquiryStore';
-import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
-import { CURRENT_COMPANY_ID } from '../../constants/currentUser';
+import { RECRUIT_DUMMY } from '../../mocks/dummyData';
+import { COMPANY_DETAIL } from '../../mocks/detailData';
+import { useCompanyScrap } from '../../stores/useScrapStore';
+import { useCompanyInquiryStore } from '../../stores/useCompanyInquiryStore';
+import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
+import { CURRENT_COMPANY_ID } from '../../mocks/currentUser';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
 import { useAuth } from '../../context/AuthContext';
 

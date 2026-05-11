@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import CompanySidebar from '../../components/sidebar/CompanySidebar';
-import { STUDENT_DUMMY } from '../../constants/dummyData';
-import { STUDENT_DETAIL } from '../../constants/detailData';
-import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
-import { useWishList } from '../../hooks/useWishList';
+import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
+import { STUDENT_DUMMY } from '../../mocks/dummyData';
+import { STUDENT_DETAIL } from '../../mocks/detailData';
+import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
+import { useWishList } from '../../stores/useWishListStore';
 import LottieButton from '../../components/common/LottieButton';
-import { useCpOfferStore } from '../../hooks/useCpOfferStore';
-import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import { useCpOfferStore } from '../../stores/useCpOfferStore';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 
 const MBTI_LIST = ['ISTJ','ISFJ','INFJ','INTJ','ISTP','ISFP','INFP','INTP','ESTP','ESFP','ENFP','ENTP','ESTJ','ESFJ','ENFJ','ENTJ'];
 const REGIONS   = ['전체','서울','경기','인천','부산','대구','광주','대전','울산','강원','세종','충북','충남','전북','전남','경북','경남','제주','전국'];

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import { INTERVIEW_DUMMY } from '../../constants/dummyData';
-import { useContentsStore } from '../../hooks/useContentsStore';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
-import { useSkillStore } from '../../hooks/useSkillStore';
-import { usePortfolioStore } from '../../hooks/usePortfolioStore';
-import { ST_INTERVIEW_DETAIL } from '../../constants/detailData';
+import { INTERVIEW_DUMMY } from '../../mocks/dummyData';
+import { useContentsStore } from '../../stores/useContentsStore';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
+import { useSkillStore } from '../../stores/useSkillStore';
+import { usePortfolioStore } from '../../stores/usePortfolioStore';
+import { ST_INTERVIEW_DETAIL } from '../../mocks/detailData';
 
 export default function StInterviewDetailPage() {
   const { id } = useParams();

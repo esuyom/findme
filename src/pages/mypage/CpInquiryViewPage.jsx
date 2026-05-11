@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import CompanySidebar from '../../components/sidebar/CompanySidebar';
-import { useCompanyInquiryStore } from '../../hooks/useCompanyInquiryStore';
+import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
+import { useCompanyInquiryStore } from '../../stores/useCompanyInquiryStore';
 
 export default function CpInquiryViewPage() {
   const { id } = useParams();

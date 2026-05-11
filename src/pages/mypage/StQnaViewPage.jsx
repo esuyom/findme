@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import StudentSidebar from '../../components/sidebar/StudentSidebar';
-import { useQnaStore } from '../../hooks/useQnaStore';
+import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
+import { useQnaStore } from '../../stores/useQnaStore';
 
 export default function StQnaViewPage() {
   const navigate = useNavigate();

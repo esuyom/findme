@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../constants/jobData';
-import { RECRUIT_DUMMY } from '../../constants/dummyData';
+import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
+import { RECRUIT_DUMMY } from '../../mocks/dummyData';
 
 /* ── 직무별 스킬 데이터 ──────────────────────────────── */
 const SKILL_BY_DUTY = {

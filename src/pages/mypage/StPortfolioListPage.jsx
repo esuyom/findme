@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import Layout from '../../components/layout/Layout';
-import StudentSidebar from '../../components/sidebar/StudentSidebar';
-import { usePortfolioStore } from '../../hooks/usePortfolioStore';
+import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
+import { usePortfolioStore } from '../../stores/usePortfolioStore';
 import { compressImage } from '../../utils/compressImage';
 
 const EMPTY_FORM = { title: '', description: '', thumbData: [], pfData: [] };

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
-import { TIP_DUMMY } from '../../constants/dummyData';
+import { TIP_DUMMY } from '../../mocks/dummyData';
 
 export default function TipListPage() {
   const [selectedTab, setSelectedTab] = useState('trend');

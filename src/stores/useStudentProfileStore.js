@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CURRENT_STUDENT } from '../constants/currentUser';
+import { CURRENT_STUDENT } from '../mocks/currentUser';
 
 const KEY = 'findme_student_profile';
 

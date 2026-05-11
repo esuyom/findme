@@ -1,8 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import StudentSidebar from '../../components/sidebar/StudentSidebar';
-import { useContentsStore } from '../../hooks/useContentsStore';
+import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
+import { useContentsStore } from '../../stores/useContentsStore';
 
 const STATUS_LABEL = { complete: '작성완료', draft: '작성중', request: '인터뷰요청' };
 

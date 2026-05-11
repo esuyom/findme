@@ -4,9 +4,9 @@ import SectionTitle from '../components/common/SectionTitle';
 import RecruitCard from '../components/cards/RecruitCard';
 import RecruitListCard from '../components/cards/RecruitListCard';
 import InterviewCard from '../components/cards/InterviewCard';
-import { useCompanyProfileStore } from '../hooks/useCompanyProfileStore';
-import { CURRENT_COMPANY_ID } from '../constants/currentUser';
-import { RECRUIT_DUMMY, INTERVIEW_DUMMY } from '../constants/dummyData';
+import { useCompanyProfileStore } from '../stores/useCompanyProfileStore';
+import { CURRENT_COMPANY_ID } from '../mocks/currentUser';
+import { RECRUIT_DUMMY, INTERVIEW_DUMMY } from '../mocks/dummyData';
 
 // 최신순 상위 8개
 const LATEST_RECRUITS = [...RECRUIT_DUMMY]

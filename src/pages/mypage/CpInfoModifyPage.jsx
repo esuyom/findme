@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react';
 import Layout from '../../components/layout/Layout';
-import CompanySidebar from '../../components/sidebar/CompanySidebar';
+import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
 import { compressImage } from '../../utils/compressImage';
-import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
+import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
 
 const KEYWORD_OPTIONS = [
   '연봉 업계 평균 이상', '일한만큼 받는 보상', '퇴사율 10% 이하',

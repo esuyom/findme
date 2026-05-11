@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { useCompanyProfileStore } from '../../hooks/useCompanyProfileStore';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
 
 const NAV_ITEMS = [
   {

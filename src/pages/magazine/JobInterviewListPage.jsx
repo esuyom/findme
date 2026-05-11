@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
-import { JOB_INTERVIEW_DUMMY } from '../../constants/detailData';
-import { useContentsStore } from '../../hooks/useContentsStore';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { JOB_INTERVIEW_DUMMY } from '../../mocks/detailData';
+import { useContentsStore } from '../../stores/useContentsStore';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 export default function JobInterviewListPage() {
   const { contents } = useContentsStore();

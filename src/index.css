@@ -2,7 +2,7 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* AOS */
-@import './styles/aos.css';
+@import './styles/vendors/aos.css';
 
 /* 기존 CSS 임포트 */
 @import './styles/font.css';

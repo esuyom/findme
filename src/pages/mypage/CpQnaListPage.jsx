@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import CompanySidebar from '../../components/sidebar/CompanySidebar';
-import { useCpQnaStore } from '../../hooks/useCpQnaStore';
+import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
+import { useCpQnaStore } from '../../stores/useCpQnaStore';
 
 export default function CpQnaListPage() {
   const { qnas, remove } = useCpQnaStore();

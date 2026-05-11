@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import StudentSidebar from '../../components/sidebar/StudentSidebar';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
+import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
 import { useAuth } from '../../context/AuthContext';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 export default function SecessionPage() {
   const navigate = useNavigate();

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import CompanySidebar from '../../components/sidebar/CompanySidebar';
-import { useCpOfferStore } from '../../hooks/useCpOfferStore';
+import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
+import { useCpOfferStore } from '../../stores/useCpOfferStore';
 
 export default function CpOfferListPage() {
   const { offers, remove } = useCpOfferStore();

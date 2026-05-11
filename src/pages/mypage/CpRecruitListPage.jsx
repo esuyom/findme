@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import CompanySidebar from '../../components/sidebar/CompanySidebar';
-import { useCpRecruitStore } from '../../hooks/useCpRecruitStore';
+import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 
 const STATUS_LABEL = { active: '채용중', draft: '임시저장', closed: '채용종료' };
 const STATUS_CLASS = { active: 'blue', draft: 'gray', closed: 'gray' };

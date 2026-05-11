@@ -2,11 +2,11 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
-import { INTERVIEW_DUMMY } from '../../constants/dummyData';
-import { useContentsStore } from '../../hooks/useContentsStore';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
-import { usePortfolioStore } from '../../hooks/usePortfolioStore';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
+import { INTERVIEW_DUMMY } from '../../mocks/dummyData';
+import { useContentsStore } from '../../stores/useContentsStore';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
+import { usePortfolioStore } from '../../stores/usePortfolioStore';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
 
 const CATEGORIES = [
   '전체',

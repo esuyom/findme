@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import StudentSidebar from '../../components/sidebar/StudentSidebar';
-import { useJoinStore } from '../../hooks/useJoinStore';
+import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
+import { useJoinStore } from '../../stores/useJoinStore';
 
 export default function StJoinListPage() {
   const { joins, remove } = useJoinStore();

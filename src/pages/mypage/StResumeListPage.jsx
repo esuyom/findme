@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
-import StudentSidebar from '../../components/sidebar/StudentSidebar';
-import { JOB_CATEGORIES } from '../../constants/jobData';
-import { useResumeStore } from '../../hooks/useResumeStore';
-import { useSkillStore } from '../../hooks/useSkillStore';
+import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
+import { JOB_CATEGORIES } from '../../mocks/jobData';
+import { useResumeStore } from '../../stores/useResumeStore';
+import { useSkillStore } from '../../stores/useSkillStore';
 
 // 직군별 스킬 더미데이터
 const SKILLS_BY_CATEGORY = {

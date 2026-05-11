@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import MemberLayout from '../../components/layout/MemberLayout';
-import { CURRENT_STUDENT } from '../../constants/currentUser';
-import { useStudentProfileStore } from '../../hooks/useStudentProfileStore';
+import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 export default function FindIdResultPage() {
   const { profile: stProfile } = useStudentProfileStore();
