@@ -347,7 +347,11 @@ export default function HrDetailPage() {
                     return (
                       <div key={key} style={{ marginBottom: 18 }}>
                         <h5 style={{ fontSize: 13, fontWeight: 700, color: '#4dbbff', marginBottom: 6 }}>{label}</h5>
-                        <p style={{ fontSize: 13, color: '#444', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{val}</p>
+                        {key === 'link' ? (
+                          <a href={val} target="_blank" rel="noreferrer" style={{ fontSize: 13, color: '#4dbbff', lineHeight: 1.75, wordBreak: 'break-all', textDecoration: 'underline' }}>{val}</a>
+                        ) : (
+                          <p style={{ fontSize: 13, color: '#444', lineHeight: 1.75, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{val}</p>
+                        )}
                       </div>
                     );
                   })}
