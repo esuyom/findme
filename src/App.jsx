@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import ScrollToTop from './components/common/ScrollToTop';
 import { AuthProvider } from './context/AuthContext';
+import PrivateRoute from './components/common/PrivateRoute';
 
 // 메인
 import HomePage from './pages/HomePage';
@@ -135,35 +136,39 @@ export default function App() {
           <Route path="/member/find-pw-reset" element={<FindPwResetPage />} />
           <Route path="/member/find-pw-result" element={<FindPwResultPage />} />
 
-          {/* 마이페이지 - 수강생 */}
-          <Route path="/mypage/profile" element={<StudentProfilePage />} />
-          <Route path="/mypage/secession" element={<SecessionPage />} />
-          <Route path="/mypage/resume" element={<StResumeListPage />} />
-          <Route path="/mypage/resume/write" element={<StResumeWritePage />} />
-          <Route path="/mypage/recruit" element={<StRecruitListPage />} />
-          <Route path="/mypage/scrap" element={<StScrapListPage />} />
-          <Route path="/mypage/portfolio" element={<StPortfolioListPage />} />
-          <Route path="/mypage/contents" element={<StContentsListPage />} />
-          <Route path="/mypage/contents/write" element={<StContentsWritePage />} />
-          <Route path="/mypage/join" element={<StJoinListPage />} />
-          <Route path="/mypage/qna" element={<StQnaListPage />} />
-          <Route path="/mypage/qna/write" element={<StQnaWritePage />} />
-          <Route path="/mypage/qna/:id" element={<StQnaViewPage />} />
+          {/* 마이페이지 - 수강생 (student 전용) */}
+          <Route element={<PrivateRoute allowedRoles={['student']} />}>
+            <Route path="/mypage/profile" element={<StudentProfilePage />} />
+            <Route path="/mypage/secession" element={<SecessionPage />} />
+            <Route path="/mypage/resume" element={<StResumeListPage />} />
+            <Route path="/mypage/resume/write" element={<StResumeWritePage />} />
+            <Route path="/mypage/recruit" element={<StRecruitListPage />} />
+            <Route path="/mypage/scrap" element={<StScrapListPage />} />
+            <Route path="/mypage/portfolio" element={<StPortfolioListPage />} />
+            <Route path="/mypage/contents" element={<StContentsListPage />} />
+            <Route path="/mypage/contents/write" element={<StContentsWritePage />} />
+            <Route path="/mypage/join" element={<StJoinListPage />} />
+            <Route path="/mypage/qna" element={<StQnaListPage />} />
+            <Route path="/mypage/qna/write" element={<StQnaWritePage />} />
+            <Route path="/mypage/qna/:id" element={<StQnaViewPage />} />
+          </Route>
 
-          {/* 마이페이지 - 기업 */}
-          <Route path="/mypage/cp/dashboard" element={<CpRecruitInfoPage />} />
-          <Route path="/mypage/cp/recruit" element={<CpRecruitListPage />} />
-          <Route path="/mypage/cp/recruit/:id" element={<CpRecruitViewPage />} />
-          <Route path="/mypage/cp/recruit/write" element={<CpRecruitWritePage />} />
-          <Route path="/mypage/cp/info" element={<CpInfoModifyPage />} />
-          <Route path="/mypage/cp/hr-search" element={<CpHrSearchPage />} />
-          <Route path="/mypage/cp/hr-wish" element={<CpHrWishPage />} />
-          <Route path="/mypage/cp/qna" element={<CpQnaListPage />} />
-          <Route path="/mypage/cp/qna/write" element={<CpQnaWritePage />} />
-          <Route path="/mypage/cp/qna/:id" element={<CpQnaViewPage />} />
-          <Route path="/mypage/cp/offer" element={<CpOfferListPage />} />
-          <Route path="/mypage/cp/inquiry" element={<CpInquiryListPage />} />
-          <Route path="/mypage/cp/inquiry/:id" element={<CpInquiryViewPage />} />
+          {/* 마이페이지 - 기업 (company 전용) */}
+          <Route element={<PrivateRoute allowedRoles={['company']} />}>
+            <Route path="/mypage/cp/dashboard" element={<CpRecruitInfoPage />} />
+            <Route path="/mypage/cp/recruit" element={<CpRecruitListPage />} />
+            <Route path="/mypage/cp/recruit/:id" element={<CpRecruitViewPage />} />
+            <Route path="/mypage/cp/recruit/write" element={<CpRecruitWritePage />} />
+            <Route path="/mypage/cp/info" element={<CpInfoModifyPage />} />
+            <Route path="/mypage/cp/hr-search" element={<CpHrSearchPage />} />
+            <Route path="/mypage/cp/hr-wish" element={<CpHrWishPage />} />
+            <Route path="/mypage/cp/qna" element={<CpQnaListPage />} />
+            <Route path="/mypage/cp/qna/write" element={<CpQnaWritePage />} />
+            <Route path="/mypage/cp/qna/:id" element={<CpQnaViewPage />} />
+            <Route path="/mypage/cp/offer" element={<CpOfferListPage />} />
+            <Route path="/mypage/cp/inquiry" element={<CpInquiryListPage />} />
+            <Route path="/mypage/cp/inquiry/:id" element={<CpInquiryViewPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
