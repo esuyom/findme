@@ -1,19 +1,34 @@
 import { useState, useEffect } from 'react';
 import { CURRENT_STUDENT } from '../mocks/currentUser';
+import { saveImage, loadImage } from '../utils/imageDB';
 
 const KEY = 'findme_student_profile';
+const IMG_KEY = 'student_profileImg';
 
-function load() {
+function loadMeta() {
   try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
 }
-function save(data) {
-  localStorage.setItem(KEY, JSON.stringify(data));
+function saveMeta(data) {
+  const { profileImg, ...meta } = data;
+  localStorage.setItem(KEY, JSON.stringify(meta));
 }
 
-// ── 모듈 레벨 싱글톤 ──────────────────────────────────────────
-// 컴포넌트별로 독립 state를 갖던 구조를 전역 단일 상태로 통일.
-// update() 호출 시 구독 중인 모든 컴포넌트가 즉시 리렌더링됨.
-let _profile = { profileImg: CURRENT_STUDENT.profileImg || '', ...load() };
+// one-time migration: localStorage에 있던 profileImg를 IndexedDB로 이전
+(function migrateProfileImg() {
+  const raw = localStorage.getItem(KEY);
+  if (!raw) return;
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed.profileImg) {
+      saveImage(IMG_KEY, parsed.profileImg).then(() => {
+        const { profileImg, ...rest } = parsed;
+        localStorage.setItem(KEY, JSON.stringify(rest));
+      }).catch(() => {});
+    }
+  } catch {}
+})();
+
+let _profile = { profileImg: CURRENT_STUDENT.profileImg || '', ...loadMeta() };
 const _listeners = new Set();
 
 function _subscribe(fn) {
@@ -25,18 +40,28 @@ function _notify() {
   _listeners.forEach((fn) => fn({ ..._profile }));
 }
 
+// 모듈 로드 시 IndexedDB에서 이미지 비동기 로드
+loadImage(IMG_KEY).then((img) => {
+  if (img) {
+    _profile = { ..._profile, profileImg: img };
+    _notify();
+  }
+}).catch(() => {});
+
 export function useStudentProfileStore() {
   const [profile, setProfile] = useState(() => ({ ..._profile }));
 
   useEffect(() => {
-    // 구독 등록 — useState 초기값이 이미 최신 싱글톤을 읽으므로 동기화 불필요
     const unsub = _subscribe(setProfile);
     return unsub;
   }, []);
 
   const update = (fields) => {
     _profile = { ..._profile, ...fields };
-    save(_profile);
+    saveMeta(_profile);
+    if ('profileImg' in fields) {
+      saveImage(IMG_KEY, fields.profileImg).catch(() => {});
+    }
     _notify();
   };
 

@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { CURRENT_COMPANY } from '../mocks/currentUser';
+import { saveImage, loadImage } from '../utils/imageDB';
 
 const STORAGE_KEY = 'findme_company_profile';
+const LOGO_KEY = 'company_logoPreview';
 
 const DEFAULT_PROFILE = {
   name:           CURRENT_COMPANY.name,
@@ -22,21 +24,34 @@ const DEFAULT_PROFILE = {
   logoPreview:    CURRENT_COMPANY.logoImg || '',
 };
 
-function load() {
+function loadMeta() {
   try {
     const data = localStorage.getItem(STORAGE_KEY);
     return data ? JSON.parse(data) : null;
   } catch { return null; }
 }
 
-function save(profile) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+function saveMeta(profile) {
+  const { logoPreview, ...meta } = profile;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(meta));
 }
 
-// ── 모듈 레벨 싱글톤 ──────────────────────────────────────────
-// 여러 컴포넌트(Header, 수정 페이지 등)가 동일한 상태를 공유.
-// update() 호출 시 구독 중인 모든 컴포넌트가 즉시 리렌더링됨.
-let _profile = load() || { ...DEFAULT_PROFILE };
+// one-time migration
+(function migrateLogoPreview() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed.logoPreview) {
+      saveImage(LOGO_KEY, parsed.logoPreview).then(() => {
+        const { logoPreview, ...rest } = parsed;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
+      }).catch(() => {});
+    }
+  } catch {}
+})();
+
+let _profile = loadMeta() || { ...DEFAULT_PROFILE };
 const _listeners = new Set();
 
 function _subscribe(fn) {
@@ -48,7 +63,14 @@ function _notify() {
   _listeners.forEach((fn) => fn({ ..._profile }));
 }
 
-/** CURRENT_COMPANY를 기본값으로, localStorage 저장값으로 오버라이드 */
+// 모듈 로드 시 IndexedDB에서 로고 이미지 비동기 로드
+loadImage(LOGO_KEY).then((img) => {
+  if (img) {
+    _profile = { ..._profile, logoPreview: img };
+    _notify();
+  }
+}).catch(() => {});
+
 export function useCompanyProfileStore() {
   const [profile, setProfile] = useState(() => ({ ..._profile }));
 
@@ -59,7 +81,10 @@ export function useCompanyProfileStore() {
 
   const update = (fields) => {
     _profile = { ..._profile, ...fields };
-    save(_profile);
+    saveMeta(_profile);
+    if ('logoPreview' in fields) {
+      saveImage(LOGO_KEY, fields.logoPreview).catch(() => {});
+    }
     _notify();
   };
 

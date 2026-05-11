@@ -79,7 +79,7 @@ export default function StPortfolioListPage() {
   const removeThumb = (idx) => setFormData((p) => ({ ...p, thumbData: p.thumbData.filter((_, i) => i !== idx) }));
   const removePf    = (idx) => setFormData((p) => ({ ...p, pfData:    p.pfData.filter((_,    i) => i !== idx) }));
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.title.trim()) { setFormError('제목을 입력해 주세요.'); return; }
     const payload = {
       title:       formData.title.trim(),
@@ -88,10 +88,10 @@ export default function StPortfolioListPage() {
       pfData:      formData.pfData,
     };
     if (editId) {
-      update(editId, payload);
+      await update(editId, payload);
       showToast('포트폴리오가 수정되었습니다.');
     } else {
-      add(payload);
+      await add(payload);
       showToast('포트폴리오가 등록되었습니다.');
     }
     setShowPopup(false);
@@ -161,7 +161,7 @@ export default function StPortfolioListPage() {
                       </div>
                       <div className="d-flex gap-1">
                         <button type="button" className="sm tb" onClick={(e) => { e.stopPropagation(); openEdit(pf); }}>수정</button>
-                        <button type="button" className="sm tb" onClick={(e) => { e.stopPropagation(); remove(pf.id); }}>삭제</button>
+                        <button type="button" className="sm tb" onClick={async (e) => { e.stopPropagation(); await remove(pf.id); }}>삭제</button>
                       </div>
                     </li>
                   ))}
