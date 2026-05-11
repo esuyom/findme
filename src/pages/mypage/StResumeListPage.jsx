@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
 import { JOB_CATEGORIES } from '../../mocks/jobData';
@@ -19,7 +19,7 @@ const SKILLS_BY_CATEGORY = {
 };
 
 export default function StResumeListPage() {
-  const navigate = useNavigate();
+
   const { resumes, remove, rename, copy, setMain } = useResumeStore();
 
   // 스킬 관리 (localStorage 연동)
@@ -118,11 +118,6 @@ export default function StResumeListPage() {
 
   const handleSetMain = (id) => { setMain(id); setOpenMenuId(null); };
 
-  const handleEdit = (id) => {
-    navigate('/mypage/resume/write', { state: { editId: id } });
-    setOpenMenuId(null);
-  };
-
   return (
     <Layout containerClass="mypage sub">
       <div className="contents_wrap">
@@ -191,9 +186,9 @@ export default function StResumeListPage() {
                 {resumes.map((resume) => (
                   <li key={resume.id} style={{ position: 'relative' }}>
                     {/* 카드 본문 */}
-                    <a
-                      href="#"
-                      onClick={(e) => { e.preventDefault(); handleEdit(resume.id); }}
+                    <Link
+                      to="/mypage/resume/write"
+                      state={{ editId: resume.id }}
                     >
                       <div>
                         {resume.isMain && <span className="main_resume">기본이력서</span>}
@@ -203,7 +198,7 @@ export default function StResumeListPage() {
                           {resume.status === 'complete' ? '작성완료' : '작성중'}
                         </span>
                       </div>
-                    </a>
+                    </Link>
 
                     {/* ··· 버튼 */}
                     <em
@@ -220,36 +215,24 @@ export default function StResumeListPage() {
                     {openMenuId === resume.id && (
                       <ul className="more_list on">
                         <li>
-                          <a href="#" onClick={(e) => { e.preventDefault(); handleEdit(resume.id); }}>
-                            이력서 수정하기
-                          </a>
+                          <Link to="/mypage/resume/write" state={{ editId: resume.id }} onClick={() => setOpenMenuId(null)}>이력서 수정하기</Link>
                         </li>
                         {!resume.isMain && (
                           <li>
-                            <a href="#" onClick={(e) => { e.preventDefault(); handleSetMain(resume.id); }}>
-                              기본이력서로 설정
-                            </a>
+                            <button type="button" onClick={() => handleSetMain(resume.id)}>기본이력서로 설정</button>
                           </li>
                         )}
                         <li>
-                          <a href="#" onClick={(e) => { e.preventDefault(); openRename(resume); }}>
-                            이력서 이름 변경
-                          </a>
+                          <button type="button" onClick={() => openRename(resume)}>이력서 이름 변경</button>
                         </li>
                         <li>
-                          <a href="#" onClick={(e) => { e.preventDefault(); handleCopy(resume.id); }}>
-                            사본 만들기
-                          </a>
+                          <button type="button" onClick={() => handleCopy(resume.id)}>사본 만들기</button>
                         </li>
                         <li>
-                          <a href="#" onClick={(e) => { e.preventDefault(); alert('PDF 다운로드는 작성된 이력서에서 사용 가능합니다.'); setOpenMenuId(null); }}>
-                            다운로드
-                          </a>
+                          <button type="button" onClick={() => { alert('PDF 다운로드는 작성된 이력서에서 사용 가능합니다.'); setOpenMenuId(null); }}>다운로드</button>
                         </li>
                         <li className="delete">
-                          <a href="#" onClick={(e) => { e.preventDefault(); openDelete(resume.id); }}>
-                            이력서 삭제
-                          </a>
+                          <button type="button" onClick={() => openDelete(resume.id)}>이력서 삭제</button>
                         </li>
                       </ul>
                     )}

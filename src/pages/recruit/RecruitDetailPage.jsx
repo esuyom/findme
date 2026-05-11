@@ -373,17 +373,14 @@ export default function RecruitDetailPage() {
                             {r.status === 'complete' ? '작성완료' : '작성중'} · {r.lastModified}
                           </span>
                         </label>
-                        <a
-                          href="#"
+                        <Link
                           className="resume_edit_btn"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            setShowApplyModal(false);
-                            navigate('/mypage/resume/write', { state: { editId: r.id } });
-                          }}
+                          to="/mypage/resume/write"
+                          state={{ editId: r.id }}
+                          onClick={() => setShowApplyModal(false)}
                         >
                           이력서 수정하기
-                        </a>
+                        </Link>
                       </li>
                     ))}
                   </ul>

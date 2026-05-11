@@ -6,6 +6,7 @@ import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
 import { CURRENT_STUDENT } from '../../mocks/currentUser';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 import { compressImage } from '../../utils/compressImage';
+import Toast from '../../components/common/Toast';
 
 const MBTI_LIST = ['ISTJ','ISFJ','INFJ','INTJ','ISTP','ISFP','INFP','INTP','ESTP','ESFP','ENFP','ENTP','ESTJ','ESFJ','ENFJ','ENTJ'];
 const KEYWORD_LIST = ['노력형', '책임감', '활동적인', '주도적인', '자신감', '프리랜서'];
@@ -205,19 +206,7 @@ export default function StudentProfilePage() {
         </section>
       </div>
 
-      {/* 토스트 메시지 */}
-      {toast && (
-        <div style={{
-          position: 'fixed', bottom: '32px', left: '50%', transform: 'translateX(-50%)',
-          background: '#222', color: '#fff', padding: '13px 28px', borderRadius: '8px',
-          fontSize: '15px', fontWeight: '600', zIndex: 9999,
-          boxShadow: '0 4px 16px rgba(0,0,0,0.18)', letterSpacing: '-0.02em',
-          display: 'flex', alignItems: 'center', gap: '8px',
-        }}>
-          <span style={{ color: '#4dbbff', fontSize: '18px' }}>✓</span>
-          프로필 정보가 수정되었습니다.
-        </div>
-      )}
+      {toast && <Toast msg="프로필 정보가 수정되었습니다." />}
 
       {/* 직군 선택 팝업 */}
       {showJobGroupPopup && (

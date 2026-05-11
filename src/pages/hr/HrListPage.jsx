@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import SwiperSlider from '../../components/common/SwiperSlider';
 import SectionTitle from '../../components/common/SectionTitle';
@@ -40,7 +40,6 @@ function mergeCurrentUser(list, stProfile) {
 }
 
 export default function HrListPage() {
-  const navigate = useNavigate();
   const { profile: stProfile } = useStudentProfileStore();
 
   const allStudents = mergeCurrentUser(STUDENT_DUMMY, stProfile);
@@ -71,16 +70,10 @@ export default function HrListPage() {
           <ul>
             {CATEGORIES.map((cat) => (
               <li key={cat.label} className="col">
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    navigate(`/hr/category?job=${encodeURIComponent(cat.label)}`);
-                  }}
-                >
+                <Link to={`/hr/category?job=${encodeURIComponent(cat.label)}`}>
                   <div className="img"><img src={cat.img} alt="quick icon" /></div>
                   <div className="title">{cat.label}</div>
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
@@ -136,15 +129,9 @@ export default function HrListPage() {
             <ul>
               {REGIONS.map((region) => (
                 <li key={region}>
-                  <a
-                    href="#"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      navigate(`/hr/category?location=${encodeURIComponent(region)}`);
-                    }}
-                  >
+                  <Link to={`/hr/category?location=${encodeURIComponent(region)}`}>
                     {region}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>

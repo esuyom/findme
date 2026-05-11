@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
@@ -78,14 +78,8 @@ export default function Header() {
     ? (cpProfile.logoPreview || '/img/common/img-profile-default.jpg')
     : (stProfile.profileImg  || CURRENT_STUDENT.profileImg || '/img/common/img-profile-default.jpg');
   const mypageLink  = userType === 'company' ? '/mypage/cp/dashboard' : '/mypage/profile';
-  const navigate    = useNavigate();
   const { pathname }= useLocation();
   const parentMenu  = getParentMenu(pathname);
-
-  const handleCoachingClick = (menuNum, to) => {
-    navigate(`${to}?tab=${menuNum + 1}`);
-    setMenuOpen(false);
-  };
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -114,19 +108,12 @@ export default function Header() {
                 <ul className="depth2">
                   {item.children.map((child) => (
                     <li key={child.label}>
-                      {child.menuNum !== undefined ? (
-                        <a
-                          href="#"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleCoachingClick(child.menuNum, child.to);
-                          }}
-                        >
-                          {child.label}
-                        </a>
-                      ) : (
-                        <Link to={child.to} onClick={closeMenu}>{child.label}</Link>
-                      )}
+                      <Link
+                        to={child.menuNum !== undefined ? `${child.to}?tab=${child.menuNum + 1}` : child.to}
+                        onClick={closeMenu}
+                      >
+                        {child.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>

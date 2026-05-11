@@ -6,22 +6,9 @@ import { CURRENT_STUDENT } from '../../mocks/currentUser';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 import { useResumeStore } from '../../stores/useResumeStore';
 import { useSkillStore } from '../../stores/useSkillStore';
+import Toast from '../../components/common/Toast';
 
 const REGION_LIST = ['서울','경기','인천','부산','대구','광주','대전','울산','세종','강원','충북','충남','전북','전남','경북','경남','제주'];
-
-function Toast({ msg }) {
-  return (
-    <div style={{
-      position:'fixed',bottom:'32px',left:'50%',transform:'translateX(-50%)',
-      background:'#222',color:'#fff',padding:'13px 28px',borderRadius:'8px',
-      fontSize:'15px',fontWeight:'600',zIndex:9999,
-      boxShadow:'0 4px 16px rgba(0,0,0,0.18)',letterSpacing:'-0.02em',
-      display:'flex',alignItems:'center',gap:'8px',whiteSpace:'nowrap',
-    }}>
-      <span style={{color:'#4dbbff',fontSize:'18px'}}>✓</span>{msg}
-    </div>
-  );
-}
 
 export default function StResumeWritePage() {
   const navigate  = useNavigate();

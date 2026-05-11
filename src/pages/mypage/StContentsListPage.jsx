@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
 import { useContentsStore } from '../../stores/useContentsStore';
@@ -7,7 +7,7 @@ import { useContentsStore } from '../../stores/useContentsStore';
 const STATUS_LABEL = { complete: '작성완료', draft: '작성중', request: '인터뷰요청' };
 
 export default function StContentsListPage() {
-  const navigate = useNavigate();
+
   const { contents, remove } = useContentsStore();
   const [openMenuId, setOpenMenuId] = useState(null);
   const menuRef = useRef(null);
@@ -38,7 +38,7 @@ export default function StContentsListPage() {
 
                 {contents.map((content) => (
                   <li key={content.id} style={{ position: 'relative' }}>
-                    <a href="#" onClick={(e) => { e.preventDefault(); navigate('/mypage/contents/write', { state: { editId: content.id } }); }}>
+                    <Link to="/mypage/contents/write" state={{ editId: content.id }}>
                       <div>
                         <span className="title">{content.title}</span>
                         <span className="edit_day">최종수정일 : {content.lastModified}</span>
@@ -46,7 +46,7 @@ export default function StContentsListPage() {
                           {STATUS_LABEL[content.status] || content.status}
                         </span>
                       </div>
-                    </a>
+                    </Link>
                     <em
                       className="more"
                       onClick={(e) => {
@@ -59,14 +59,10 @@ export default function StContentsListPage() {
                     {openMenuId === content.id && (
                       <ul className="more_list on">
                         <li>
-                          <a href="#" onClick={(e) => { e.preventDefault(); setOpenMenuId(null); navigate('/mypage/contents/write', { state: { editId: content.id } }); }}>
-                            수정하기
-                          </a>
+                          <Link to="/mypage/contents/write" state={{ editId: content.id }} onClick={() => setOpenMenuId(null)}>수정하기</Link>
                         </li>
                         <li className="delete">
-                          <a href="#" onClick={(e) => { e.preventDefault(); remove(content.id); setOpenMenuId(null); }}>
-                            인터뷰 삭제
-                          </a>
+                          <button type="button" onClick={() => { remove(content.id); setOpenMenuId(null); }}>인터뷰 삭제</button>
                         </li>
                       </ul>
                     )}

@@ -221,7 +221,8 @@ header.gnb_member a + a::before{content:"";width:1px;height: 9px;background:#999
 
 /* mypage - sidebar */
 .sidebar{width:250px; padding:50px 10px; border-right:1px solid #eaeaea; }
-.sidebar ul li a{display:block; width: fit-content; padding:10px;position: relative;color:rgb(51 51 51 / 40%);margin-bottom: 10px;font-weight: 600;position:relative;}
+.sidebar ul li {position:relative;}
+.sidebar ul li a{display:block; width: fit-content; padding:10px;position: relative;color:rgb(51 51 51 / 40%);margin-bottom: 10px;font-weight: 600;}
 .sidebar ul li .bubble{width:107px;font-size: 10px;font-weight: 500;right: 89px;top: -17px;height: 17px;line-height: 17px;}
 .sidebar ul li.active a{color:#333333;font-weight: 700;}
 .sidebar ul li.on a::after{content:"";width: 7px;height: 7px;border-radius:50%;background:#4dbbff;position:absolute;display:block;right: -2px;top: 12px;}
@@ -726,7 +727,7 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .pop_apply .file_box .filebox:last-child{padding-bottom: 0; margin-bottom: 0; border-bottom: 0;}
 .pop_apply .file_box .file-list .delete{background:url(/img/sub/delete-file.png); width:20px; height:20px; background-size:contain;display: inline-block;}
 .pop_apply .pick_list{ max-height: none !important; overflow-y:visible !important; font-weight: 600;}
-.pop_apply .pick_list ul li .resume_edit_btn{color:#4dbbff; font-size:12px; font-weight:600; float:right; padding: 3px;}
+.pop_apply .pick_list ul li .resume_edit_btn{color:#4dbbff; font-size:12px; font-weight:600; float:right; padding: 3px;    height: auto;line-height: normal;border: none;}
 .pop_apply .btn_center{margin-top:40px;}
 .pop_apply .noti{color:#6e6e6e; font-size:13px; margin-top:40px;}
 .pop_apply .noti li{margin-bottom:3px;}

@@ -103,12 +103,12 @@ export default function App() {
           <Route path="/coaching" element={<CoachingListPage />} />
           <Route path="/coaching/:id" element={<CoachingDetailPage />} />
 
-          {/* 팁 */}
+          {/* 팁 — 정적 경로를 동적 경로보다 앞에 */}
           <Route path="/tip" element={<TipListPage />} />
-          <Route path="/tip/:id" element={<TipDetailPage />} />
           <Route path="/tip/skill" element={<TipSkillDataPage />} />
           <Route path="/tip/contest" element={<TipContestListPage />} />
           <Route path="/tip/contest/:id" element={<TipContestDetailPage />} />
+          <Route path="/tip/:id" element={<TipDetailPage />} />
 
           {/* 파인드매거진 */}
           <Route path="/magazine/stinterview" element={<StInterviewListPage />} />
