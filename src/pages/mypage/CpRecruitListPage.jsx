@@ -65,7 +65,7 @@ export default function CpRecruitListPage() {
               {filtered.length === 0 ? (
                 <EmptyState
                   message={
-                    activeTab === 'active' ? '채용중인 공고가 없습니다.' :
+                    activeTab === 'active' ? '등록된 채용공고가 없습니다.' :
                     activeTab === 'draft'  ? '임시저장된 공고가 없습니다.' :
                                             '마감된 공고가 없습니다.'
                   }
