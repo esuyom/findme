@@ -47,10 +47,10 @@ export default function CpRecruitListPage() {
                 key={tab.key}
                 className={`part col${activeTab === tab.key ? ' active' : ''}`}
               >
-                <Link onClick={() => setActiveTab(tab.key)}>
+                <button type="button" onClick={() => setActiveTab(tab.key)}>
                   <div className="text">{tab.label}</div>
                   <div className={`num${tab.count === 0 ? ' zero' : ''}`}>{tab.count}</div>
-                </Link>
+                </button>
               </div>
             ))}
           </div>

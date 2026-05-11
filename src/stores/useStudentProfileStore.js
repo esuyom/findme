@@ -25,31 +25,30 @@ function _notify() {
   _listeners.forEach((fn) => fn({ ..._profile }));
 }
 
-// one-time migration: localStorage에 있던 profileImg를 IndexedDB로 이전
-(function migrateProfileImg() {
+// 모듈 로드 시 migration 완료 후 IndexedDB에서 이미지 비동기 로드
+(function initProfileImg() {
   const raw = localStorage.getItem(KEY);
-  if (!raw) return;
-  try {
-    const parsed = JSON.parse(raw);
-    if (parsed.profileImg) {
-      const { profileImg, ...rest } = parsed;
-      saveImage(IMG_KEY, profileImg).then(() => {
-        localStorage.setItem(KEY, JSON.stringify(rest));
-        // _profile과 구독자에게도 즉시 반영
-        _profile = { ..._profile, profileImg };
-        _notify();
-      }).catch(() => {});
-    }
-  } catch {}
-})();
+  let migrationPromise = Promise.resolve();
 
-// 모듈 로드 시 IndexedDB에서 이미지 비동기 로드
-loadImage(IMG_KEY).then((img) => {
-  if (img) {
-    _profile = { ..._profile, profileImg: img };
-    _notify();
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed.profileImg) {
+        const { profileImg, ...rest } = parsed;
+        migrationPromise = saveImage(IMG_KEY, profileImg).then(() => {
+          localStorage.setItem(KEY, JSON.stringify(rest));
+        }).catch(() => {});
+      }
+    } catch {}
   }
-}).catch(() => {});
+
+  migrationPromise.then(() => loadImage(IMG_KEY)).then((img) => {
+    if (img) {
+      _profile = { ..._profile, profileImg: img };
+      _notify();
+    }
+  }).catch(() => {});
+})();
 
 export function useStudentProfileStore() {
   const [profile, setProfile] = useState(() => ({ ..._profile }));

@@ -48,30 +48,30 @@ function _notify() {
   _listeners.forEach((fn) => fn({ ..._profile }));
 }
 
-// one-time migration
-(function migrateLogoPreview() {
+// 모듈 로드 시 migration 완료 후 IndexedDB에서 로고 이미지 비동기 로드
+(function initLogoImg() {
   const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return;
-  try {
-    const parsed = JSON.parse(raw);
-    if (parsed.logoPreview) {
-      const { logoPreview, ...rest } = parsed;
-      saveImage(LOGO_KEY, logoPreview).then(() => {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
-        _profile = { ..._profile, logoPreview };
-        _notify();
-      }).catch(() => {});
-    }
-  } catch {}
-})();
+  let migrationPromise = Promise.resolve();
 
-// 모듈 로드 시 IndexedDB에서 로고 이미지 비동기 로드
-loadImage(LOGO_KEY).then((img) => {
-  if (img) {
-    _profile = { ..._profile, logoPreview: img };
-    _notify();
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed.logoPreview) {
+        const { logoPreview, ...rest } = parsed;
+        migrationPromise = saveImage(LOGO_KEY, logoPreview).then(() => {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
+        }).catch(() => {});
+      }
+    } catch {}
   }
-}).catch(() => {});
+
+  migrationPromise.then(() => loadImage(LOGO_KEY)).then((img) => {
+    if (img) {
+      _profile = { ..._profile, logoPreview: img };
+      _notify();
+    }
+  }).catch(() => {});
+})();
 
 export function useCompanyProfileStore() {
   const [profile, setProfile] = useState(() => ({ ..._profile }));

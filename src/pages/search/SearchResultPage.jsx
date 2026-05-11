@@ -84,8 +84,6 @@ export default function SearchResultPage() {
   const [inputValue, setInputValue] = useState(initialQuery);
   const [activeTab, setActiveTab] = useState('all');
 
-  if (!initialQuery) return <Navigate to="/search" replace />;
-
   const filtered = useMemo(() => filterByQuery(ALL_DATA, initialQuery), [initialQuery]);
 
   const totalCount =
@@ -94,6 +92,8 @@ export default function SearchResultPage() {
     filtered.coaching.length +
     filtered.trend.length +
     filtered.story.length;
+
+  if (!initialQuery) return <Navigate to="/search" replace />;
 
   const handleSearch = () => {
     const q = inputValue.trim();
