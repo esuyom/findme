@@ -1,21 +1,17 @@
+import { useEffect } from 'react';
+
 const shimmer = {
   background: 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
   backgroundSize: '200% 100%',
   animation: 'skeleton-shimmer 1.4s infinite',
 };
 
-// 전역 keyframes (한 번만 주입)
-if (typeof document !== 'undefined' && !document.getElementById('skeleton-style')) {
-  const style = document.createElement('style');
-  style.id = 'skeleton-style';
-  style.textContent = `
-    @keyframes skeleton-shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-  `;
-  document.head.appendChild(style);
-}
+const KEYFRAMES = `
+  @keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+`;
 
 function CardSkeleton() {
   return (
@@ -46,6 +42,15 @@ function ListSkeleton() {
  * @param {number} count
  */
 export default function SkeletonCard({ type = 'card', count = 4 }) {
+  useEffect(() => {
+    if (!document.getElementById('skeleton-style')) {
+      const style = document.createElement('style');
+      style.id = 'skeleton-style';
+      style.textContent = KEYFRAMES;
+      document.head.appendChild(style);
+    }
+  }, []);
+
   const items = Array.from({ length: count });
   if (type === 'list') {
     return (

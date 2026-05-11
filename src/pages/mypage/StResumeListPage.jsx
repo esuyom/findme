@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import SkeletonCard from '../../components/common/SkeletonCard';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
@@ -22,6 +23,15 @@ const SKILLS_BY_CATEGORY = {
 export default function StResumeListPage() {
 
   const navigate = useNavigate();
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // 백엔드 연동 전 시뮬레이션 (200ms)
+    const timer = setTimeout(() => setIsLoading(false), 200);
+    return () => clearTimeout(timer);
+  }, []);
+
   const { resumes, remove, rename, copy, setMain } = useResumeStore();
 
   // 스킬 관리 (localStorage 연동)
@@ -179,7 +189,9 @@ export default function StResumeListPage() {
           <div className="box mt-5">
             <h4>이력서관리</h4>
             <div className="list_box">
-              {resumes.length === 0 ? (
+              {isLoading ? (
+                <SkeletonCard type="list" count={3} />
+              ) : resumes.length === 0 ? (
                 <EmptyState
                   message="등록된 이력서가 없습니다."
                   subMessage="나를 표현할 이력서를 작성해 보세요."
