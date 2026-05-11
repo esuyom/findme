@@ -13,21 +13,6 @@ function saveMeta(data) {
   localStorage.setItem(KEY, JSON.stringify(meta));
 }
 
-// one-time migration: localStorage에 있던 profileImg를 IndexedDB로 이전
-(function migrateProfileImg() {
-  const raw = localStorage.getItem(KEY);
-  if (!raw) return;
-  try {
-    const parsed = JSON.parse(raw);
-    if (parsed.profileImg) {
-      saveImage(IMG_KEY, parsed.profileImg).then(() => {
-        const { profileImg, ...rest } = parsed;
-        localStorage.setItem(KEY, JSON.stringify(rest));
-      }).catch(() => {});
-    }
-  } catch {}
-})();
-
 let _profile = { profileImg: CURRENT_STUDENT.profileImg || '', ...loadMeta() };
 const _listeners = new Set();
 
@@ -39,6 +24,24 @@ function _subscribe(fn) {
 function _notify() {
   _listeners.forEach((fn) => fn({ ..._profile }));
 }
+
+// one-time migration: localStorage에 있던 profileImg를 IndexedDB로 이전
+(function migrateProfileImg() {
+  const raw = localStorage.getItem(KEY);
+  if (!raw) return;
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed.profileImg) {
+      const { profileImg, ...rest } = parsed;
+      saveImage(IMG_KEY, profileImg).then(() => {
+        localStorage.setItem(KEY, JSON.stringify(rest));
+        // _profile과 구독자에게도 즉시 반영
+        _profile = { ..._profile, profileImg };
+        _notify();
+      }).catch(() => {});
+    }
+  } catch {}
+})();
 
 // 모듈 로드 시 IndexedDB에서 이미지 비동기 로드
 loadImage(IMG_KEY).then((img) => {

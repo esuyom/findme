@@ -36,21 +36,6 @@ function saveMeta(profile) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(meta));
 }
 
-// one-time migration
-(function migrateLogoPreview() {
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if (!raw) return;
-  try {
-    const parsed = JSON.parse(raw);
-    if (parsed.logoPreview) {
-      saveImage(LOGO_KEY, parsed.logoPreview).then(() => {
-        const { logoPreview, ...rest } = parsed;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
-      }).catch(() => {});
-    }
-  } catch {}
-})();
-
 let _profile = loadMeta() || { ...DEFAULT_PROFILE };
 const _listeners = new Set();
 
@@ -62,6 +47,23 @@ function _subscribe(fn) {
 function _notify() {
   _listeners.forEach((fn) => fn({ ..._profile }));
 }
+
+// one-time migration
+(function migrateLogoPreview() {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const parsed = JSON.parse(raw);
+    if (parsed.logoPreview) {
+      const { logoPreview, ...rest } = parsed;
+      saveImage(LOGO_KEY, logoPreview).then(() => {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(rest));
+        _profile = { ..._profile, logoPreview };
+        _notify();
+      }).catch(() => {});
+    }
+  } catch {}
+})();
 
 // 모듈 로드 시 IndexedDB에서 로고 이미지 비동기 로드
 loadImage(LOGO_KEY).then((img) => {

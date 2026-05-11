@@ -15,8 +15,8 @@ function saveMeta(list) {
 }
 
 async function savePortfolioImages(id, thumbData, pfData) {
-  await saveImage(`portfolio_${id}_thumb`, thumbData ?? []);
-  await saveImage(`portfolio_${id}_pf`, pfData ?? []);
+  await saveImage(`portfolio_${id}_thumb`, thumbData?.length ? thumbData : null);
+  await saveImage(`portfolio_${id}_pf`, pfData?.length ? pfData : null);
 }
 
 async function loadPortfolioImages(id) {
@@ -52,10 +52,11 @@ export function usePortfolioStore() {
   const add = async (data) => {
     const id = Date.now();
     const { thumbData, pfData, ...rest } = data;
-    const entry = { id, ...rest };
-    const next = [...ref.current, { ...entry, thumbData: thumbData ?? [], pfData: pfData ?? [] }];
+    const next = [...ref.current, { id, ...rest, thumbData: thumbData ?? [], pfData: pfData ?? [] }];
     _commit(next);
-    await savePortfolioImages(id, thumbData, pfData).catch(() => {});
+    await savePortfolioImages(id, thumbData, pfData).catch((err) => {
+      console.warn('[usePortfolioStore] 이미지 저장 실패:', err);
+    });
   };
 
   const update = async (id, data) => {
@@ -68,7 +69,9 @@ export function usePortfolioStore() {
     _commit(next);
     const updated = next.find((p) => p.id === id);
     if (updated) {
-      await savePortfolioImages(id, updated.thumbData, updated.pfData).catch(() => {});
+      await savePortfolioImages(id, updated.thumbData, updated.pfData).catch((err) => {
+        console.warn('[usePortfolioStore] 이미지 저장 실패:', err);
+      });
     }
   };
 
@@ -77,7 +80,9 @@ export function usePortfolioStore() {
     await Promise.all([
       removeImage(`portfolio_${id}_thumb`),
       removeImage(`portfolio_${id}_pf`),
-    ]).catch(() => {});
+    ]).catch((err) => {
+      console.warn('[usePortfolioStore] 이미지 삭제 실패:', err);
+    });
   };
 
   const getById = (id) => ref.current.find((p) => p.id === id) || null;
