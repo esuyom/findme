@@ -1,40 +1,49 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import Layout from '../../components/layout/Layout';
+import { RECRUIT_DUMMY, INTERVIEW_DUMMY } from '../../mocks/dummyData';
+import { COACHING_ITEMS, TIP_TREND_ITEMS } from '../../mocks/pageData';
 
-/* ── 샘플 데이터 ── */
+// 중복 없는 회사 목록 추출
+const COMPANY_LIST = (() => {
+  const seen = new Set();
+  return RECRUIT_DUMMY.reduce((acc, r) => {
+    if (!seen.has(r.companyId)) {
+      seen.add(r.companyId);
+      acc.push({ id: r.companyId, name: r.company, logo: r.companyLogo });
+    }
+    return acc;
+  }, []);
+})();
+
 const ALL_DATA = {
-  recruit: [
-    { id: 1, company: '모멘티',   title: '[CJ올리브영] MD스토어기획팀 스토어 지원 (계약직)', img: '/img/company/co-img.jpg',  logo: '/img/company/co-logo.jpg' },
-    { id: 2, company: '슈퍼센트', title: '[100억 투자] 마케팅 영상 디자이너 (1년 이상)',      img: '/img/company/co-img.jpg',  logo: '/img/company/co-logo.jpg' },
-    { id: 3, company: '와이즐리', title: '패키지 디자인팀 정직원 채용모집',                  img: '/img/company/co-img.jpg',  logo: '/img/company/co-logo-3.png' },
-    { id: 4, company: '카카오',   title: 'UX/UI 디자이너 정규직 채용',                       img: '/img/company/co-img.jpg',  logo: '/img/company/co-logo.jpg' },
-  ],
-  company: [
-    { id: 1, name: '씨제이올리브영', logo: '/img/company/co-logo.jpg' },
-    { id: 2, name: '와이즐리컴퍼니', logo: '/img/company/co-logo-3.png' },
-    { id: 3, name: '카카오',         logo: '/img/company/co-logo.jpg' },
-  ],
-  coaching: [
-    { id: 1, title: '취업특강 이력서·자소서 작성법', category: '합격자소서',    img: '/img/sub/img-poster.jpg' },
-    { id: 2, title: '면접 준비 완벽 가이드',         category: '면접준비',      img: '/img/sub/img-poster.jpg' },
-    { id: 3, title: '포트폴리오 제작 핵심 전략',     category: '포트폴리오',    img: '/img/sub/img-poster.jpg' },
-  ],
-  trend: [
-    { id: 1, title: '생성형 AI 기반 코딩 툴의 장점과 단점', source: '삼성SDS',  date: '2024.04.18' },
-    { id: 2, title: 'UX 리서치 방법론 최신 트렌드',         source: 'Google',   date: '2024.04.10' },
-    { id: 3, title: '프론트엔드 개발자가 알아야 할 2024 기술 스택', source: 'Kakao', date: '2024.03.25' },
-  ],
-  story: [
-    { id: 1, name: '박수경', major: '전산세무회계', portfolios: 8,  img: '/img/interview/img-profile.jpg',         mention: '수업을 들을 때 좀 더 체계적이게 수업을 들을 수 있도록 개개인마다 멘토님이 계셔서 정말 많은 도움을 받고 있어요.' },
-    { id: 2, name: '최수정', major: '전산세무회계', portfolios: 0,  img: '/img/interview/img-profile-default.jpg', mention: '파인드미 덕분에 원하는 회사에 취업할 수 있었어요. 멘토님의 조언이 정말 큰 도움이 됐습니다.' },
-    { id: 3, name: '이준호', major: '편집디자인',   portfolios: 1,  img: '/img/interview/img-profile.jpg',         mention: '취업 준비할 때 막막했는데 체계적인 커리큘럼 덕분에 방향을 잡을 수 있었어요.' },
-    { id: 4, name: '김민지', major: '웹디자인',     portfolios: 5,  img: '/img/interview/img-profile-default.jpg', mention: '포트폴리오 제작부터 면접 준비까지 모두 도와주셔서 자신있게 면접에 임할 수 있었습니다.' },
-  ],
+  recruit: RECRUIT_DUMMY.map((r) => ({
+    id: r.id,
+    title: r.title,
+    company: r.company,
+    img: r.companyImg,
+    logo: r.companyLogo,
+  })),
+  company: COMPANY_LIST,
+  coaching: COACHING_ITEMS,
+  trend: TIP_TREND_ITEMS.map((t) => ({
+    id: t.id,
+    title: t.title,
+    source: t.company,
+    date: t.date,
+  })),
+  story: INTERVIEW_DUMMY.map((s) => ({
+    id: s.id,
+    name: s.name,
+    major: s.major,
+    img: s.profileImg,
+    portfolios: s.portfolios.length,
+    mention: s.mention,
+  })),
 };
 
 /* 검색어 필터 함수 */
@@ -74,6 +83,10 @@ export default function SearchResultPage() {
   const initialQuery = searchParams.get('q') || '';
   const [inputValue, setInputValue] = useState(initialQuery);
   const [activeTab, setActiveTab] = useState('all');
+
+  useEffect(() => {
+    if (!initialQuery) navigate('/search', { replace: true });
+  }, [initialQuery, navigate]);
 
   const filtered = useMemo(() => filterByQuery(ALL_DATA, initialQuery), [initialQuery]);
 
