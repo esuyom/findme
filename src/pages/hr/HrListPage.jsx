@@ -4,10 +4,8 @@ import SwiperSlider from '../../components/common/SwiperSlider';
 import SectionTitle from '../../components/common/SectionTitle';
 import StudentCard from '../../components/cards/StudentCard';
 import { STUDENT_DUMMY } from '../../mocks/dummyData';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
-
-const CURRENT_USER_ID = 29;
 
 const CATEGORIES = [
   { img: '/img/common/icon-category001.png', label: '마야&CG' },
@@ -22,27 +20,31 @@ const CATEGORIES = [
 
 const REGIONS = ['서울', '경기', '인천', '대전', '세종', '충남', '충북', '광주', '전남', '전북', '대구', '경북', '부산', '울산', '경남', '강원', '제주', '전국'];
 
-/** 수강생 프로필 수정 데이터를 id=29 항목에 merge */
-function mergeCurrentUser(list, stProfile) {
+// TODO(Phase2): 테스트 계정 전용 - id=29 수강생은 항상 stProfile로 merge
+const TEST_STUDENT_ID = 29;
+
+/** 수강생 프로필 수정 데이터를 현재 로그인 유저 항목 및 테스트 계정(id=29)에 merge */
+function mergeCurrentUser(list, stProfile, user) {
   return list.map((s) => {
-    if (s.id !== CURRENT_USER_ID) return s;
+    if (s.id !== TEST_STUDENT_ID && s.id !== user?.id) return s;
     return {
       ...s,
-      name:       stProfile.name       || CURRENT_STUDENT.name       || s.name,
-      mention:    stProfile.mention    || CURRENT_STUDENT.mention     || s.mention,
-      keywords:   stProfile.keywords   || CURRENT_STUDENT.keywords    || s.keywords,
-      mbti:       stProfile.mbti       || CURRENT_STUDENT.mbti        || s.mbti,
-      region:     stProfile.region     || CURRENT_STUDENT.region      || s.region,
+      name:       stProfile.name       || user?.name       || s.name,
+      mention:    stProfile.mention    || user?.mention     || s.mention,
+      keywords:   stProfile.keywords   || user?.keywords    || s.keywords,
+      mbti:       stProfile.mbti       || user?.mbti        || s.mbti,
+      region:     stProfile.region     || user?.region      || s.region,
       duty:       stProfile.duties     || stProfile.jobGroup          || s.duty,
-      profileImg: stProfile.profileImg || CURRENT_STUDENT.profileImg  || s.profileImg,
+      profileImg: stProfile.profileImg || user?.profileImg  || s.profileImg,
     };
   });
 }
 
 export default function HrListPage() {
+  const { user } = useAuth();
   const { profile: stProfile } = useStudentProfileStore();
 
-  const allStudents = mergeCurrentUser(STUDENT_DUMMY, stProfile);
+  const allStudents = mergeCurrentUser(STUDENT_DUMMY, stProfile, user);
 
   // 최신 등록 인재 (섹션1 - 전체)
   const NEW_STUDENTS = [...allStudents].slice(0, 8);

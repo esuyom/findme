@@ -3,11 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import { JOB_INTERVIEW_DUMMY, JOB_INTERVIEW_DETAIL } from '../../mocks/detailData';
 import { useContentsStore } from '../../stores/useContentsStore';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 export default function JobInterviewDetailPage() {
   const { id } = useParams();
+  const { user } = useAuth();
   const { contents } = useContentsStore();
   const { profile: stProfile } = useStudentProfileStore();
   const isUserContent = String(id).startsWith('u');
@@ -21,7 +22,7 @@ export default function JobInterviewDetailPage() {
     title:    userContent.formData?.feeling || userContent.formData?.q1?.slice(0,40) || '직무 인터뷰',
     field:    userContent.formData?.jobGroup || '',
     company:  userContent.formData?.company  || '',
-    designer: (userContent.formData?.anonymousName || userContent.formData?.name || CURRENT_STUDENT.name)
+    designer: (userContent.formData?.anonymousName || userContent.formData?.name || user?.name)
               + (userContent.formData?.jobTitle ? ' ' + userContent.formData.jobTitle : ''),
     thumb:    userContent.formData?.profileImageUrl || '/img/interview/img-worker.jpg',
   } : JOB_INTERVIEW_DUMMY.find((i) => i.id === numId) || JOB_INTERVIEW_DUMMY[0];
@@ -113,7 +114,7 @@ export default function JobInterviewDetailPage() {
                 <div>실무자 소개</div>
               </div>
               <div className="photo">
-                <img src={isUserContent ? (stProfile.profileImg || CURRENT_STUDENT.profileImg || '/img/interview/img-worker.jpg') : (detail.profile?.profileImg || '/img/interview/img-worker.jpg')} alt="프로필 사진" />
+                <img src={isUserContent ? (stProfile.profileImg || user?.profileImg || '/img/interview/img-worker.jpg') : (detail.profile?.profileImg || '/img/interview/img-worker.jpg')} alt="프로필 사진" />
               </div>
               <div className="character">
                 <div className="name">

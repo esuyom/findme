@@ -15,7 +15,6 @@ import { useResumeStore } from '../../stores/useResumeStore';
 import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 import { useApplicationStore } from '../../stores/useApplicationStore';
-import { CURRENT_STUDENT, CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../mocks/currentUser';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
@@ -27,7 +26,7 @@ export default function RecruitDetailPage() {
   const { toggle: scrapToggle, isScraped } = useRecruitScrap();
   const { resumes } = useResumeStore();
   const { add: addApplication, applications } = useApplicationStore();
-  const { userType } = useAuth();
+  const { userType, user } = useAuth();
   const { profile: stProfile } = useStudentProfileStore();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { recruits: storeRecruits } = useCpRecruitStore();
@@ -45,9 +44,9 @@ export default function RecruitDetailPage() {
   const recruitFromDummy = RECRUIT_DUMMY.find((r) => r.id === numId);
   const recruit = recruitFromDummy || (storeRecruit ? {
     id:        storeRecruit.id,
-    companyId: CURRENT_COMPANY_ID,
+    companyId: storeRecruit.companyId || user?.id,
     title:     storeRecruit.title || '(제목 없음)',
-    company:   cpProfile.name || CURRENT_COMPANY.name,
+    company:   cpProfile.name || user?.name,
     companyImg:  storeRecruit.thumbnailImg || storeRecruit.companyImg || '/img/company/co-img.jpg',
     companyLogo: storeRecruit.companyLogo  || cpProfile.logoPreview  || '/img/company/co-logo.jpg',
     location:  storeRecruit.address || '',
@@ -58,7 +57,7 @@ export default function RecruitDetailPage() {
     keywords:  (cpProfile.keywords || []).join(', '),
   } : RECRUIT_DUMMY[0]);
   const detail = RECRUIT_DETAIL[numId] || (isStoreOnly ? {
-    companyId:      CURRENT_COMPANY_ID,
+    companyId:      storeRecruit.companyId || user?.id,
     companyJobGroup: cpProfile.industry || storeRecruit.jobGroup || '',
     jobGroup:       storeRecruit.jobGroup || '',
     duty:           storeRecruit.duties || '',
@@ -126,6 +125,7 @@ export default function RecruitDetailPage() {
       company:   recruit.company,
       title:     recruit.title,
       field:     recruit.location,
+      studentId: user?.id ?? null,
     });
     if (!ok) {
       // 중복 지원은 openApplyModal 단계에서 처리되므로 여기선 예외 처리만
@@ -161,16 +161,17 @@ export default function RecruitDetailPage() {
             <Link to="/recruit" className="btn_back">
               <img src="/img/common/icon-inventory.png" alt="채용공고리스트로 이동" />
             </Link>
-            <div style={{ position: 'relative' }}>
+            {userType !== 'company' && (
+              <div style={{ position: 'relative' }}>
                 <LottieButton
-              animationPath="/img/sub/icon-save.json"
-              className="btn_save"
-              initialOn={isScraped(numId)}
-              onToggle={() => scrapToggle(numId)}
-            />
-              
+                  animationPath="/img/sub/icon-save.json"
+                  className="btn_save"
+                  initialOn={isScraped(numId)}
+                  onToggle={() => scrapToggle(numId)}
+                />
                 {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
               </div>
+            )}
           </div>
 
           {/* 본문 */}
@@ -261,11 +262,11 @@ export default function RecruitDetailPage() {
               <Link to={`/recruit/company/${recruit.companyId}`}>
                 <div className="company_info">
                   <div>
-                    <p className="company_name">{recruit.companyId === CURRENT_COMPANY_ID ? (cpProfile.name || recruit.company) : recruit.company}</p>
+                    <p className="company_name">{recruit.companyId === user?.id ? (cpProfile.name || recruit.company) : recruit.company}</p>
                     <p className="company_job_group">{detail.companyJobGroup}</p>
                   </div>
                   <div className="company_logo">
-                      <img src={recruit.companyId === CURRENT_COMPANY_ID && cpProfile.logoPreview ? cpProfile.logoPreview : (recruit.companyLogo || '/img/company/co-logo-2.png')} alt="" />
+                      <img src={recruit.companyId === user?.id && cpProfile.logoPreview ? cpProfile.logoPreview : (recruit.companyLogo || '/img/company/co-logo-2.png')} alt="" />
                   </div>
                 </div>
 
@@ -344,9 +345,9 @@ export default function RecruitDetailPage() {
               <h3>지원정보</h3>
               <div className="apply_info">
                 <ul>
-                  <li><span>이름</span>{stProfile.name || CURRENT_STUDENT.name}</li>
-                  <li><span>이메일</span>{stProfile.email || CURRENT_STUDENT.email}</li>
-                  <li><span>연락처</span>{stProfile.phone || CURRENT_STUDENT.phone}</li>
+                  <li><span>이름</span>{stProfile.name || user?.name}</li>
+                  <li><span>이메일</span>{stProfile.email || user?.email}</li>
+                  <li><span>연락처</span>{stProfile.phone || user?.phone}</li>
                 </ul>
               </div>
               <h3>이력서첨부</h3>

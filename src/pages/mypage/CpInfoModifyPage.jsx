@@ -9,17 +9,31 @@ const KEYWORD_OPTIONS = [
   '연봉 업계 평균 이상', '일한만큼 받는 보상', '퇴사율 10% 이하',
   '수평적인 기업 문화', '지속 성장중인 기업', '다양한 근무 지원 제도 운영', '요즘 뜨는 산업',
 ];
+const WELFARE_PRESETS = ['4대보험', '연차제공', '유연근무', '식비지원', '교육비지원', '경조사비', '건강검진', '생일선물', '자율출퇴근', '주거지원', '야근수당', '성과급', '스톡옵션', '재택근무'];
 
 export default function CpInfoModifyPage() {
   const { profile, update } = useCompanyProfileStore();
-  const [form, setForm] = useState({ ...profile });
+  const [form, setForm] = useState({ ...profile, keywords: profile.keywords || [] });
   const [toast, setToast] = useState(false);
   const toastTimer = useRef(null);
   const logoInputRef = useRef(null);
+  const [welfareList,  setWelfareList]  = useState(profile.welfare ? profile.welfare.split(', ').filter(Boolean) : []);
+  const [welfareInput, setWelfareInput] = useState('');
 
   const handleForm = (e) => {
     const { name, value } = e.target;
     setForm((p) => ({ ...p, [name]: value }));
+  };
+
+  const addWelfare = (item) => {
+    const trimmed = item.trim();
+    if (!trimmed || welfareList.includes(trimmed)) return;
+    setWelfareList((prev) => [...prev, trimmed]);
+    setWelfareInput('');
+  };
+  const removeWelfare = (item) => setWelfareList((prev) => prev.filter((w) => w !== item));
+  const handleWelfareKeyDown = (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); addWelfare(welfareInput); }
   };
 
   const toggleKeyword = (kw) => {
@@ -39,7 +53,7 @@ export default function CpInfoModifyPage() {
   };
 
   const handleSave = () => {
-    update(form);
+    update({ ...form, welfare: welfareList.join(', ') });
     setToast(true);
     clearTimeout(toastTimer.current);
     toastTimer.current = setTimeout(() => setToast(false), 2500);
@@ -153,6 +167,43 @@ export default function CpInfoModifyPage() {
               <h5 className="sub_title">인사담당자 연락처</h5>
               <input name="hrPhone" type="text" className="normal" value={form.hrPhone} onChange={handleForm} placeholder='"-"를 제외한 숫자만 입력해 주세요.' />
             </div>
+          </div>
+
+          <div className="input">
+            <h5 className="sub_title">혜택 및 복지</h5>
+            <div className="welfare_presets">
+              {WELFARE_PRESETS.map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  className={`welfare_preset_btn${welfareList.includes(preset) ? ' active' : ''}`}
+                  onClick={() => addWelfare(preset)}
+                >
+                  {welfareList.includes(preset) ? '✓ ' : '+ '}{preset}
+                </button>
+              ))}
+            </div>
+            <div className="d-flex gap-2 align-items-center">
+              <input
+                type="text"
+                className="normal flex-1"
+                placeholder="직접 입력 후 Enter 또는 추가"
+                value={welfareInput}
+                onChange={(e) => setWelfareInput(e.target.value)}
+                onKeyDown={handleWelfareKeyDown}
+              />
+              <button type="button" className="sm tb" onClick={() => addWelfare(welfareInput)}>추가</button>
+            </div>
+            {welfareList.length > 0 && (
+              <div className="welfare_tags">
+                {welfareList.map((item) => (
+                  <span key={item} className="welfare_tag">
+                    {item}
+                    <button type="button" className="welfare_tag_remove" onClick={() => removeWelfare(item)}>×</button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="input keywords">

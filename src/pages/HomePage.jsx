@@ -5,7 +5,7 @@ import RecruitCard from '../components/cards/RecruitCard';
 import RecruitListCard from '../components/cards/RecruitListCard';
 import InterviewCard from '../components/cards/InterviewCard';
 import { useCompanyProfileStore } from '../stores/useCompanyProfileStore';
-import { CURRENT_COMPANY_ID } from '../mocks/currentUser';
+import { useAuth } from '../context/AuthContext';
 import { RECRUIT_DUMMY, INTERVIEW_DUMMY } from '../mocks/dummyData';
 
 // 최신순 상위 8개
@@ -45,6 +45,7 @@ const BP_INTERVIEW = {
 };
 
 export default function HomePage() {
+  const { user } = useAuth();
   const { profile: cpProfile } = useCompanyProfileStore();
   return (
     <Layout containerClass="main">
@@ -87,7 +88,7 @@ export default function HomePage() {
               loopAdditionalSlides={2}
               breakpoints={BP_RECRUIT}
               items={LATEST_RECRUITS.map((d) => (
-                <RecruitCard key={d.id} {...d} companyLogo={d.companyId === CURRENT_COMPANY_ID && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
+                <RecruitCard key={d.id} {...d} companyLogo={d.companyId === user?.id && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
               ))}
             />
           </div>
@@ -156,7 +157,7 @@ export default function HomePage() {
               loopAdditionalSlides={2}
               breakpoints={BP_RECRUIT}
               items={SALARY_RECRUITS.map((d) => (
-                <RecruitCard key={d.id} {...d} companyLogo={d.companyId === CURRENT_COMPANY_ID && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
+                <RecruitCard key={d.id} {...d} companyLogo={d.companyId === user?.id && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
               ))}
             />
           </div>
@@ -176,7 +177,7 @@ export default function HomePage() {
               loopAdditionalSlides={2}
               breakpoints={BP_RECRUIT}
               items={DEADLINE_RECRUITS.map((d) => (
-                <RecruitCard key={d.id} {...d} companyLogo={d.companyId === CURRENT_COMPANY_ID && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
+                <RecruitCard key={d.id} {...d} companyLogo={d.companyId === user?.id && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
               ))}
             />
           </div>

@@ -1,36 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
 import { JOB_CATEGORIES, DUTIES_BY_CATEGORY, ALL_DUTIES } from '../../mocks/jobData';
 import { STUDENT_DUMMY } from '../../mocks/dummyData';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
-
-const CURRENT_USER_ID = 29;
 
 const MBTI_LIST = ['ENFJ','ENFP','ENTJ','ENTP','ESFJ','ESFP','ESTJ','ESTP',
                    'INFJ','INFP','INTJ','INTP','ISFJ','ISFP','ISTJ','ISTP'];
+const PAGE_SIZE = 12;
 const REGIONS   = ['서울','경기','인천','대전','세종','충남','충북','광주','전남','전북','대구','경북','부산','울산','경남','강원','제주'];
 
 export default function HrCategoryListPage() {
   const [searchParams] = useSearchParams();
   const initialJob = searchParams.get('job') || '';
   const initialLocation = searchParams.get('location') || '';
+  const { user } = useAuth();
   const { profile: stProfile } = useStudentProfileStore();
 
-  // 수강생 프로필 수정 데이터를 id=29 항목에 실시간 merge
+  // TODO(Phase2): 테스트 계정 전용 - id=29는 항상 stProfile로 merge
   const allStudents = STUDENT_DUMMY.map((s) => {
-    if (s.id !== CURRENT_USER_ID) return s;
+    if (s.id !== 29 && s.id !== user?.id) return s;
     return {
       ...s,
-      name:       stProfile.name       || CURRENT_STUDENT.name       || s.name,
-      mention:    stProfile.mention    || CURRENT_STUDENT.mention     || s.mention,
-      keywords:   stProfile.keywords   || CURRENT_STUDENT.keywords    || s.keywords,
-      mbti:       stProfile.mbti       || CURRENT_STUDENT.mbti        || s.mbti,
-      region:     stProfile.region     || CURRENT_STUDENT.region      || s.region,
+      name:       stProfile.name       || user?.name       || s.name,
+      mention:    stProfile.mention    || user?.mention     || s.mention,
+      keywords:   stProfile.keywords   || user?.keywords    || s.keywords,
+      mbti:       stProfile.mbti       || user?.mbti        || s.mbti,
+      region:     stProfile.region     || user?.region      || s.region,
       duty:       stProfile.duties     || stProfile.jobGroup          || s.duty,
-      profileImg: stProfile.profileImg || CURRENT_STUDENT.profileImg  || s.profileImg,
+      profileImg: stProfile.profileImg || user?.profileImg  || s.profileImg,
     };
   });
 
@@ -47,6 +47,7 @@ export default function HrCategoryListPage() {
   const [isNewbie,          setIsNewbie]           = useState(false);
   const [searchText,        setSearchText]         = useState('');
   const [openSel,           setOpenSel]            = useState('');
+  const [currentPage,       setCurrentPage]        = useState(1);
 
   useEffect(() => {
     setSelectedJob(searchParams.get('job') || '');
@@ -72,8 +73,11 @@ export default function HrCategoryListPage() {
   const toggleDuty = (duty) =>
     setSelectedDuties((p) => p.includes(duty) ? p.filter((d) => d !== duty) : [...p, duty]);
 
+  // 필터 변경 시 페이지 초기화
+  useEffect(() => { setCurrentPage(1); }, [selectedJob, selectedDuties, selectedMbti, selectedLocations, selectedGender, selectedStatus, ageFrom, ageTo, careerFrom, careerTo, isNewbie, searchText]);
+
   // 필터링
-  const filtered = allStudents.filter((s) => {
+  const filtered = useMemo(() => allStudents.filter((s) => {
     if (selectedJob) {
       const duties = DUTIES_BY_CATEGORY[selectedJob] || [];
       if (!duties.some((d) => s.duty.includes(d))) return false;
@@ -92,6 +96,7 @@ export default function HrCategoryListPage() {
     }
     if (isNewbie) {
       const careerMatch = !s.duty.includes('경력');
+      if (!careerMatch) return false;
     }
     if (!isNewbie && (careerFrom || careerTo)) {
       // 더미에 경력 수치 없음 → 스킵
@@ -99,7 +104,10 @@ export default function HrCategoryListPage() {
     if (selectedLocations.length > 0 && !selectedLocations.includes(s.region)) return false;
     if (searchText && !s.name.includes(searchText) && !s.duty.includes(searchText) && !s.mention.includes(searchText)) return false;
     return true;
-  });
+  }), [allStudents, selectedJob, selectedDuties, selectedMbti, selectedLocations, selectedGender, selectedStatus, ageFrom, ageTo, careerFrom, careerTo, isNewbie, searchText]);
+
+  const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
+  const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
 
   // 공통 CustomSelect 래퍼
   const Sel = ({ id, label, value, children }) => (
@@ -281,7 +289,7 @@ export default function HrCategoryListPage() {
           {/* 인재 목록 */}
           <div className="student_list_box non-slide my-5 line">
             <div className="wrap d-flex flex-wrap gap-3">
-              {filtered.length > 0 ? filtered.map((s) => (
+              {paged.length > 0 ? paged.map((s) => (
                 <div key={s.id} className="con">
                   <Link to={`/hr/${s.id}`}>
                     <div className="student_img_box">
@@ -309,7 +317,11 @@ export default function HrCategoryListPage() {
             </div>
           </div>
 
-          <Pagination />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </section>
       </div>
     </Layout>

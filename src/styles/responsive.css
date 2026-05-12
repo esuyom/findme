@@ -228,6 +228,13 @@
     line-height: 1.4;
     height: auto;
   }
+  header nav .depth1>li span{
+    display: block;
+    padding: 16px 24px;
+    font-size: 16px;
+    line-height: 1.4;
+    height: auto;
+  }
   header nav .depth2 {
     position: static;
     transform: none;

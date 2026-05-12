@@ -8,7 +8,6 @@ function loadMeta() {
   catch { return []; }
 }
 
-/** 이미지 필드 제거 후 localStorage 저장 */
 function saveMeta(list) {
   const stripped = list.map(({ thumbData, pfData, ...rest }) => rest);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(stripped));
@@ -31,7 +30,6 @@ export function usePortfolioStore() {
   const [portfolios, setPortfolios] = useState(loadMeta);
   const ref = useRef(portfolios);
 
-  // 마운트 시 각 포트폴리오 이미지를 IndexedDB에서 로드
   useEffect(() => {
     const meta = loadMeta();
     if (meta.length === 0) return;

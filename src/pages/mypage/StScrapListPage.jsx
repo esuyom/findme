@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { RECRUIT_DUMMY } from '../../mocks/dummyData';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
-import { CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { COACHING_ITEMS, TIP_TREND_ITEMS, TIP_CONTEST_ITEMS } from '../../mocks/pageData';
 import {
   useRecruitScrap,
@@ -38,10 +38,11 @@ const TABS = [
 
 export default function StScrapListPage() {
   const [activeTab, setActiveTab] = useState('all');
+  const { user } = useAuth();
 
+  const { profile: cpProfile } = useCompanyProfileStore();
   const { list: recruitIds,  remove: removeRecruit }  = useRecruitScrap();
   const { recruits: storeRecruits } = useCpRecruitStore();
-  const { profile: cpProfile }      = useCompanyProfileStore();
   const { list: companyIds,  remove: removeCompany }  = useCompanyScrap();
   const { list: coachingIds, remove: removeCoaching } = useCoachingScrap();
   const { list: trendIds,    remove: removeTrend }    = useTrendScrap();
@@ -51,15 +52,17 @@ export default function StScrapListPage() {
     ...RECRUIT_DUMMY,
     ...storeRecruits.filter((r) => !RECRUIT_DUMMY.find((d) => d.id === r.id)).map((r) => ({
       id:          r.id,
-      companyId:   CURRENT_COMPANY_ID,
+      companyId:   user?.id,
       title:       r.title || '(제목 없음)',
-      company:     cpProfile.name || CURRENT_COMPANY.name,
+      company:     cpProfile.name || user?.name,
       companyImg:  r.thumbnailImg || r.companyImg || '/img/company/co-img.jpg',
       companyLogo: r.companyLogo  || cpProfile.logoPreview || '/img/company/co-logo.jpg',
     })),
   ];
   const recruits = recruitIds.map((id) => ALL_RECRUITS.find((r) => r.id === id || r.id === Number(id))).filter(Boolean);
-  const companies = companyIds.map((id) => COMPANY_MAP[id]).filter(Boolean);
+  const companies = companyIds.map((id) =>
+    COMPANY_MAP[id] || (cpProfile.name ? { id, name: cpProfile.name, logo: cpProfile.logoPreview || '/img/company/co-logo.jpg', img: '/img/company/co-img.jpg' } : undefined)
+  ).filter(Boolean);
   const coachings = coachingIds.map((id) => COACHING_ITEMS.find((c) => c.id === id)).filter(Boolean);
   const trends    = trendIds.map((id) => TIP_TREND_ITEMS.find((t) => t.id === id)).filter(Boolean);
   const contests  = contestIds.map((id) => TIP_CONTEST_ITEMS.find((c) => c.id === id)).filter(Boolean);

@@ -8,11 +8,15 @@ import { useWishList } from '../../stores/useWishListStore';
 import LottieButton from '../../components/common/LottieButton';
 import { useCpOfferStore } from '../../stores/useCpOfferStore';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
+import { useAuth } from '../../context/AuthContext';
 
 export default function CpHrWishPage() {
   const { wishList, remove, toggle, isWished } = useWishList();
   const { add: addOffer, offers }   = useCpOfferStore();
   const { recruits }                = useCpRecruitStore();
+  const { user: stUser }            = useAuth();
+  const { profile: stProfile }      = useStudentProfileStore();
 
   const [confirmRemoveId, setConfirmRemoveId] = useState(null);
   const [offerModal,       setOfferModal]      = useState(null);
@@ -33,7 +37,28 @@ export default function CpHrWishPage() {
   };
 
   const alreadyOffered = (id) => offers.some((o) => o.studentId === id);
-  const wishedStudents = wishList.map((id) => STUDENT_DUMMY.find((s) => s.id === id)).filter(Boolean);
+
+  // TODO(Phase2): 백엔드 연동 후 아래 STUDENT_USER_ID 블록 삭제 및 API 데이터로 대체 필요 - 테스트 계정 전용
+  // 테스트 수강생(id=29)이면 stProfile 데이터로 오버라이드
+  const STUDENT_USER_ID = 29;
+  const wishedStudents = wishList.map((id) => {
+    if (id === STUDENT_USER_ID) {
+      const base = STUDENT_DUMMY.find((s) => s.id === id) || {};
+      return {
+        ...base,
+        id: STUDENT_USER_ID,
+        name:       stProfile.name       || base.name,
+        age:        base.age,
+        mention:    stProfile.mention    || base.mention,
+        duty:       stProfile.duties     || stProfile.jobGroup || base.duty || '',
+        keywords:   stProfile.keywords   || base.keywords || [],
+        mbti:       stProfile.mbti       || base.mbti || '',
+        region:     stProfile.region     || base.region || '',
+        profileImg: stProfile.profileImg || base.profileImg || '/img/common/img-profile-default2.png',
+      };
+    }
+    return STUDENT_DUMMY.find((s) => s.id === id);
+  }).filter(Boolean);
 
   return (
     <Layout containerClass="mypage cp sub">
@@ -72,7 +97,7 @@ export default function CpHrWishPage() {
                   />
 
                   <div className="hr_info slash d-flex align-items-center mb-4">
-                    <span className="profile"><img src="/img/common/img-profile-default2.png" alt="profile" /></span>
+                    <span className="profile"><img src={student.profileImg || '/img/common/img-profile-default2.png'} alt="profile" /></span>
                     <div><Link to={`/hr/${student.id}`} style={{ fontWeight: 700 }}>{student.name}</Link>{' '}<span className="age">{student.age}</span></div>
                     <div>{student.duty.split(',')[0].trim()} 직군</div>
                     <div>{student.mbti}</div>
@@ -134,7 +159,7 @@ export default function CpHrWishPage() {
             </div>
             <div className="profile" style={{ display: 'flex', alignItems: 'center', padding: '16px', background: '#f2f4f7', borderRadius: 12 }}>
               <div style={{ width: 64, height: 64, borderRadius: '50%', overflow: 'hidden', marginRight: 16, flexShrink: 0 }}>
-                <img src="/img/common/img-profile-default2.png" alt="프로필" style={{ width: '100%' }} />
+                <img src={offerModal.profileImg || '/img/common/img-profile-default2.png'} alt="프로필" style={{ width: '100%' }} />
               </div>
               <div>
                 <div style={{ fontSize: 17, fontWeight: 800 }}>{offerModal.name} <span style={{ fontSize: 13, fontWeight: 400 }}>{offerModal.age}</span></div>

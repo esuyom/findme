@@ -144,7 +144,7 @@ header .back_btn { display: none; }
 /* detail 페이지 */
 .detail_txt{margin-top:35px;}
 .detail_txt h4{font-size:21px;font-weight: 800;margin-bottom: 15px; color: #191919;}
-.detail_txt p{font-size:15px;word-break: keep-all;}
+.detail_txt p{font-size:15px;}
 .detail_txt p + p{margin-top: 20px;}
 .detail_img{margin-top:35px;}
 .top_txt .sub_txt{font-size:15px;font-weight: 600; margin-bottom:5px;}
@@ -194,6 +194,7 @@ header nav{height:100%; margin-left: 50px;}
 header nav .depth1{display:flex; }
 header nav .depth1>li{margin:0 7px; position:relative;}
 header nav .depth1>li a{font-weight:800;font-size:15px;height: 100%;display: block;padding: 0 17px; line-height:70px;}
+header nav .depth1>li span{cursor: pointer;font-weight:800;font-size:15px;height: 100%;display: block;padding: 0 17px; line-height:70px;}
 header nav .depth2{position: absolute;bottom: 0;left: 50%;transform: translate(-50%,100%);width: 100%;pointer-events: none; text-align: center;opacity:0; transition: opacity 0.3s;transition-delay: -0.25s;z-index: 10;}
 header nav .depth2 li{margin:0;}
 header nav .depth2 li a{font-size:14px;font-weight: 500;padding: 0;line-height: initial;padding: 10px 0;}
@@ -314,6 +315,7 @@ footer .footer_site .select_site .company_group > ul::-webkit-scrollbar-track {b
 .recruit .detail_float .company_detail .more::after{content:"";width:10px;height:10px;display:inline-block;background:url(/img/company/icon-more.png)no-repeat center;background-size: contain;margin-left: 5px;vertical-align: -1px;}
 .recruit .company_recruit_box{margin-top:18px;}
 .detail_float .detail_company.fixed {  position: sticky; left: 0; top: 60px; z-index: 5;}
+.recruit .welfare{margin-top:20px;}
 .recruit .welfare span{font-size:12px;color: #666666;border:1px solid #eaeaea;border-radius:12px;padding: 6px 12px;font-weight: 600;margin-right: 7px;}
 
 .recruit.company .company_info{display:flex;align-items: center;padding-bottom: 40px;}
@@ -600,6 +602,12 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .mypage.cp.recruit.write .back img{width: 40%;}
 .mypage.cp.recruit.write .job_noti{color:#959595;background-color:#eaeaea;border-radius:8px; padding:17px; font-weight:600;}
 .mypage.cp.recruit.write .pay_noti{font-size:14px; color:#999999; font-weight:500; }
+.welfare_presets{display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px;}
+.welfare_preset_btn{font-size:12px;display: flex; align-items: center; padding:4px 10px; border-radius:12px; border:1px solid #ddd; background:#f8f8f8; color:#555; font-weight:600; cursor:pointer;}
+.welfare_preset_btn.active{border-color:#4dbbff; background:#e8f7ff; color:#4dbbff;}
+.welfare_tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
+.welfare_tag{height: 48px; font-size:12px; padding:4px 10px; border-radius:12px; border:1px solid #4dbbff; background:#e8f7ff; color:#4dbbff; font-weight:600; display:flex; align-items:center; gap:4px;}
+.welfare_tag_remove{background:none; border:none; cursor:pointer; padding:0; color:#4dbbff; font-weight:700; font-size:13px; line-height:1;}
 
 .mypage.cp.info .contents{width:846px; }
 .mypage.cp.info .multi_input label span{margin-left:7px;height: 40px;line-height: 40px;}
@@ -661,7 +669,7 @@ button em.icon{display:inline-block;background-size: contain !important;width:15
 .popup-dim.show {display: block;}
 .popup.w400{width:400px;}
 .popup.w560{width:560px;}
-.mypage .popup .contents{width:100%; padding:0; font-size:auto;}
+.mypage .popup .contents{width:100%; padding:0 !important; font-size:auto;}
 .popup .btn_center button{width:100%;}
 
 /* 팝업 - 스킬 추가*/

@@ -26,7 +26,7 @@ export function useContentsStore() {
     const item = {
       id: Date.now(),
       title: formData.company
-        ? `${formData.company} 취업 성공 스토리`
+        ? `${formData.company} ${formData.category === '직무인터뷰' ? '직무인터뷰' : '취업 성공 스토리'}`
         : formData.feeling || '새 인터뷰',
       lastModified: todayStr(),
       status,
@@ -43,7 +43,7 @@ export function useContentsStore() {
           ? {
               ...c,
               title: formData.company
-                ? `${formData.company} 취업 성공 스토리`
+                ? `${formData.company} ${formData.category === '직무인터뷰' ? '직무인터뷰' : '취업 성공 스토리'}`
                 : formData.feeling || c.title,
               lastModified: todayStr(),
               status: status ?? c.status,

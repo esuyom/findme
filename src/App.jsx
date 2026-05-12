@@ -95,7 +95,7 @@ export default function App() {
           <Route path="/hr/:id" element={<HrDetailPage />} />
           <Route path="/hr/category" element={<HrCategoryListPage />} />
 
-          {/* 채용정보 — 정적 경로를 동적 경로보다 앞에 */}
+          {/* 채용정보 */}
           <Route path="/recruit" element={<RecruitListPage />} />
           <Route path="/recruit/company/:id" element={<CompanyDetailPage />} />
           <Route path="/recruit/:id" element={<RecruitDetailPage />} />
@@ -104,7 +104,7 @@ export default function App() {
           <Route path="/coaching" element={<CoachingListPage />} />
           <Route path="/coaching/:id" element={<CoachingDetailPage />} />
 
-          {/* 팁 — 정적 경로를 동적 경로보다 앞에 */}
+          {/* 팁 */}
           <Route path="/tip" element={<TipListPage />} />
           <Route path="/tip/skill" element={<TipSkillDataPage />} />
           <Route path="/tip/contest" element={<TipContestListPage />} />

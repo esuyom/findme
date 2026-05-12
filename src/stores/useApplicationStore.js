@@ -26,11 +26,11 @@ export function useApplicationStore() {
   };
 
   /** 입사지원 추가 */
-  const add = ({ recruitId, company, title, field }) => {
+  const add = ({ recruitId, company, title, field, studentId }) => {
     // 동일 공고 중복 지원 방지
     if (listRef.current.some((a) => a.recruitId === recruitId)) return false;
     _commit([
-      { id: Date.now(), date: todayStr(), recruitId, company, title, field, status: '진행중', viewed: false },
+      { id: Date.now(), date: todayStr(), recruitId, company, title, field, studentId: studentId ?? null, applicationStatus: '진행중', viewed: false },
       ...listRef.current,
     ]);
     return true;
@@ -41,5 +41,15 @@ export function useApplicationStore() {
     _commit(listRef.current.filter((a) => a.id !== id));
   };
 
-  return { applications, add, remove };
+  /** 전형 상태 변경 (진행중 / 서류합격 / 최종합격 / 불합격) */
+  const updateStatus = (id, applicationStatus) => {
+    _commit(listRef.current.map((a) => (a.id === id ? { ...a, applicationStatus } : a)));
+  };
+
+  /** 열람 처리 */
+  const markViewed = (id) => {
+    _commit(listRef.current.map((a) => (a.id === id ? { ...a, viewed: true } : a)));
+  };
+
+  return { applications, add, remove, updateStatus, markViewed };
 }

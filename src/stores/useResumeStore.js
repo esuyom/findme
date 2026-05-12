@@ -2,25 +2,7 @@ import { useState } from 'react';
 
 const STORAGE_KEY = 'findme_resumes';
 
-// 기본 더미 이력서 (localStorage 비어있을 때 초기값)
-const DEFAULT_RESUMES = [
-  {
-    id: 1,
-    name: '다재다능한 디자이너 최수정',
-    isMain: true,
-    status: 'complete',
-    lastModified: '2024.05.06',
-    formData: null,
-  },
-  {
-    id: 2,
-    name: '패기와 열정이 있는 디자이너 최수정',
-    isMain: false,
-    status: 'draft',
-    lastModified: '2024.05.06',
-    formData: null,
-  },
-];
+const DEFAULT_RESUMES = [];
 
 function loadFromStorage() {
   try {

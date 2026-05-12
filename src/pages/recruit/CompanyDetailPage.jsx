@@ -7,7 +7,7 @@ import { COMPANY_DETAIL } from '../../mocks/detailData';
 import { useCompanyScrap } from '../../stores/useScrapStore';
 import { useCompanyInquiryStore } from '../../stores/useCompanyInquiryStore';
 import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
-import { CURRENT_COMPANY_ID } from '../../mocks/currentUser';
+import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
 import { useAuth } from '../../context/AuthContext';
 
@@ -15,10 +15,11 @@ export default function CompanyDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
   const { toggle: scrapToggle, isScraped } = useCompanyScrap();
-  const { userType } = useAuth();
+  const { userType, user } = useAuth();
   const { add: addInquiry } = useCompanyInquiryStore();
   const { profile: cpProfile } = useCompanyProfileStore();
-  const isOwnCompany = numId === CURRENT_COMPANY_ID;
+  const { recruits: storeRecruits } = useCpRecruitStore();
+  const isOwnCompany = numId === user?.id;
   const [showContactModal, setShowContactModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [form, setForm] = useState({ title: '', content: '', email: '', agreed: false });
@@ -28,27 +29,48 @@ export default function CompanyDetailPage() {
   // 기업 상세 데이터 조회
   const company = COMPANY_DETAIL[numId] || COMPANY_DETAIL.default;
 
-  // 현재 로그인 기업이면 store 데이터로 오버라이드
-  const companyData = isOwnCompany ? {
+  // COMPANY_DETAIL에 없는 회사(스토어 등록 기업)이면 cpProfile로 오버라이드
+  const isStoreCompany = !COMPANY_DETAIL[numId] && cpProfile.name;
+  const useProfileOverride = isOwnCompany || isStoreCompany;
+
+  const companyData = useProfileOverride ? {
     ...company,
-    companyName:     cpProfile.name     || companyData.companyName,
-    companyJobGroup: cpProfile.industry || companyData.companyJobGroup,
-    logoSrc:         cpProfile.logoPreview || companyData.logoSrc,
-    intro:           cpProfile.intro ? [cpProfile.intro] : companyData.intro,
-    address:         cpProfile.address  || companyData.address,
-    welfareKeywords: cpProfile.keywords?.length ? cpProfile.keywords : companyData.welfareKeywords,
+    companyName:     cpProfile.name     || company.companyName,
+    companyJobGroup: cpProfile.industry || company.companyJobGroup,
+    logoSrc:         cpProfile.logoPreview || company.logoSrc,
+    intro:           cpProfile.intro ? [cpProfile.intro] : company.intro,
+    address:         cpProfile.address  || company.address,
+    welfareKeywords: cpProfile.welfare ? cpProfile.welfare.split(', ').filter(Boolean) : company.welfareKeywords,
     table: [
-      { label: '산업분류', value: cpProfile.industry  || companyData.companyJobGroup },
-      { label: '설립일',   value: cpProfile.founded   ? `${cpProfile.founded}년 설립` : (companyData.table?.find(r=>r.label==='설립일')?.value||'') },
-      { label: '매출',     value: cpProfile.revenue   || (companyData.table?.find(r=>r.label==='매출')?.value||'') },
-      { label: '기업유형', value: cpProfile.size       || (companyData.table?.find(r=>r.label==='기업유형')?.value||'') },
-      { label: '사원수',   value: cpProfile.employees || (companyData.table?.find(r=>r.label==='사원수')?.value||'') },
+      { label: '산업분류', value: cpProfile.industry  || company.companyJobGroup },
+      { label: '설립일',   value: cpProfile.founded   ? `${cpProfile.founded}년 설립` : (company.table?.find(r=>r.label==='설립일')?.value||'') },
+      { label: '매출',     value: cpProfile.revenue   || (company.table?.find(r=>r.label==='매출')?.value||'') },
+      { label: '기업유형', value: cpProfile.size       || (company.table?.find(r=>r.label==='기업유형')?.value||'') },
+      { label: '사원수',   value: cpProfile.employees || (company.table?.find(r=>r.label==='사원수')?.value||'') },
       { label: '홈페이지', value: cpProfile.website   || '', isLink: true },
     ].filter(r => r.value),
   } : company;
 
-  // 해당 기업의 채용공고 목록
-  const companyRecruits = RECRUIT_DUMMY.filter((r) => r.companyId === numId);
+  // TODO(Phase2): 백엔드 연동 후 storeCompanyRecruits 블록 삭제 및 API 데이터로 대체 필요 - 테스트 계정 전용
+  // 해당 기업의 채용공고 목록 (더미 + 스토어 등록 공고)
+  const storeCompanyRecruits = (isOwnCompany || isStoreCompany)
+    ? storeRecruits
+        .filter((r) => r.status === 'active' && (r.companyId === numId || isOwnCompany))
+        .map((r) => {
+          const dDay = r.deadline && r.deadline !== '상시채용'
+            ? Math.max(0, Math.ceil((new Date(r.deadline) - new Date()) / (1000 * 60 * 60 * 24)))
+            : null;
+          return {
+            id:       r.id,
+            title:    r.title || '(제목 없음)',
+            location: `${r.region1 || '서울'} ${r.region2 || ''}`,
+            state:    dDay === null ? '채용시마감' : `D-${dDay}`,
+            deadline: r.deadline || '',
+          };
+        })
+    : [];
+  const dummyCompanyRecruits = RECRUIT_DUMMY.filter((r) => r.companyId === numId);
+  const companyRecruits = [...storeCompanyRecruits, ...dummyCompanyRecruits];
 
   // 스크롤 시 detail_company fixed 처리
   useEffect(() => {
@@ -63,7 +85,9 @@ export default function CompanyDetailPage() {
   // RECRUIT_DUMMY에서 이 기업의 대표 데이터 참조 (이름/키워드)
   const recruitRef = RECRUIT_DUMMY.find((r) => r.companyId === numId);
   const displayName = companyData.companyName || recruitRef?.company || '';
-  const displayKeywords = recruitRef?.keywords || '';
+  const displayKeywords = isOwnCompany
+    ? (cpProfile.keywords?.join(', ') || '')
+    : (recruitRef?.keywords || '');
 
   return (
     <Layout containerClass="recruit company sub">
@@ -75,16 +99,18 @@ export default function CompanyDetailPage() {
             <Link to="/recruit" className="btn_back">
               <img src="/img/common/icon-inventory.png" alt="채용공고리스트로 이동" />
             </Link>
-            <div style={{ position: 'relative' }}>
-              <LottieButton
-                animationPath="/img/sub/icon-wish1.json"
-                className="btn_wish"
-                initialOn={isScraped(numId)}
-                onToggle={() => scrapToggle(numId)}
-              />
-            
+            {userType !== 'company' && (
+              <div style={{ position: 'relative' }}>
+                <LottieButton
+                  animationPath="/img/sub/icon-wish1.json"
+                  className="btn_wish"
+                  initialOn={isScraped(numId)}
+                  onToggle={() => scrapToggle(numId)}
+                />
                 {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
-              </div></div>
+              </div>
+            )}
+          </div>
 
           {/* 본문 */}
           <section className="w640">
@@ -112,9 +138,6 @@ export default function CompanyDetailPage() {
                     [{l.label}]<br />
                     <a href={l.href} target="_blank" rel="noreferrer">{l.href}</a>
                   </p>
-                ))}
-                {companyData.welfare.map((w, i) => (
-                  <p key={i} style={{ whiteSpace: 'pre-line' }}>{w}</p>
                 ))}
               </div>
 

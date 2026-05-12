@@ -2,13 +2,12 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
 import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 export default function SecessionPage() {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { profile: stProfile } = useStudentProfileStore();
   const [checks, setChecks] = useState({
     unpaidAmount: false,
@@ -60,7 +59,7 @@ export default function SecessionPage() {
               <h4>탈퇴계정</h4>
               <div className="email">
                 <img src="/img/common/img-profile-default.jpg" alt="" />
-                {stProfile.email || CURRENT_STUDENT.email}
+                {stProfile.email || user?.email}
               </div>
               <ul className="txt dot">
                 <li>

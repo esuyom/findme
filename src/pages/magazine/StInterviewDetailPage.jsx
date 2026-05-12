@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import { INTERVIEW_DUMMY } from '../../mocks/dummyData';
 import { useContentsStore } from '../../stores/useContentsStore';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 import { useSkillStore } from '../../stores/useSkillStore';
 import { usePortfolioStore } from '../../stores/usePortfolioStore';
@@ -12,6 +12,7 @@ import { ST_INTERVIEW_DETAIL } from '../../mocks/detailData';
 export default function StInterviewDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
+  const { user } = useAuth();
 
   const { contents } = useContentsStore();
   const { profile: stProfile } = useStudentProfileStore();
@@ -28,7 +29,7 @@ export default function StInterviewDetailPage() {
 
   const interview = userContent ? {
     id,
-    name:       userContent.formData?.anonymousName || userContent.formData?.name || CURRENT_STUDENT.name,
+    name:       userContent.formData?.anonymousName || userContent.formData?.name || user?.name,
     profileImg: userContent.formData?.profileImageUrl || '/img/interview/img-profile-default.jpg',
     mention:    userContent.formData?.feeling || '',
     date:       userContent.lastModified || userContent.date || '',
@@ -141,7 +142,7 @@ export default function StInterviewDetailPage() {
               <div className="photo">
                 <img
                   src={isUserContent
-                    ? (stProfile.profileImg || CURRENT_STUDENT.profileImg || '/img/common/img-profile-default.jpg')
+                    ? (stProfile.profileImg || user?.profileImg || '/img/common/img-profile-default.jpg')
                     : (interview.profileImg || '/img/interview/img-profile.jpg')}
                   alt="프로필 사진"
                 />
@@ -150,8 +151,8 @@ export default function StInterviewDetailPage() {
                 <ul className="characters">
                   {isUserContent ? (
                     <>
-                      <li className="mbti">{stProfile.mbti || CURRENT_STUDENT.mbti || ''}</li>
-                      {(stProfile.keywords || CURRENT_STUDENT.keywords || []).map((k) => <li key={k}>{k}</li>)}
+                      <li className="mbti">{stProfile.mbti || user?.mbti || ''}</li>
+                      {(stProfile.keywords || user?.keywords || []).map((k) => <li key={k}>{k}</li>)}
                     </>
                   ) : (
                     <li style={{fontSize:12,color:'#666',fontWeight:600}}>{interview.major}</li>
@@ -159,22 +160,24 @@ export default function StInterviewDetailPage() {
                 </ul>
                 <div className="name">
                   {interview.name}
-                  {isUserContent && <span className="age" style={{ fontSize:12, marginLeft:4 }}>{CURRENT_STUDENT.age}</span>}
+                  {isUserContent && <span className="age" style={{ fontSize:12, marginLeft:4 }}>{user?.age}</span>}
                 </div>
                 <div className="part" style={{ fontSize:12, color:'#4dbbff', fontWeight:600 }}>
-                  {isUserContent ? (stProfile.jobGroup || CURRENT_STUDENT.major || '') : interview.major}
+                  {isUserContent ? (stProfile.jobGroup || user?.major || '') : interview.major}
                 </div>
+                {isUserContent && mappedSkills.length > 0 && (
                 <div className="skill_info">
-                    <ul>
-                      {(isUserContent ? (mappedSkills.length > 0 ? mappedSkills : (CURRENT_STUDENT.skills || [])) : detail.skills).map((skill, idx) => (
-                        <li key={idx}>
-                          <div className="skill">{skill.name}</div>
-                          <div className="bar"><div className="outer"><span style={{ width: `${skill.percentage}%` }}></span></div></div>
-                          <div className="percent">{skill.percentage}%</div>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  <ul>
+                    {mappedSkills.map((skill, idx) => (
+                      <li key={idx}>
+                        <div className="skill">{skill.name}</div>
+                        <div className="bar"><div className="outer"><span style={{ width: `${skill.percentage}%` }}></span></div></div>
+                        <div className="percent">{skill.percentage}%</div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               </div>
             </div>
           </section>

@@ -1,27 +1,28 @@
 import { useState, useEffect } from 'react';
-import { CURRENT_COMPANY } from '../mocks/currentUser';
 import { saveImage, loadImage } from '../utils/imageDB';
 
 const STORAGE_KEY = 'findme_company_profile';
 const LOGO_KEY = 'company_logoPreview';
 
+// TODO (Phase 2): GET /api/profile/company 응답으로 초기값 교체
 const DEFAULT_PROFILE = {
-  name:           CURRENT_COMPANY.name,
-  email:          CURRENT_COMPANY.email,
-  intro:          CURRENT_COMPANY.intro || '',
-  website:        CURRENT_COMPANY.website || '',
-  address:        CURRENT_COMPANY.address || '',
-  businessNumber: CURRENT_COMPANY.businessNumber || '',
-  revenue:        CURRENT_COMPANY.revenue || '',
-  industry:       CURRENT_COMPANY.industry || '',
-  size:           CURRENT_COMPANY.size || '',
-  employees:      CURRENT_COMPANY.employees || '',
-  founded:        CURRENT_COMPANY.founded || '',
-  hrEmail:        CURRENT_COMPANY.hrEmail || '',
-  hrManager:      CURRENT_COMPANY.hrManager || '',
-  hrPhone:        CURRENT_COMPANY.hrPhone || '',
-  keywords:       CURRENT_COMPANY.keywords || [],
-  logoPreview:    CURRENT_COMPANY.logoImg || '',
+  name:           '코리아교육그룹',
+  email:          'hr@koreaedugroup.com',
+  intro:          '',
+  website:        '',
+  address:        '',
+  businessNumber: '',
+  revenue:        '',
+  industry:       '',
+  size:           '',
+  employees:      '',
+  founded:        '',
+  hrEmail:        '',
+  hrManager:      '',
+  hrPhone:        '',
+  keywords:       [],
+  welfare:        '',
+  logoPreview:    '/img/company/co-logo.jpg',
 };
 
 function loadMeta() {

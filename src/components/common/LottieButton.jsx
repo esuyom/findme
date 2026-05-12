@@ -19,8 +19,10 @@ export default function LottieButton({
 }) {
   const containerRef = useRef(null);
   const animRef = useRef(null);
+  const initialOnRef = useRef(initialOn);
   const [isOn, setIsOn] = useState(initialOn);
 
+  // animationPath 변경 시에만 애니메이션 재생성 (initialOn 변경으로 재초기화하지 않음)
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -33,8 +35,8 @@ export default function LottieButton({
     });
     animRef.current = anim;
 
-    // initialOn이면 로드 완료 후 마지막 프레임(색 채워진 상태)으로 점프
-    if (initialOn) {
+    // 마운트 시점의 initialOn 값으로만 초기 프레임 설정
+    if (initialOnRef.current) {
       anim.addEventListener('DOMLoaded', () => {
         anim.goToAndStop(anim.totalFrames - 1, true);
       });
@@ -43,7 +45,8 @@ export default function LottieButton({
     return () => {
       anim.destroy();
     };
-  }, [animationPath, initialOn]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [animationPath]);
 
   const handleClick = () => {
     if (!animRef.current) return;
@@ -51,17 +54,7 @@ export default function LottieButton({
     setIsOn(next);
     animRef.current.setDirection(next ? 1 : -1);
     animRef.current.play();
-
-    if (!next && onToggle) {
-      // 비활성화(off) 방향: 애니메이션 완료 후 콜백
-      const handler = () => {
-        animRef.current?.removeEventListener('complete', handler);
-        onToggle(next);
-      };
-      animRef.current.addEventListener('complete', handler);
-    } else {
-      onToggle?.(next);
-    }
+    onToggle?.(next);
   };
 
   return (

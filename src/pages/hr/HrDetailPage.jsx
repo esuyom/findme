@@ -9,7 +9,6 @@ import LottieButton from '../../components/common/LottieButton';
 import { STUDENT_DUMMY, RECRUIT_DUMMY } from '../../mocks/dummyData';
 import { DUTIES_BY_CATEGORY } from '../../mocks/jobData';
 import { STUDENT_DETAIL } from '../../mocks/detailData';
-import { CURRENT_COMPANY_ID, CURRENT_STUDENT } from '../../mocks/currentUser';
 import { useWishList } from '../../stores/useWishListStore';
 import { useCpOfferStore } from '../../stores/useCpOfferStore';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
@@ -19,8 +18,6 @@ import { usePortfolioStore } from '../../stores/usePortfolioStore';
 import { useResumeStore } from '../../stores/useResumeStore';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
 import { useAuth } from '../../context/AuthContext';
-
-const CURRENT_USER_ID = 29;
 
 // duty 문자열로 직군 역매핑
 function inferJobGroup(dutyStr) {
@@ -38,7 +35,7 @@ export default function HrDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
   const { toggle, isWished } = useWishList();
-  const { userType } = useAuth();
+  const { userType, user } = useAuth();
   const { add: addOffer } = useCpOfferStore();
   const { recruits: storeRecruits } = useCpRecruitStore();
   const { profile: stProfile } = useStudentProfileStore();
@@ -69,29 +66,32 @@ export default function HrDetailPage() {
   const handleInquiryChange = (e) =>
     setInquiryForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
-  // ── id=29 이면 수강생 본인 프로필로 override ─────────────────
-  const isCurrentUser = numId === CURRENT_USER_ID;
+  // TODO(Phase2): 백엔드 연동 후 isCurrentUser/isTestStudent 분기 및 store override 블록 삭제 필요 - 테스트 계정 전용
+  // ── 현재 로그인 수강생 본인 프로필로 override (기업이 테스트 수강생 볼 때도 store 데이터 사용) ────────────────
+  const isCurrentUser = user?.id != null && numId === user.id;
+  const isTestStudent = numId === 29; // 테스트 수강생 고정 ID
+  const showStoreData = isCurrentUser || isTestStudent;
   const rawStudent = STUDENT_DUMMY.find((s) => s.id === numId) || STUDENT_DUMMY[0];
 
-  const student = isCurrentUser ? {
+  const student = showStoreData ? {
     ...rawStudent,
-    name:       stProfile.name       || CURRENT_STUDENT.name       || rawStudent.name,
-    mention:    stProfile.mention    || CURRENT_STUDENT.mention     || rawStudent.mention,
-    keywords:   stProfile.keywords   || CURRENT_STUDENT.keywords    || rawStudent.keywords,
-    mbti:       stProfile.mbti       || CURRENT_STUDENT.mbti        || rawStudent.mbti,
-    region:     stProfile.region     || CURRENT_STUDENT.region      || rawStudent.region,
+    name:       stProfile.name       || user?.name       || rawStudent.name,
+    mention:    stProfile.mention    || user?.mention     || rawStudent.mention,
+    keywords:   stProfile.keywords   || user?.keywords    || rawStudent.keywords,
+    mbti:       stProfile.mbti       || user?.mbti        || rawStudent.mbti,
+    region:     stProfile.region     || user?.region      || rawStudent.region,
     duty:       stProfile.duties     || stProfile.jobGroup          || rawStudent.duty,
-    profileImg: stProfile.profileImg || CURRENT_STUDENT.profileImg  || rawStudent.profileImg,
+    profileImg: stProfile.profileImg || user?.profileImg  || rawStudent.profileImg,
   } : rawStudent;
 
   const rawDetail = STUDENT_DETAIL[numId] || STUDENT_DETAIL.default;
   const mappedSkills = resumeSkills.map((s) => ({ name: s.name, percentage: s.degree || 0 }));
 
-  const detail = isCurrentUser ? {
+  const detail = showStoreData ? {
     ...rawDetail,
-    phone:     stProfile.phone     || CURRENT_STUDENT.phone     || rawDetail.phone,
-    email:     stProfile.email     || CURRENT_STUDENT.email     || rawDetail.email,
-    address:   CURRENT_STUDENT.address || rawDetail.address,
+    phone:     stProfile.phone     || user?.phone     || rawDetail.phone,
+    email:     stProfile.email     || user?.email     || rawDetail.email,
+    address:   user?.address || rawDetail.address,
     jobStatus: stProfile.jobStatus || rawDetail.jobStatus,
     career:    stProfile.career    || rawDetail.career,
     skills:    mappedSkills.length > 0 ? mappedSkills : rawDetail.skills,
@@ -100,7 +100,7 @@ export default function HrDetailPage() {
   // 기업이 직접 등록한 활성 공고만 표시 (더미 데이터 제외)
   const myRecruits = storeRecruits
     .filter((r) => r.status === 'active')
-    .map((r) => ({ id: r.id, title: r.title || '(제목 없음)', location: r.region1 || '서울', companyId: CURRENT_COMPANY_ID }));
+    .map((r) => ({ id: r.id, title: r.title || '(제목 없음)', location: r.region1 || '서울', companyId: user?.id }));
   const duties = student.duty.split(',').map((d) => d.trim()).filter(Boolean).slice(0, 3);
   const relatedByDuty = duties.map((duty) => ({
     duty,
@@ -167,6 +167,7 @@ export default function HrDetailPage() {
               <Link to="/hr" className="btn_back">
                 <img src="/img/common/icon-banner-prev.png" alt="뒤로가기" />
               </Link>
+            {userType !== 'student' && (
               <div style={{ position: 'relative' }}>
                 <LottieButton
                   animationPath="/img/sub/icon-wish1.json"
@@ -176,6 +177,7 @@ export default function HrDetailPage() {
                 />
                 {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
               </div>
+            )}
             </div>
           </div>
         </section>
@@ -200,7 +202,7 @@ export default function HrDetailPage() {
               <h3>{student.name}님의 포트폴리오를 소개합니다.</h3>
               <div className="portfolio_list">
                 <ul className="gap-3">
-                  {isCurrentUser ? (
+                  {showStoreData ? (
                     myPortfolios.length > 0 ? (
                       myPortfolios.map((pf, i) => {
                         const thumb = (pf.thumbData && pf.thumbData[0]) || '/img/sub/img-thum-portfolio.png';
@@ -325,7 +327,7 @@ export default function HrDetailPage() {
                   ))}
                 </ul>
               </div>
-              {isCurrentUser && mainResume && (
+              {showStoreData && mainResume && (
                 <div style={{ marginTop: 24 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20, paddingBottom: 12, borderBottom: '2px solid #4dbbff' }}>
                     <span style={{ fontSize: 15, fontWeight: 700, color: '#222' }}>{mainResume.name}</span>
@@ -372,7 +374,7 @@ export default function HrDetailPage() {
                   )}
                 </div>
               )}
-              {isCurrentUser && !mainResume && (
+              {showStoreData && !mainResume && (
                 <p style={{ fontSize: 13, color: '#aaa', textAlign: 'center', padding: '24px 0' }}>등록된 이력서가 없습니다.</p>
               )}
             </div>

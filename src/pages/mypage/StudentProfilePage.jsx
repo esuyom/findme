@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
 import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 import { compressImage } from '../../utils/compressImage';
 import Toast from '../../components/common/Toast';
@@ -12,15 +12,19 @@ const MBTI_LIST = ['ISTJ','ISFJ','INFJ','INTJ','ISTP','ISFP','INFP','INTP','ESTP
 const KEYWORD_LIST = ['노력형', '책임감', '활동적인', '주도적인', '자신감', '프리랜서'];
 
 export default function StudentProfilePage() {
+  const { user } = useAuth();
   const { profile: stProfile, update: updateProfile } = useStudentProfileStore();
-  const [p1, p2, p3] = CURRENT_STUDENT.phone.split('-');
+  const [p1, p2, p3] = (stProfile.phone || user?.phone || '010--').split('-');
   const [jobState, setJobState] = useState('구직중');
-  const [checkedKeywords, setCheckedKeywords] = useState(CURRENT_STUDENT.keywords || []);
-  const [imagePreview, setImagePreview] = useState(stProfile.profileImg || CURRENT_STUDENT.profileImg || '');
+  const [checkedKeywords, setCheckedKeywords] = useState(stProfile.keywords || user?.keywords || []);
+  const [imagePreview, setImagePreview] = useState(stProfile.profileImg || user?.profileImg || '');
   const formRef = useRef(null);
   const fileInputRef = useRef(null);
-  const [jobGroup, setJobGroup] = useState(CURRENT_STUDENT.major || '직군선택');
-  const [jobDuties, setJobDuties] = useState([]);
+  const [jobGroup, setJobGroup] = useState(stProfile.jobGroup || user?.jobGroup || user?.major || '직군선택');
+  const [jobDuties, setJobDuties] = useState(() => {
+    const raw = stProfile.duties || user?.duties || '';
+    return raw ? raw.split(',').map((d) => d.trim()).filter(Boolean) : [];
+  });
   const [showJobGroupPopup, setShowJobGroupPopup] = useState(false);
   const [showJobDutyPopup, setShowJobDutyPopup] = useState(false);
   const [toast, setToast] = useState(false);
@@ -53,13 +57,13 @@ export default function StudentProfilePage() {
     const getValue = (name) => form?.querySelector(`[name="${name}"]`)?.value || '';
     const profileData = {
       ...(imagePreview ? { profileImg: imagePreview } : {}),
-      name:     getValue('name')     || stProfile.name     || CURRENT_STUDENT.name,
-      email:    getValue('email')    || stProfile.email    || CURRENT_STUDENT.email,
+      name:     getValue('name')     || stProfile.name     || user.name,
+      email:    getValue('email')    || stProfile.email    || user.email,
       phone:    [getValue('phone01') || p1, getValue('phone02') || p2, getValue('phone03') || p3].join('-'),
       jobStatus: jobState,
       mention:  form?.querySelector('textarea[name="mention"]')?.value || stProfile.mention || '',
       career:   form?.querySelector('select[name="career"]')?.value   || stProfile.career  || '신입',
-      mbti:     form?.querySelector('select[name="mbti"]')?.value     || stProfile.mbti    || CURRENT_STUDENT.mbti,
+      mbti:     form?.querySelector('select[name="mbti"]')?.value     || stProfile.mbti    || user.mbti,
       keywords: checkedKeywords,
       jobGroup,
       duties:   jobDuties.join(', '),
@@ -102,12 +106,12 @@ export default function StudentProfilePage() {
 
             <div className="input">
               <h5 className="sub_title">이메일</h5>
-              <input name="email" defaultValue={stProfile.email || CURRENT_STUDENT.email} type="text" className="normal" />
+              <input name="email" defaultValue={stProfile.email || user.email} type="text" className="normal" />
             </div>
 
             <div className="input">
               <h5 className="sub_title">이름</h5>
-              <input name="name" defaultValue={stProfile.name || CURRENT_STUDENT.name} type="text" className="normal" />
+              <input name="name" defaultValue={stProfile.name || user.name} type="text" className="normal" />
             </div>
 
             <div className="input">
@@ -150,7 +154,7 @@ export default function StudentProfilePage() {
 
             <div className="input">
               <h5 className="sub_title">한 줄 소개</h5>
-              <textarea className="normal" placeholder="내용을 입력해 주세요." defaultValue={stProfile.mention || CURRENT_STUDENT.mention || ''} />
+              <textarea name="mention" className="normal" placeholder="내용을 입력해 주세요." defaultValue={stProfile.mention || user.mention || ''} />
             </div>
 
             <div className="input job_group">
@@ -169,7 +173,7 @@ export default function StudentProfilePage() {
 
             <div className="input">
               <h5 className="sub_title">경력</h5>
-              <select name="career" className="w100" defaultValue={stProfile.career || CURRENT_STUDENT.career || '신입'}>
+              <select name="career" className="w100" defaultValue={stProfile.career || user.career || '신입'}>
                 {['신입', ...Array.from({ length: 35 }, (_, i) => `${i + 1}년 이상`)].map((v) => (
                   <option key={v}>{v}</option>
                 ))}
@@ -178,7 +182,7 @@ export default function StudentProfilePage() {
 
             <div className="input">
               <h5 className="sub_title">MBTI</h5>
-              <select name="mbti" className="w100" defaultValue={stProfile.mbti || CURRENT_STUDENT.mbti || 'ENFP'}>
+              <select name="mbti" className="w100" defaultValue={stProfile.mbti || user.mbti || 'ENFP'}>
                 {MBTI_LIST.map((v) => <option key={v}>{v}</option>)}
               </select>
             </div>

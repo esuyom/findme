@@ -6,7 +6,7 @@ import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
 import { JOB_CATEGORIES } from '../../mocks/jobData';
 import { useResumeStore } from '../../stores/useResumeStore';
 import { useSkillStore } from '../../stores/useSkillStore';
-import EmptyState from '../../components/common/EmptyState';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 // 직군별 스킬 더미데이터
 const SKILLS_BY_CATEGORY = {
@@ -33,6 +33,7 @@ export default function StResumeListPage() {
   }, []);
 
   const { resumes, remove, rename, copy, setMain } = useResumeStore();
+  const { profile: stProfile } = useStudentProfileStore();
 
   // 스킬 관리 (localStorage 연동)
   const { skills, setSkills, commit: commitSkills } = useSkillStore();
@@ -130,6 +131,57 @@ export default function StResumeListPage() {
 
   const handleSetMain = (id) => { setMain(id); setOpenMenuId(null); };
 
+  const handleDownload = (id) => {
+    const resume = resumes.find((r) => r.id === id);
+    if (!resume?.formData) { alert('작성된 내용이 없습니다.'); setOpenMenuId(null); return; }
+    const fd = resume.formData;
+    const skillRows = skills.map((s) => `<li>${s.name}${s.degree ? ` <span style="color:#4dbbff">${s.degree}%</span>` : ''}</li>`).join('');
+    const row = (label, value) => value ? `<tr><th>${label}</th><td>${value}</td></tr>` : '';
+    const html = `<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8">
+      <title>${fd.resumeName || '이력서'}</title>
+      <style>
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:'Apple SD Gothic Neo',sans-serif;color:#333;padding:40px;max-width:800px;margin:0 auto;font-size:14px;line-height:1.7}
+        h1{font-size:22px;font-weight:800;margin-bottom:4px}
+        h2{font-size:15px;font-weight:700;border-bottom:2px solid #4dbbff;padding-bottom:4px;margin:24px 0 10px}
+        table{width:100%;border-collapse:collapse;margin-bottom:8px}
+        th{width:120px;text-align:left;color:#888;font-weight:600;padding:4px 0;vertical-align:top}
+        td{padding:4px 0;white-space:pre-wrap}
+        .info-row{display:flex;gap:16px;color:#666;font-size:13px;margin-bottom:20px}
+        ul{padding-left:16px}
+        li{margin-bottom:4px}
+        @media print{body{padding:20px}}
+      </style></head><body>
+      <h1>${fd.resumeName || '이력서'}</h1>
+      <div class="info-row">
+        <span>${stProfile.name || ''}</span>
+        ${stProfile.email ? `<span>${stProfile.email}</span>` : ''}
+        ${stProfile.phone ? `<span>${stProfile.phone}</span>` : ''}
+        ${stProfile.jobGroup && stProfile.jobGroup !== '직군선택' ? `<span>${stProfile.jobGroup}</span>` : ''}
+      </div>
+      ${stProfile.mention ? `<p style="margin-bottom:16px;color:#555">${stProfile.mention}</p>` : ''}
+      ${fd.intro ? `<h2>자기소개</h2><p>${fd.intro.replace(/\n/g,'<br>')}</p>` : ''}
+      ${fd.experience ? `<h2>경력사항</h2><p>${fd.experience.replace(/\n/g,'<br>')}</p>` : ''}
+      ${fd.education ? `<h2>학력</h2><p>${fd.education.replace(/\n/g,'<br>')}</p>` : ''}
+      ${fd.certificate ? `<h2>자격증</h2><p>${fd.certificate.replace(/\n/g,'<br>')}</p>` : ''}
+      ${fd.language ? `<h2>어학</h2><p>${fd.language.replace(/\n/g,'<br>')}</p>` : ''}
+      ${skills.length > 0 ? `<h2>스킬</h2><ul>${skillRows}</ul>` : ''}
+      ${fd.link ? `<h2>포트폴리오/링크</h2><p>${fd.link}</p>` : ''}
+      <h2>희망 근무조건</h2>
+      <table>
+        ${row('근무지역', fd.region)}
+        ${row('희망 연봉', fd.salary)}
+        ${row('입사 가능일', fd.availableDate)}
+      </table>
+      </body></html>`;
+    const win = window.open('', '_blank', 'width=900,height=1100');
+    if (!win) { alert('팝업 차단을 해제해 주세요.'); return; }
+    win.document.write(html);
+    win.document.close();
+    setTimeout(() => win.print(), 600);
+    setOpenMenuId(null);
+  };;
+
   return (
     <Layout containerClass="mypage sub">
       <div className="contents_wrap">
@@ -171,7 +223,6 @@ export default function StResumeListPage() {
                         /100
                       </td>
                       <td className="d-flex gap-1">
-                        <button type="button" className="sm tb">수정</button>
                         <button type="button" className="sm tb" onClick={() => handleDeleteSkill(skill.id)}>삭제</button>
                       </td>
                     </tr>
@@ -191,13 +242,6 @@ export default function StResumeListPage() {
             <div className="list_box">
               {isLoading ? (
                 <SkeletonCard type="list" count={3} />
-              ) : resumes.length === 0 ? (
-                <EmptyState
-                  message="등록된 이력서가 없습니다."
-                  subMessage="나를 표현할 이력서를 작성해 보세요."
-                  actionLabel="이력서 작성하기"
-                  onAction={() => navigate('/mypage/resume/write')}
-                />
               ) : (
               <ul className="d-flex gap-3 flex-wrap" ref={menuRef}>
                 {/* 등록 버튼 */}
@@ -241,20 +285,20 @@ export default function StResumeListPage() {
                         </li>
                         {!resume.isMain && (
                           <li>
-                            <button type="button" onClick={() => handleSetMain(resume.id)}>기본이력서로 설정</button>
+                            <a href="#" onClick={(e) => { e.preventDefault(); handleSetMain(resume.id); }}>기본이력서로 설정</a>
                           </li>
                         )}
                         <li>
-                          <button type="button" onClick={() => openRename(resume)}>이력서 이름 변경</button>
+                          <a href="#" onClick={(e) => { e.preventDefault(); openRename(resume); }}>이력서 이름 변경</a>
                         </li>
                         <li>
-                          <button type="button" onClick={() => handleCopy(resume.id)}>사본 만들기</button>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleCopy(resume.id); }}>사본 만들기</a>
                         </li>
                         <li>
-                          <button type="button" onClick={() => { alert('PDF 다운로드는 작성된 이력서에서 사용 가능합니다.'); setOpenMenuId(null); }}>다운로드</button>
+                          <a href="#" onClick={(e) => { e.preventDefault(); handleDownload(resume.id); }}>다운로드</a>
                         </li>
                         <li className="delete">
-                          <button type="button" onClick={() => openDelete(resume.id)}>이력서 삭제</button>
+                          <a href="#" onClick={(e) => { e.preventDefault(); openDelete(resume.id); }}>이력서 삭제</a>
                         </li>
                       </ul>
                     )}

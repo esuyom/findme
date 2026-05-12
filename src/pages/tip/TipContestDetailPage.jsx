@@ -5,7 +5,6 @@ import LottieButton from '../../components/common/LottieButton';
 import { useContestScrap } from '../../stores/useScrapStore';
 import { useAuth } from '../../context/AuthContext';
 import { useContestInquiryStore } from '../../stores/useContestInquiryStore';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 import LoginPromptModal from '../../components/common/LoginPromptModal';
 
@@ -13,7 +12,7 @@ export default function TipContestDetailPage() {
   const { id } = useParams();
   const numId = Number(id);
   const { toggle: scrapToggle, isScraped } = useContestScrap();
-  const { userType } = useAuth();
+  const { userType, user } = useAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { add: addInquiry, isInquired } = useContestInquiryStore();
   const { profile: stProfile } = useStudentProfileStore();
@@ -21,10 +20,10 @@ export default function TipContestDetailPage() {
   const [inquiryDone, setInquiryDone] = useState(false);
   const [outsideMsg, setOutsideMsg] = useState('');
   const [formData, setFormData] = useState({
-    name: stProfile.name || CURRENT_STUDENT.name,
-    phone01: (stProfile.phone || CURRENT_STUDENT.phone).split('-')[0] || '010',
-    phone02: (stProfile.phone || CURRENT_STUDENT.phone).split('-')[1] || '',
-    phone03: (stProfile.phone || CURRENT_STUDENT.phone).split('-')[2] || '',
+    name: stProfile.name || user?.name,
+    phone01: (stProfile.phone || user?.phone || '010--').split('-')[0] || '010',
+    phone02: (stProfile.phone || user?.phone || '010--').split('-')[1] || '',
+    phone03: (stProfile.phone || user?.phone || '010--').split('-')[2] || '',
     location: 'SBS아카데미컴퓨터아트학원 강남지점',
     agreed: false,
   });
@@ -130,16 +129,17 @@ export default function TipContestDetailPage() {
             <Link to="/tip/contest" className="btn_back">
               <img src="/img/common/icon-inventory.png" alt="채용공고리스트로 이동" />
             </Link>
-            <div style={{ position: 'relative' }}>
+            {userType !== 'company' && (
+              <div style={{ position: 'relative' }}>
                 <LottieButton
-              animationPath="/img/sub/icon-save.json"
-              className="btn_save"
-              initialOn={isScraped(numId)}
-              onToggle={() => scrapToggle(numId)}
-            />
-              
+                  animationPath="/img/sub/icon-save.json"
+                  className="btn_save"
+                  initialOn={isScraped(numId)}
+                  onToggle={() => scrapToggle(numId)}
+                />
                 {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
               </div>
+            )}
           </div>
 
           <section className="w640">

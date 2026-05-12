@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const KEY = 'findme_wish_students';
 
@@ -10,23 +10,31 @@ function save(list) {
   localStorage.setItem(KEY, JSON.stringify(list));
 }
 
+let _list = load();
+const _listeners = new Set();
+
+function _notify() {
+  _listeners.forEach((fn) => fn([..._list]));
+}
+
 export function useWishList() {
-  const [wishList, setWishList] = useState(load);
+  const [wishList, setWishList] = useState(() => [..._list]);
+
+  useEffect(() => {
+    _listeners.add(setWishList);
+    return () => _listeners.delete(setWishList);
+  }, []);
 
   const toggle = (id) => {
-    setWishList((prev) => {
-      const next = prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id];
-      save(next);
-      return next;
-    });
+    _list = _list.includes(id) ? _list.filter((i) => i !== id) : [..._list, id];
+    save(_list);
+    _notify();
   };
 
   const remove = (id) => {
-    setWishList((prev) => {
-      const next = prev.filter((i) => i !== id);
-      save(next);
-      return next;
-    });
+    _list = _list.filter((i) => i !== id);
+    save(_list);
+    _notify();
   };
 
   const isWished = (id) => wishList.includes(id);

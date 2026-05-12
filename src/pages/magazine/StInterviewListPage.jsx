@@ -6,7 +6,7 @@ import { INTERVIEW_DUMMY } from '../../mocks/dummyData';
 import { useContentsStore } from '../../stores/useContentsStore';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 import { usePortfolioStore } from '../../stores/usePortfolioStore';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 
 const CATEGORIES = [
   '전체',
@@ -23,19 +23,19 @@ const CATEGORIES = [
 const PAGE_SIZE = 9;
 
 export default function StInterviewListPage() {
+  const { user } = useAuth();
   const { contents } = useContentsStore();
   const { profile: stProfile } = useStudentProfileStore();
   const { portfolios: myPortfolios } = usePortfolioStore();
-  // 취업성공스토리 카테고리 콘텐츠를 INTERVIEW_DUMMY 형식으로 변환
   const userContents = contents
     .filter((ct) => ct.status === 'complete' && ct.formData?.category === '취업성공스토리')
     .map((ct) => ({
       id:          `u${ct.id}`,
-      name:        ct.formData?.anonymousName || ct.formData?.name || CURRENT_STUDENT.name,
+      name:        ct.formData?.anonymousName || ct.formData?.name || user?.name,
       role:        '수강생',
       major:       ct.formData?.jobGroup || ct.formData?.subject || '',
       category:    ct.formData?.jobGroup || '전체',
-      profileImg:  ct.formData?.profileImageUrl || stProfile.profileImg || CURRENT_STUDENT.profileImg || '/img/interview/img-profile-default.jpg',
+      profileImg:  ct.formData?.profileImageUrl || stProfile.profileImg || user?.profileImg || '/img/interview/img-profile-default.jpg',
       portfolios:  myPortfolios.slice(0,3).map((p) => p.thumbData?.[0] || '/img/sub/img-thum-portfolio.png'),
       isOver:      myPortfolios.length > 3,
       overCount:   Math.max(0, myPortfolios.length - 3),

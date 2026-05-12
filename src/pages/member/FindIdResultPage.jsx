@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
 import MemberLayout from '../../components/layout/MemberLayout';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 export default function FindIdResultPage() {
+  const { user } = useAuth();
   const { profile: stProfile } = useStudentProfileStore();
   return (
     <MemberLayout containerClass="find result member sub">
@@ -12,9 +13,9 @@ export default function FindIdResultPage() {
       </h2>
       <form name="frm" method="post">
         <p className="result_txt">
-          환영합니다. <strong>{stProfile.name || CURRENT_STUDENT.name}</strong>님!<br />
+          환영합니다. <strong>{stProfile.name || user?.name}</strong>님!<br />
           가입시 등록하신 이메일은<br />
-          <strong>{stProfile.email || CURRENT_STUDENT.email}</strong> 입니다.
+          <strong>{stProfile.email || user?.email}</strong> 입니다.
         </p>
 
         <div className="btn_box d-flex justify-content-between">

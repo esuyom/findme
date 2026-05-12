@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
 import { useQnaStore } from '../../stores/useQnaStore';
 
 export default function StQnaListPage() {
   const { qnas, remove } = useQnaStore();
+  const navigate = useNavigate();
 
   return (
     <Layout containerClass="qna mypage sub">
@@ -60,8 +61,8 @@ export default function StQnaListPage() {
               )}
             </div>
 
-            <div className="btn_box d-flex mt-5 justify-content-center">
-              <Link to="/mypage/qna/write" className="type02 w195">문의하기</Link>
+            <div className="btn_box d-flex mt-5">
+              <button type="button" className="type02 w195" onClick={() => navigate('/mypage/qna/write')}>문의하기</button>
             </div>
           </div>
         </section>

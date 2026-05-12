@@ -4,6 +4,7 @@ import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 import { useWishList } from '../../stores/useWishListStore';
 import { useCpOfferStore } from '../../stores/useCpOfferStore';
+import { useApplicationStore } from '../../stores/useApplicationStore';
 import { STUDENT_DUMMY } from '../../mocks/dummyData';
 
 const RECOMMEND_STUDENTS = STUDENT_DUMMY.slice(0, 5);
@@ -12,6 +13,7 @@ export default function CpRecruitInfoPage() {
   const { recruits } = useCpRecruitStore();
   const { offers }   = useCpOfferStore();
   const { wishList }  = useWishList();
+  const { applications } = useApplicationStore();
   const wishCount    = wishList.length;
 
   const activeCount  = recruits.filter((r) => r.status === 'active').length;
@@ -81,9 +83,6 @@ export default function CpRecruitInfoPage() {
                 {recentRecruits.length === 0 ? (
                   <li style={{ padding: '16px 0', color: '#aaa', fontSize: '14px' }}>
                     등록된 채용공고가 없습니다.
-                    <Link to="/mypage/cp/recruit/write" style={{ color: '#4dbbff', marginLeft: '8px', fontSize: '13px' }}>
-                      공고 등록하기
-                    </Link>
                   </li>
                 ) : (
                   recentRecruits.map((r) => (
@@ -95,7 +94,7 @@ export default function CpRecruitInfoPage() {
                         <div className="list_inner">
                           <div className="text_title">{r.title || '(제목 없음)'}</div>
                           <div className="text_sub">
-                            <div>지원자 {r.applicants ?? 0}명</div>
+                            <div>지원자 {applications.filter((a) => a.recruitId === r.id).length}명</div>
                             <div>마감일: {r.deadline || '상시채용'}</div>
                           </div>
                         </div>

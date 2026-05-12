@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
 
 const NAV_ITEMS = [
   {
@@ -70,13 +69,13 @@ function getParentMenu(pathname) {
 export default function Header() {
   const [isOn, setIsOn]           = useState(false);
   const [menuOpen, setMenuOpen]   = useState(false);
-  const { userType }              = useAuth();
+  const { userType, user }        = useAuth();
   const isLoggedIn  = userType !== null;
   const { profile: cpProfile } = useCompanyProfileStore();
   const { profile: stProfile } = useStudentProfileStore();
   const headerImg = userType === 'company'
     ? (cpProfile.logoPreview || '/img/common/img-profile-default.jpg')
-    : (stProfile.profileImg  || CURRENT_STUDENT.profileImg || '/img/common/img-profile-default.jpg');
+    : (stProfile.profileImg  || user?.profileImg || '/img/common/img-profile-default.jpg');
   const mypageLink  = userType === 'company' ? '/mypage/cp/dashboard' : '/mypage/profile';
   const { pathname }= useLocation();
   const parentMenu  = getParentMenu(pathname);
@@ -103,8 +102,12 @@ export default function Header() {
           <ul className="depth1">
             {NAV_ITEMS.map((item) => (
               <li key={item.label}>
-                <Link to={item.to} onClick={closeMenu}>{item.label}</Link>
-                {item.badge && <span className="bubble">{item.badge}</span>}
+                {item.to ? (
+                  <Link to={item.to} onClick={closeMenu}>{item.label}</Link>
+                ) : (
+                  <span>{item.label}</span>
+                )}
+                {item.badge && <em className="bubble">{item.badge}</em>}
                 <ul className="depth2">
                   {item.children.map((child) => (
                     <li key={child.label}>

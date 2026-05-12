@@ -2,11 +2,12 @@ import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
 import { useCompanyInquiryStore } from '../../stores/useCompanyInquiryStore';
-import { CURRENT_COMPANY_ID } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 
 export default function CpInquiryListPage() {
+  const { user } = useAuth();
   const { getByCompanyId, remove } = useCompanyInquiryStore();
-  const inquiries = getByCompanyId(CURRENT_COMPANY_ID);
+  const inquiries = getByCompanyId(user?.id);
 
   return (
     <Layout containerClass="mypage cp qna sub">

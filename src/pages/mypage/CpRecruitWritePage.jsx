@@ -2,13 +2,14 @@ import { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
-import { CURRENT_COMPANY } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 import { compressImage } from '../../utils/compressImage';
 import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
 import Toast from '../../components/common/Toast';
 
 const REGION1 = ['서울', '경기', '인천', '부산', '대구', '광주', '대전', '울산', '세종', '강원', '충북', '충남', '전북', '전남', '경북', '경남', '제주'];
+const WELFARE_PRESETS = ['4대보험', '연차제공', '유연근무', '식비지원', '교육비지원', '경조사비', '건강검진', '생일선물', '자율출퇴근', '주거지원', '야근수당', '성과급', '스톡옵션', '재택근무'];
 const REGION2 = {
   서울: ['강남구', '강동구', '강북구', '강서구', '관악구', '광진구', '구로구', '금천구', '노원구', '도봉구', '동대문구', '동작구', '마포구', '서대문구', '서초구', '성동구', '성북구', '송파구', '양천구', '영등포구', '용산구', '은평구', '종로구', '중구', '중랑구'],
   경기: ['수원시', '성남시', '안양시', '부천시', '광명시', '평택시', '안산시', '고양시', '과천시', '구리시', '남양주시', '용인시', '화성시'],
@@ -20,6 +21,7 @@ const getRegion2 = (r1) => REGION2[r1] || [r1 + ' 전체'];
 export default function CpRecruitWritePage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuth();
   const { profile: cpProfile } = useCompanyProfileStore();
   const thumbInputRef = useRef(null);
   const [toast, setToast] = useState('');
@@ -35,6 +37,8 @@ export default function CpRecruitWritePage() {
   const [selectedDuties, setSelectedDuties] = useState(
     existing?.duties ? existing.duties.split(', ').filter(Boolean) : []
   );
+  const [welfareList,  setWelfareList]  = useState(existing?.welfare ? existing.welfare.split(', ').filter(Boolean) : []);
+  const [welfareInput, setWelfareInput] = useState('');
   const [isNewbie, setIsNewbie] = useState(existing?.isNewbie ?? false);
   const [isAlways, setIsAlways] = useState(existing?.deadline === '상시채용');
   const [region1, setRegion1] = useState(existing?.region1 || '서울');
@@ -45,19 +49,31 @@ export default function CpRecruitWritePage() {
     mainDuties:    existing?.mainDuties    || '',
     requirements:  existing?.requirements  || '',
     preference:    existing?.preference    || '',
-    welfare:       existing?.welfare       || '',
     salaryMin:     existing?.salaryMin     || '',
     salaryMax:     existing?.salaryMax     || '',
     careerMin:     existing?.careerMin     || '',
     careerMax:     existing?.careerMax     || '',
     addressDetail: existing?.addressDetail || '',
     deadline:      existing?.deadline === '상시채용' ? '' : (existing?.deadline || ''),
-    email:         existing?.email         || CURRENT_COMPANY.email,
+    email:         existing?.email         || cpProfile.email || user?.email,
   });
 
   const handleForm = (e) => {
     const { name, value } = e.target;
     setForm((p) => ({ ...p, [name]: value }));
+  };
+
+  const addWelfare = (item) => {
+    const trimmed = item.trim();
+    if (!trimmed || welfareList.includes(trimmed)) return;
+    setWelfareList((prev) => [...prev, trimmed]);
+    setWelfareInput('');
+  };
+
+  const removeWelfare = (item) => setWelfareList((prev) => prev.filter((w) => w !== item));
+
+  const handleWelfareKeyDown = (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); addWelfare(welfareInput); }
   };
 
   const toggleDuty = (duty) => {
@@ -102,6 +118,7 @@ export default function CpRecruitWritePage() {
     }
     const deadline = isAlways ? '상시채용' : form.deadline;
     const payload = {
+      companyId:     user?.id,
       jobGroup:      selectedJob,
       duties:        selectedDuties.join(', '),
       isNewbie,
@@ -114,7 +131,7 @@ export default function CpRecruitWritePage() {
       mainDuties:    form.mainDuties,
       requirements:  form.requirements,
       preference:    form.preference,
-      welfare:       form.welfare,
+      welfare:       welfareList.join(', '),
       salaryMin:     form.salaryMin,
       salaryMax:     form.salaryMax,
       salary:        form.salaryMin || form.salaryMax ? `${form.salaryMin}~${form.salaryMax}만원` : '',
@@ -355,13 +372,45 @@ export default function CpRecruitWritePage() {
           {/* 혜택 및 복지 */}
           <div className="input">
             <h5 className="sub_title">혜택 및 복지</h5>
-            <textarea
-              name="welfare"
-              className="normal"
-              placeholder="내용을 입력해 주세요."
-              value={form.welfare}
-              onChange={handleForm}
-            />
+
+            {/* 프리셋 칩 */}
+            <div className="welfare_presets">
+              {WELFARE_PRESETS.map((preset) => (
+                <button
+                  key={preset}
+                  type="button"
+                  className={`welfare_preset_btn${welfareList.includes(preset) ? ' active' : ''}`}
+                  onClick={() => addWelfare(preset)}
+                >
+                  {welfareList.includes(preset) ? '✓ ' : '+ '}{preset}
+                </button>
+              ))}
+            </div>
+
+            {/* 직접 입력 */}
+            <div className="d-flex gap-2 align-items-center">
+              <input
+                type="text"
+                className="normal flex-1"
+                placeholder="직접 입력 후 Enter 또는 추가"
+                value={welfareInput}
+                onChange={(e) => setWelfareInput(e.target.value)}
+                onKeyDown={handleWelfareKeyDown}
+              />
+              <button type="button" className="w195" onClick={() => addWelfare(welfareInput)}>추가</button>
+            </div>
+
+            {/* 선택된 태그 목록 */}
+            {welfareList.length > 0 && (
+              <div className="welfare_tags">
+                {welfareList.map((item) => (
+                  <span key={item} className="welfare_tag">
+                    {item}
+                    <button type="button" className="welfare_tag_remove" onClick={() => removeWelfare(item)}>×</button>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* 채용시 예상 연봉 */}
@@ -387,7 +436,7 @@ export default function CpRecruitWritePage() {
                 value={form.salaryMax}
                 onChange={handleForm}
               />
-              <strong className="ms-2">만원</strong>
+              <strong className="ms-2" style={{width:100}}>만원</strong>
             </div>
             <p className="pay_noti mt-2">연봉 정보는 통계 자료로만 쓰이며, 개별 연봉 정보는 절대 공개되지 않습니다.</p>
           </div>

@@ -43,16 +43,17 @@ export default function TipDetailPage() {
             <Link to="/tip" className="btn_back">
               <img src="/img/common/icon-inventory.png" alt="채용공고리스트로 이동" />
             </Link>
-            <div style={{ position: 'relative' }}>
+            {userType !== 'company' && (
+              <div style={{ position: 'relative' }}>
                 <LottieButton
-              animationPath="/img/sub/icon-save.json"
-              className="btn_save"
-              initialOn={isScraped(currentId)}
-              onToggle={() => scrapToggle(currentId)}
-            />
-              
+                  animationPath="/img/sub/icon-save.json"
+                  className="btn_save"
+                  initialOn={isScraped(currentId)}
+                  onToggle={() => scrapToggle(currentId)}
+                />
                 {!userType && <div style={{ position: 'absolute', inset: 0, cursor: 'pointer', zIndex: 1 }} onClick={() => setShowLoginModal(true)} />}
               </div>
+            )}
           </div>
 
           <section className="w640">

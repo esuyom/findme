@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { CURRENT_STUDENT } from '../mocks/currentUser';
 import { saveImage, loadImage } from '../utils/imageDB';
 
 const KEY = 'findme_student_profile';
 const IMG_KEY = 'student_profileImg';
+
+// TODO (Phase 2): GET /api/profile/student 응답으로 초기값 교체
+const DEFAULT_PROFILE_IMG = '/img/sub/img-teacher.jpg';
 
 function loadMeta() {
   try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
@@ -13,7 +15,7 @@ function saveMeta(data) {
   localStorage.setItem(KEY, JSON.stringify(meta));
 }
 
-let _profile = { profileImg: CURRENT_STUDENT.profileImg || '', ...loadMeta() };
+let _profile = { profileImg: DEFAULT_PROFILE_IMG, ...loadMeta() };
 const _listeners = new Set();
 
 function _subscribe(fn) {

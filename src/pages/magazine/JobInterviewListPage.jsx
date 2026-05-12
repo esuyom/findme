@@ -1,14 +1,20 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import Pagination from '../../components/common/Pagination';
 import { JOB_INTERVIEW_DUMMY } from '../../mocks/detailData';
 import { useContentsStore } from '../../stores/useContentsStore';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
+const PAGE_SIZE = 9;
+
 export default function JobInterviewListPage() {
+  const { user } = useAuth();
   const { contents } = useContentsStore();
   const { profile: stProfile } = useStudentProfileStore();
+  const [currentPage, setCurrentPage] = useState(1);
+
   const userJobContents = contents
     .filter((ct) => ct.status === 'complete' && ct.formData?.category === '직무인터뷰')
     .map((ct) => ({
@@ -16,10 +22,13 @@ export default function JobInterviewListPage() {
       title:    ct.formData?.feeling || ct.formData?.company || '사용자 인터뷰',
       field:    ct.formData?.jobGroup || '',
       company:  ct.formData?.company  || '',
-      designer: ct.formData?.name || stProfile.name || CURRENT_STUDENT.name,
+      designer: ct.formData?.name || stProfile.name || user?.name,
       thumb:    ct.formData?.profileImageUrl || '/img/interview/img-worker.jpg',
     }));
   const ALL_JOB_INTERVIEWS = [...userJobContents, ...JOB_INTERVIEW_DUMMY];
+  const totalPages = Math.ceil(ALL_JOB_INTERVIEWS.length / PAGE_SIZE);
+  const paged = ALL_JOB_INTERVIEWS.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
   return (
     <Layout containerClass="sub">
       <div className="contents_wrap">
@@ -35,7 +44,7 @@ export default function JobInterviewListPage() {
 
           <div className="work_interview_box">
             <div className="wrap">
-              {ALL_JOB_INTERVIEWS.map((interview) => (
+              {paged.map((interview) => (
                 <div key={interview.id} className="con">
                   <Link to={`/magazine/jobinterview/${interview.id}`}>
                     <div className="work_interview_thumb">
@@ -51,7 +60,11 @@ export default function JobInterviewListPage() {
             </div>
           </div>
 
-          <Pagination />
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+          />
         </section>
       </div>
     </Layout>

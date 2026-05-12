@@ -3,13 +3,14 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import StudentSidebar from '../../components/layout/sidebar/StudentSidebar';
 import { useContentsStore } from '../../stores/useContentsStore';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
 import Toast from '../../components/common/Toast';
 
 export default function StContentsWritePage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [toast, setToast] = useState('');
   const toastTimer = useRef(null);
   const location = useLocation();
@@ -31,7 +32,7 @@ export default function StContentsWritePage() {
     category:    existingForm.category    || '취업성공스토리',
     feeling: existingForm.feeling || '',
     profileImage: null,
-    name: existingForm.name || stProfile.name || CURRENT_STUDENT.name,
+    name: existingForm.name || stProfile.name || user?.name,
     anonymous: existingForm.anonymous || false,
     department:         existingForm.department         || '',
     subject:            existingForm.subject            || '',
@@ -212,7 +213,7 @@ export default function StContentsWritePage() {
             </div>
 
             <div>
-              <h5 className="sub_title">취업성공 소감 한마디!</h5>
+              <h5 className="sub_title">{formData.category === '직무인터뷰' ? '직무 인터뷰 한마디' : '취업성공 소감 한마디!'}</h5>
               <div className="input">
                 <input
                   type="text"

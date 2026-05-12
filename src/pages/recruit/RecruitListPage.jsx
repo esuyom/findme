@@ -5,7 +5,7 @@ import Pagination from '../../components/common/Pagination';
 import { JOB_CATEGORIES } from '../../mocks/jobData';
 import { useCompanyProfileStore } from '../../stores/useCompanyProfileStore';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
-import { CURRENT_COMPANY, CURRENT_COMPANY_ID } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { RECRUIT_DUMMY } from '../../mocks/dummyData';
 
 const FILTER_TAGS = [
@@ -18,6 +18,7 @@ const REGIONS = ['전체', '서울', '경기', '인천', '대전', '세종', '�
 const PAGE_SIZE = 12;
 
 export default function RecruitListPage() {
+  const { user } = useAuth();
   const { profile: cpProfile } = useCompanyProfileStore();
   const { recruits: storeRecruits } = useCpRecruitStore();
 
@@ -30,9 +31,9 @@ export default function RecruitListPage() {
         : null;
       return {
         id:              r.id,
-        companyId:       CURRENT_COMPANY_ID,
+        companyId:       user?.id,
         title:           r.title || '(제목 없음)',
-        company:         cpProfile.name || CURRENT_COMPANY.name,
+        company:         cpProfile.name || user?.name,
         companyImg:      r.thumbnailImg || r.companyImg || '/img/company/co-img.jpg',
         companyLogo:     r.companyLogo || cpProfile.logoPreview || '/img/company/co-logo.jpg',
         keywords:        (cpProfile.keywords || []).join(', '),
@@ -63,9 +64,10 @@ export default function RecruitListPage() {
     return ALL_RECRUITS.filter((d) => {
       const regionMatch = selectedRegion === '전체' || d.region === selectedRegion;
       const tagMatch = checkedTags.length === 0 || checkedTags.every((tag) => d.companyKeywords.includes(tag));
-      return regionMatch && tagMatch;
+      const jobMatch = !selectedJobCategory || d.jobGroup === selectedJobCategory;
+      return regionMatch && tagMatch && jobMatch;
     });
-  }, [selectedRegion, checkedTags]);
+  }, [selectedRegion, checkedTags, selectedJobCategory, storeRecruits, cpProfile]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paged = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
@@ -122,7 +124,7 @@ export default function RecruitListPage() {
             <div className="wrap">
               {paged.length > 0 ? (
                 paged.map((d) => (
-                  <RecruitCard key={d.id} {...d} companyLogo={d.companyId === CURRENT_COMPANY_ID && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
+                  <RecruitCard key={d.id} {...d} companyLogo={d.companyId === user?.id && cpProfile.logoPreview ? cpProfile.logoPreview : d.companyLogo} to={`/recruit/${d.id}`} />
                 ))
               ) : (
                 <p className="gray text-center w-100 py-5">조건에 맞는 채용공고가 없습니다.</p>

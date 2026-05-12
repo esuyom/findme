@@ -6,9 +6,10 @@ import { useApplicationStore } from '../../stores/useApplicationStore';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
 import { useCpOfferStore } from '../../stores/useCpOfferStore';
 import { RECRUIT_DUMMY } from '../../mocks/dummyData';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 
 export default function StRecruitListPage() {
+  const { user } = useAuth();
   const { applications, remove } = useApplicationStore();
   const { recruits: storeRecruits } = useCpRecruitStore();
   const ALL_RECRUITS = [...RECRUIT_DUMMY, ...storeRecruits];
@@ -32,8 +33,8 @@ export default function StRecruitListPage() {
     return '진행중';
   };
   const { offers: allOffers, updateStatus: updateOfferStatus } = useCpOfferStore();
-  // 현재 로그인 수강생(id=29)에게 온 면접제의만 필터
-  const interviewOffers = allOffers.filter((o) => o.studentId === 29);
+  // 현재 로그인 수강생에게 온 면접제의만 필터
+  const interviewOffers = allOffers.filter((o) => o.studentId === user?.id);
   const [confirmId, setConfirmId] = useState(null); // 재확인 팝업 대상 id
 
   const handleCancelClick = (id) => setConfirmId(id);

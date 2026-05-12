@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import CompanySidebar from '../../components/layout/sidebar/CompanySidebar';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
+import { useApplicationStore } from '../../stores/useApplicationStore';
 import EmptyState from '../../components/common/EmptyState';
 
 const STATUS_LABEL = { active: '채용중', draft: '임시저장', closed: '채용종료' };
@@ -10,6 +11,7 @@ const STATUS_CLASS = { active: 'blue', draft: 'gray', closed: 'gray' };
 
 export default function CpRecruitListPage() {
   const { recruits, remove, close } = useCpRecruitStore();
+  const { applications } = useApplicationStore();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('active');
   const [checked, setChecked] = useState({});
@@ -40,22 +42,20 @@ export default function CpRecruitListPage() {
       <div className="contents_wrap">
         <CompanySidebar />
         <section className="contents">
-          {/* 탭 */}
           <div className="recruit_board second">
             {tabs.map((tab) => (
               <div
                 key={tab.key}
                 className={`part col${activeTab === tab.key ? ' active' : ''}`}
               >
-                <button type="button" onClick={() => setActiveTab(tab.key)}>
+                <a href="#" onClick={(e) => { e.preventDefault(); setActiveTab(tab.key); }}>
                   <div className="text">{tab.label}</div>
                   <div className={`num${tab.count === 0 ? ' zero' : ''}`}>{tab.count}</div>
-                </button>
+                </a>
               </div>
             ))}
           </div>
 
-          {/* 목록 */}
           <div className="recruit_notice second">
             <div className="notice_part col">
               <div className="notice_view">
@@ -98,7 +98,7 @@ export default function CpRecruitListPage() {
                           </Link>
                         </div>
                         <div className="col">{r.jobGroup || '-'}</div>
-                        <div className="col">{r.applicants ?? 0}건</div>
+                        <div className="col">{applications.filter((a) => a.recruitId === r.id).length}건</div>
                         <div className="col">{r.deadline || '-'}</div>
                         <div className={`col ${STATUS_CLASS[r.status] || ''}`}>{STATUS_LABEL[r.status]}</div>
                         <div className="col-2">

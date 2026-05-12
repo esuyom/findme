@@ -9,6 +9,7 @@ import { useWishList } from '../../stores/useWishListStore';
 import LottieButton from '../../components/common/LottieButton';
 import { useCpOfferStore } from '../../stores/useCpOfferStore';
 import { useCpRecruitStore } from '../../stores/useCpRecruitStore';
+import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 
 const MBTI_LIST = ['ISTJ','ISFJ','INFJ','INTJ','ISTP','ISFP','INFP','INTP','ESTP','ESFP','ENFP','ENTP','ESTJ','ESFJ','ENFJ','ENTJ'];
 const REGIONS   = ['전체','서울','경기','인천','부산','대구','광주','대전','울산','강원','세종','충북','충남','전북','전남','경북','경남','제주','전국'];
@@ -48,6 +49,8 @@ export default function CpHrSearchPage() {
   const { toggle, isWished }        = useWishList();
   const { add: addOffer, offers }   = useCpOfferStore();
   const { recruits }                = useCpRecruitStore();
+  // TODO(Phase2): 테스트 계정 전용 - id=29 수강생 스토어 데이터 반영
+  const { profile: stProfile }      = useStudentProfileStore();
 
   // 필터
   const [query,     setQuery]     = useState('');
@@ -113,7 +116,20 @@ export default function CpHrSearchPage() {
 
       return mQuery && mGroup && mRegion && mMbti && mGender && mStatus && mCareer;
     });
-    setResults(filtered);
+    // TODO(Phase2): 테스트 계정 전용 - id=29 결과에 stProfile 데이터 merge
+    const merged = filtered.map((s) => {
+      if (s.id !== 29) return s;
+      return {
+        ...s,
+        name:       stProfile.name       || s.name,
+        mention:    stProfile.mention    || s.mention,
+        duty:       stProfile.duties     || stProfile.jobGroup || s.duty,
+        mbti:       stProfile.mbti       || s.mbti,
+        region:     stProfile.region     || s.region,
+        profileImg: stProfile.profileImg || s.profileImg,
+      };
+    });
+    setResults(merged);
     setApplied(true);
     setOpenSel('');
   };
@@ -206,9 +222,14 @@ export default function CpHrSearchPage() {
                 {results.map((student) => {
                   const detail  = STUDENT_DETAIL[student.id] || STUDENT_DETAIL.default;
                   const offered = alreadyOffered(student.id);
+                  // TODO(Phase2): 테스트 계정 전용 - id=29 스킬 스토어 데이터 우선
+                  const skillNames = student.id === 29 && stProfile.skills?.length
+                    ? stProfile.skills.map((sk) => sk.name).join(', ')
+                    : (detail.skills || []).map((sk) => sk.name).join(', ');
+                  const profileImg = student.profileImg || '/img/common/img-profile-default2.png';
                   return (
                     <div key={student.id} className="hr_box" style={{ marginBottom: 12, position: 'relative' }}>
-                                            <LottieButton
+                      <LottieButton
                         animationPath="/img/sub/icon-wish1.json"
                         className="btn_wish"
                         initialOn={isWished(student.id)}
@@ -216,7 +237,7 @@ export default function CpHrSearchPage() {
                       />
 
                       <div className="hr_info slash d-flex align-items-center mb-4">
-                        <span className="profile"><img src="/img/common/img-profile-default2.png" alt="profile" /></span>
+                        <span className="profile"><img src={profileImg} alt="profile" /></span>
                         <div><Link to={`/hr/${student.id}`} style={{ fontWeight: 700 }}>{student.name}</Link>{' '}<span className="age">{student.age}</span></div>
                         <div>{inferJobGroup(student.duty)} 직군</div>
                         <div>{student.mbti}</div>
@@ -229,7 +250,7 @@ export default function CpHrSearchPage() {
                         <div><h5 className="sub_title">지역</h5><div>{student.region}</div></div>
                       </div>
                       <div className="mb-3"><h5 className="sub_title">한마디 소개</h5><div>{student.mention}</div></div>
-                      <div className="mb-3"><h5 className="sub_title">스킬</h5><div>{detail.skills.map((sk) => sk.name).join(', ')}</div></div>
+                      <div className="mb-3"><h5 className="sub_title">스킬</h5><div>{skillNames}</div></div>
 
                       <div className="d-flex gap-2 mt-4">
                         <Link to={`/hr/${student.id}`}><button type="button" className="type01 w195">프로필 보기</button></Link>
@@ -258,7 +279,7 @@ export default function CpHrSearchPage() {
             </div>
             <div className="profile" style={{ display: 'flex', alignItems: 'center', padding: '16px', background: '#f2f4f7', borderRadius: 12 }}>
               <div style={{ width: 64, height: 64, borderRadius: '50%', overflow: 'hidden', marginRight: 16, flexShrink: 0 }}>
-                <img src="/img/common/img-profile-default2.png" alt="프로필" style={{ width: '100%' }} />
+                <img src={offerModal.profileImg || '/img/common/img-profile-default2.png'} alt="프로필" style={{ width: '100%' }} />
               </div>
               <div>
                 <div style={{ fontSize: 17, fontWeight: 800 }}>{offerModal.name} <span style={{ fontSize: 13, fontWeight: 400 }}>{offerModal.age}</span></div>

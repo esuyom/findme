@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 function load(key) {
   try { return JSON.parse(localStorage.getItem(key) || '[]'); } catch { return []; }
@@ -8,23 +8,31 @@ function save(key, list) {
 }
 
 function makeHook(storageKey) {
+  let _list = load(storageKey);
+  const _listeners = new Set();
+
+  function _notify() {
+    _listeners.forEach((fn) => fn([..._list]));
+  }
+
   return function useScrap() {
-    const [list, setList] = useState(() => load(storageKey));
+    const [list, setList] = useState(() => [..._list]);
+
+    useEffect(() => {
+      _listeners.add(setList);
+      return () => _listeners.delete(setList);
+    }, []);
 
     const toggle = (id) => {
-      setList((prev) => {
-        const next = prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id];
-        save(storageKey, next);
-        return next;
-      });
+      _list = _list.includes(id) ? _list.filter((i) => i !== id) : [..._list, id];
+      save(storageKey, _list);
+      _notify();
     };
 
     const remove = (id) => {
-      setList((prev) => {
-        const next = prev.filter((i) => i !== id);
-        save(storageKey, next);
-        return next;
-      });
+      _list = _list.filter((i) => i !== id);
+      save(storageKey, _list);
+      _notify();
     };
 
     const isScraped = (id) => list.includes(id);

@@ -271,11 +271,11 @@ export default function SearchResultPage() {
                 >
                   {filtered.coaching.map((item) => (
                     <SwiperSlide key={item.id} className="con">
-                      <a href="#">
+                      <Link to={`/coaching/${item.id}`}>
                         <div className="img"><img src={item.img} alt="포스터" /></div>
                         <div className="title">{item.title}</div>
                         <div className="category">{item.category}</div>
-                      </a>
+                      </Link>
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -310,10 +310,10 @@ export default function SearchResultPage() {
                 >
                   {filtered.trend.map((item) => (
                     <SwiperSlide key={item.id} className="con">
-                      <a href="#">
+                      <Link to={`/tip/${item.id}`}>
                         <p className="title">{item.title}</p>
                         <p className="data">{item.source} · {item.date}</p>
-                      </a>
+                      </Link>
                     </SwiperSlide>
                   ))}
                 </Swiper>
@@ -348,7 +348,7 @@ export default function SearchResultPage() {
                 >
                   {filtered.story.map((item) => (
                     <SwiperSlide key={item.id} className="con">
-                      <a href="#">
+                      <Link to={`/magazine/stinterview/${item.id}`}>
                         <div className="interview_info_box">
                           <div className="info_img">
                             <img src={item.img} alt="" />
@@ -374,7 +374,7 @@ export default function SearchResultPage() {
                           </div>
                         )}
                         <p className="interview_mention">{item.mention}</p>
-                      </a>
+                      </Link>
                     </SwiperSlide>
                   ))}
                 </Swiper>

@@ -2,10 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Layout from '../../components/layout/Layout';
 import { JOB_CATEGORIES, DUTIES_BY_CATEGORY } from '../../mocks/jobData';
-import { CURRENT_STUDENT } from '../../mocks/currentUser';
+import { useAuth } from '../../context/AuthContext';
 import { useStudentProfileStore } from '../../stores/useStudentProfileStore';
 import { useResumeStore } from '../../stores/useResumeStore';
-import { useSkillStore } from '../../stores/useSkillStore';
 import Toast from '../../components/common/Toast';
 
 const REGION_LIST = ['서울','경기','인천','부산','대구','광주','대전','울산','세종','강원','충북','충남','전북','전남','경북','경남','제주'];
@@ -13,16 +12,16 @@ const REGION_LIST = ['서울','경기','인천','부산','대구','광주','대�
 export default function StResumeWritePage() {
   const navigate  = useNavigate();
   const location  = useLocation();
+  const { user } = useAuth();
   const editId    = location.state?.editId ?? null;
   const { add, update, getById, setMain } = useResumeStore();
   const { profile: stProfile } = useStudentProfileStore();
-  const { skills } = useSkillStore();
   const existing  = editId != null ? getById(editId) : null;
   const [toast, setToast] = useState('');
   const toastTimer = useRef(null);
 
   const [formData, setFormData] = useState({
-    resumeName:   existing?.formData?.resumeName   ?? `${stProfile.name || CURRENT_STUDENT.name}의 이력서`,
+    resumeName:   existing?.formData?.resumeName   ?? `${stProfile.name || user?.name}의 이력서`,
     intro:        existing?.formData?.intro        ?? '',
     experience:   existing?.formData?.experience   ?? '',
     education:    existing?.formData?.education    ?? '',
